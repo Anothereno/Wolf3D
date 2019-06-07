@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/06 17:05:14 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/07 13:53:39 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,6 @@ typedef struct	s_line
 	int			shortline;
 	int			i;
 }				t_line;
-
-typedef struct	s_point
-{
-	int			x;
-	int			y;
-	int			z;
-	long int	color;
-}				t_point;
 
 typedef struct	s_int
 {
@@ -88,38 +80,25 @@ typedef struct	s_union
 	t_int			*ints;
 }				t_union;
 
+
 typedef struct 	s_map
 {
 	int size_x;
 	int size_y;
 	int	**map;
+}				t_map;
+
+typedef struct	s_player
+{
 	int player_pos_x;
 	int player_pos_y;
 	int player_heigth;
 	int player_width;
-}				t_map;
 
-typedef struct	s_var
-{
-	double	temp_real;
-	double	temp_imag;
-	double	new_real;
-	double	temp_x;
-	double	temp_y;
-	double	new_imag;
-}				t_var;
+}				t_player;
 
-
-typedef struct	s_thread
-{
-	int		id;
-	int		y_begin;
-	int		y_finish;
-	t_map	*my_union;
-}				t_thread;
-
-void			check_event(t_union *my_union, t_map *map, const Uint8	*key);
-void			draw_player(t_union my_union, t_map map);
+void			check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key);
+void			draw_player(t_union my_union, t_player player);
 void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
 void			initialize_SDL(t_union *my_union);
@@ -143,6 +122,6 @@ int				exit_(t_map *my_union);
 void			plot(t_union *my_union, t_map *map);
 int				deal_key(int key, t_map *param);
 void			usage(void);
-void			struct_initial(t_union *my_union, t_map *map);
+void			struct_initial(t_union *my_union, t_map *map, t_player *player);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/06 18:25:35 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/07 13:52:58 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,20 @@ void	clear_window(t_union my_union)
 	SDL_RenderClear(my_union.renderer);
 }
 
-void	draw_player(t_union my_union, t_map map)
-{
-	SDL_Rect player;
+void
 
-	player.x = map.player_pos_x;
-	player.y = map.player_pos_y;
-	player.h = map.player_heigth;
-	player.w = map.player_width;
+void	draw_player(t_union my_union, t_player player)
+{
+	SDL_Rect player_body;
+
+	player_body.x = player.player_pos_x;
+	player_body.y = player.player_pos_y;
+	player_body.h = player.player_heigth;
+	player_body.w = player.player_width;
 	SDL_SetRenderDrawColor(my_union.renderer, 50, 255, 255, 255);
-	SDL_RenderFillRect(my_union.renderer, &player);
-	SDL_RenderDrawLine(my_union.renderer, map.player_pos_x + (map.player_width >> 1),
-					   map.player_pos_y + (map.player_heigth >> 1), my_union.win_x >> 1,
+	SDL_RenderFillRect(my_union.renderer, &player_body);
+	SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
+					   player.player_pos_y + (player.player_heigth >> 1), my_union.win_x >> 1,
 					   my_union.win_y >> 1);
 
 }

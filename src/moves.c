@@ -6,32 +6,32 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/06 18:50:37 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/07 13:52:58 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	check_event(t_union *my_union, t_map *map, const Uint8	*key)
+void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key)
 {
 	if (key[SDL_SCANCODE_ESCAPE])
 	{
 		exit(0);
 	}
-	if (key[SDL_SCANCODE_LEFT] && map->player_pos_x - 2 >= 0)
+	if (key[SDL_SCANCODE_LEFT] && player->player_pos_x - 4 >= 0)
 	{
-		map->player_pos_x -= 2;
+		player->player_pos_x -= 4;
 	}
-	if (key[SDL_SCANCODE_RIGHT] && map->player_pos_x + 2 < my_union->win_x + 1 - map->player_heigth)
+	if (key[SDL_SCANCODE_RIGHT] && player->player_pos_x + 4 < my_union->win_x + 1 - player->player_heigth)
 	{
-		map->player_pos_x += 2;
+		player->player_pos_x += 4;
 	}
-	if (key[SDL_SCANCODE_UP] && map->player_pos_y - 2 >= 0)
+	if (key[SDL_SCANCODE_UP] && player->player_pos_y - 4 >= 0)
 	{
-		map->player_pos_y -= 2;
+		player->player_pos_y -= 4;
 	}
-	if (key[SDL_SCANCODE_DOWN] && map->player_pos_y + 2 < my_union->win_y + 1 - map->player_width)
+	if (key[SDL_SCANCODE_DOWN] && player->player_pos_y + 4 < my_union->win_y + 1 - player->player_width)
 	{
-		map->player_pos_y += 2;
+		player->player_pos_y += 4;
 	}
 }

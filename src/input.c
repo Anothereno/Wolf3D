@@ -22,7 +22,7 @@ void	initialize_SDL(t_union *my_union)
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
-void	struct_initial(t_union *my_union, t_map *map)
+void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 {
 	my_union->win_x = map->size_x * BLOCK_SIZE;
 	my_union->win_y = map->size_y * BLOCK_SIZE;
@@ -31,10 +31,10 @@ void	struct_initial(t_union *my_union, t_map *map)
 	my_union->shift_y = 0;
 	my_union->half_win_x = my_union->win_x * 0.5;
 	my_union->half_win_y = my_union->win_y * 0.5;
-	map->player_pos_x = 100;
-	map->player_pos_y = 100;
-	map->player_heigth = BLOCK_SIZE >> 1;
-	map->player_width = BLOCK_SIZE >> 1;
+	player->player_pos_x = 100;
+	player->player_pos_y = 100;
+	player->player_heigth = BLOCK_SIZE >> 1;
+	player->player_width = BLOCK_SIZE >> 1;
 }
 
 /*
