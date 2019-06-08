@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/07 13:53:39 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/08 13:56:03 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,26 @@ typedef struct 	s_map
 
 typedef struct	s_player
 {
-	int player_pos_x;
-	int player_pos_y;
-	int player_heigth;
-	int player_width;
+	double	player_pos_x;
+	double	player_pos_y;
+	int		player_heigth;
+	int		player_width;
+	double	direct_x;
+	double	direct_y;
+	int		step_length;
+	int		radius;
+	int		degree;
 
+
+	double	dirX;
+	double	dirY;
+	double	planeX;
+	double	planeY;
+	double	time;
+	double	oldTime;
 }				t_player;
 
+void			view_follow(t_player *player, t_map *map);
 void			check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key);
 void			draw_player(t_union my_union, t_player player);
 void			draw_scene(t_union my_union, t_map map);

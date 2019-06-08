@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/07 13:52:58 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/08 15:54:58 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,52 @@ void	clear_window(t_union my_union)
 	SDL_RenderClear(my_union.renderer);
 }
 
-void
+void	take_vector_of_view(t_player *player)
+{
+	double center_x;
+	double center_y;
+	double rad;
+
+	rad = 0.0174533;
+	center_x = player->player_pos_x + (player->player_width >> 1);
+	center_y = player->player_pos_y + (player->player_heigth >> 1);
+	player->direct_x = (center_x + (player->radius * cos(player->degree * rad)));
+	player->direct_y = (center_y + (player->radius * sin(player->degree * rad)));
+}
+
+void	draw_rays(t_union my_union, t_player player)
+{
+	int		i;
+	double	cam;
+	double	ray_x;
+	double	ray_y;
+
+	i = -1;
+	while (++i < my_union.win_x)
+	{
+		cam = 2 * (double)i / (double)my_union.win_x - 1;
+		ray_x = player.dirX + player.planeX * cam;
+		ray_y = player.dirY + player.planeY * cam;
+		SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
+						   player.player_pos_y + (player.player_heigth >> 1), ray_x, ray_y);
+	}
+}
 
 void	draw_player(t_union my_union, t_player player)
 {
 	SDL_Rect player_body;
 
-	player_body.x = player.player_pos_x;
-	player_body.y = player.player_pos_y;
+	player_body.x = (int)player.player_pos_x;
+	player_body.y = (int)player.player_pos_y;
 	player_body.h = player.player_heigth;
 	player_body.w = player.player_width;
+	take_vector_of_view(&player);
 	SDL_SetRenderDrawColor(my_union.renderer, 50, 255, 255, 255);
 	SDL_RenderFillRect(my_union.renderer, &player_body);
 	SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
-					   player.player_pos_y + (player.player_heigth >> 1), my_union.win_x >> 1,
-					   my_union.win_y >> 1);
+					   player.player_pos_y + (player.player_heigth >> 1), player.direct_x,
+					   player.direct_y);
+	draw_rays(my_union, player);
 
 }
 
@@ -57,10 +88,10 @@ void	draw_scene(t_union my_union, t_map map)
 			{
 				SDL_RenderFillRect(my_union.renderer, &wall);
 			}
-			else
-			{
-				SDL_RenderDrawRect(my_union.renderer, &wall);
-			}
+//			else
+//			{
+//				SDL_RenderDrawRect(my_union.renderer, &wall);
+//			}
 		}
 	}
 }
