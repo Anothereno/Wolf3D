@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/08 15:54:58 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/08 19:35:58 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,108 @@ void	take_vector_of_view(t_player *player)
 	player->direct_y = (center_y + (player->radius * sin(player->degree * rad)));
 }
 
-void	draw_rays(t_union my_union, t_player player)
+void	draw_rays(t_union my_union, t_player player, t_map map)
 {
 	int		i;
+	int 	step_x;
+	int 	step_y;
+	int 	collis;
+	int 	line_heigth;
+	int 	start;
+	int 	end;
+	int 	wall_side;
 	double	cam;
 	double	ray_x;
 	double	ray_y;
+	int 	square_x;
+	int 	square_y;
+	double 	side_distance_x;
+	double 	side_distance_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double 	wall_dist;
+
+
 
 	i = -1;
+	SDL_SetRenderDrawColor(my_union.renderer, 130, 130, 130, 255);
 	while (++i < my_union.win_x)
 	{
-		cam = 2 * (double)i / (double)my_union.win_x - 1;
+		cam = 2 * i / (double)my_union.win_x - 1;
 		ray_x = player.dirX + player.planeX * cam;
 		ray_y = player.dirY + player.planeY * cam;
-		SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
-						   player.player_pos_y + (player.player_heigth >> 1), ray_x, ray_y);
+
+		square_x = (int)player.player_pos_x;
+		square_y = (int)player.player_pos_y;
+
+		delta_dist_x = fabs(1 / ray_x);
+		delta_dist_y = fabs(1 / ray_y);
+
+		collis = 0;
+		if (ray_x < 0)
+		{
+			step_x = -1;
+			side_distance_x = (player.player_pos_x - square_x) * delta_dist_x;
+		}
+		else
+		{
+			step_x = 1;
+			side_distance_x = (square_x + 1.0 - player.player_pos_x) * delta_dist_x;
+		}
+		if (ray_y < 0)
+		{
+			step_y = -1;
+			side_distance_y = (player.player_pos_y - square_y) * delta_dist_y;
+		}
+		else
+		{
+			step_y = 1;
+			side_distance_y = (square_y + 1.0 - player.player_pos_y) * delta_dist_y;
+		}
+
+		while (!collis)
+		{
+			if (side_distance_x < side_distance_y)
+			{
+				side_distance_x += delta_dist_x;
+				square_x += step_x;
+				wall_side = 0;
+			}
+			else
+			{
+				side_distance_y += delta_dist_y;
+				square_y += step_y;
+				wall_side = 1;
+			}
+			if (map.map[square_y][square_x] > 0)
+				collis = 1;
+
+			if (!wall_side)
+				wall_dist = (square_x - player.player_pos_x + (double)(1 - step_x) / 2) / ray_x;
+			else
+				wall_dist = (square_y - player.player_pos_y + (double)(1 - step_y) / 2) / ray_y;
+
+			line_heigth = (int)(my_union.win_y / wall_dist);
+			start = -line_heigth / 2 + my_union.win_y / 2;
+			if (start < 0)
+				start = 0;
+			end = line_heigth / 2 + my_union.win_y / 2;
+			if (end >= my_union.win_y)
+				end = my_union.win_y - 1;
+
+			SDL_RenderDrawLine(my_union.renderer, i,
+							   start, i, end);
+
+
+//			SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
+//							   player.player_pos_y + (player.player_heigth >> 1), ray_x, ray_y);
+
+
+		}
 	}
 }
 
-void	draw_player(t_union my_union, t_player player)
+void	draw_player(t_union my_union, t_player player, t_map map)
 {
 	SDL_Rect player_body;
 
@@ -63,11 +146,11 @@ void	draw_player(t_union my_union, t_player player)
 	SDL_RenderDrawLine(my_union.renderer, player.player_pos_x + (player.player_width >> 1),
 					   player.player_pos_y + (player.player_heigth >> 1), player.direct_x,
 					   player.direct_y);
-	draw_rays(my_union, player);
+	draw_rays(my_union, player, map);
 
 }
 
-void	draw_scene(t_union my_union, t_map map)
+/*void	draw_scene(t_union my_union, t_map map)
 {
 	int			x;
 	int			y;
@@ -94,7 +177,7 @@ void	draw_scene(t_union my_union, t_map map)
 //			}
 		}
 	}
-}
+}*/
 
 
 

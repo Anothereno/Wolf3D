@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/08 13:56:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/08 18:47:56 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_union
 	double			var_y;
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
+	double 			time;
 	char			mode;
 	double			shift_y;
 	int				win_y;
@@ -99,6 +100,8 @@ typedef struct	s_player
 	int		step_length;
 	int		radius;
 	int		degree;
+	double 	speed_move;
+	double 	speed_rotate;
 
 
 	double	dirX;
@@ -109,9 +112,11 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			draw_rays(t_union my_union, t_player player, t_map map);
+void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map);
 void			check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key);
-void			draw_player(t_union my_union, t_player player);
+void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
 void			initialize_SDL(t_union *my_union);

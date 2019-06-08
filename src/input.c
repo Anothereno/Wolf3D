@@ -6,11 +6,17 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/08 15:54:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/08 19:45:16 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void	change_speed(t_union *my_union, t_player *player)
+{
+	player->speed_move = my_union->time * 5.0;
+	player->speed_rotate = my_union->time * 3.0;
+}
 
 void	initialize_SDL(t_union *my_union)
 {
@@ -24,15 +30,15 @@ void	initialize_SDL(t_union *my_union)
 
 void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 {
-	my_union->win_x = map->size_x * BLOCK_SIZE;
-	my_union->win_y = map->size_y * BLOCK_SIZE;
+	my_union->win_x = 960;
+	my_union->win_y = 720;
 	my_union->scale = 1;
 	my_union->save_fdf = 0;
 	my_union->shift_y = 0;
 	my_union->half_win_x = my_union->win_x * 0.5;
 	my_union->half_win_y = my_union->win_y * 0.5;
-	player->player_pos_x = 100;
-	player->player_pos_y = 100;
+	player->player_pos_x = 3;
+	player->player_pos_y = 3;
 	player->player_heigth = BLOCK_SIZE >> 1;
 	player->player_width = BLOCK_SIZE >> 1;
 	player->radius = 80;
