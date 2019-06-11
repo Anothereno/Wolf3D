@@ -6,13 +6,13 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/08 18:47:56 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 13:09:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __FRACTOL_H
 # define __FRACTOL_H
-# define SQR(x) x * x
+# define MAX(x,y) x >= y ? x : y
 # include "/usr/local/include/mlx.h"
 # include <math.h>
 # include "../libft/libft.h"
@@ -24,7 +24,7 @@
 # include <SDL.h>
 
 # define NUM_OF_THR 200
-# define BLOCK_SIZE	64
+# define BLOCK_SIZE	32
 
 typedef struct	s_line
 {
@@ -97,6 +97,8 @@ typedef struct	s_player
 	int		player_width;
 	double	direct_x;
 	double	direct_y;
+
+	double	fov;
 	int		step_length;
 	int		radius;
 	int		degree;
@@ -112,6 +114,7 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			draw_line(t_union my_union, t_map map, double x1, double y1, double x2, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map);

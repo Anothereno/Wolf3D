@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/08 19:26:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 12:44:03 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int 	in_wall(t_player *player, t_map *map)
 {
-	if (map->map[(int)player->player_pos_y >> 6][(int)player->player_pos_x >> 6])
+	if (map->map[(int)player->player_pos_y >> 5][(int)player->player_pos_x >> 5])
 		return (1);
-	if (map->map[(int)player->player_pos_y >> 6][(int)(player->player_pos_x + player->player_width) >> 6])
+	if (map->map[((int)player->player_pos_y + (BLOCK_SIZE >> 1)) >> 5][(int)player->player_pos_x >> 5])
 		return (1);
-	if (map->map[(int)(player->player_pos_y + player->player_heigth) >> 6][(int)player->player_pos_x >> 6])
+	if (map->map[(int)player->player_pos_y >> 5][((int)player->player_pos_x + (BLOCK_SIZE >> 1)) >> 5])
 		return (1);
-	if (map->map[(int)(player->player_pos_y + player->player_heigth) >> 6][(int)(player->player_pos_x + player->player_width) >> 6])
+	if (map->map[((int)player->player_pos_y + (BLOCK_SIZE >> 1)) >> 5][((int)player->player_pos_x + (BLOCK_SIZE >> 1)) >> 5])
 		return (1);
 	return (0);
 }
@@ -62,45 +62,45 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_LEFT])
 	{
-//		player->player_pos_x -= 4;
-		old_dir_x = player->dirX;
-		old_plane_x = player->planeX;
-		player->dirX = player->dirX * cos(player->speed_rotate) - player->dirY * sin(player->speed_rotate);
-		player->dirY = old_dir_x * sin(player->speed_rotate) + player->dirY * cos(player->speed_rotate);
-		player->planeX = player->planeX * cos(player->speed_rotate) - player->planeY * sin(player->speed_rotate);
-		player->planeY = old_plane_x * sin(player->speed_rotate) + player->planeY * cos(player->speed_rotate);
+		player->player_pos_x -= 4;
+//		old_dir_x = player->dirX;
+//		old_plane_x = player->planeX;
+//		player->dirX = player->dirX * cos(player->speed_rotate) - player->dirY * sin(player->speed_rotate);
+//		player->dirY = old_dir_x * sin(player->speed_rotate) + player->dirY * cos(player->speed_rotate);
+//		player->planeX = player->planeX * cos(player->speed_rotate) - player->planeY * sin(player->speed_rotate);
+//		player->planeY = old_plane_x * sin(player->speed_rotate) + player->planeY * cos(player->speed_rotate);
 	}
 	if (key[SDL_SCANCODE_RIGHT])
 	{
-//		player->player_pos_x += 4;
-		old_dir_x = player->dirX;
-		old_plane_x = player->planeX;
-		player->dirX = player->dirX * cos(-player->speed_rotate) - player->dirY * sin(-player->speed_rotate);
-		player->dirY = old_dir_x * sin(-player->speed_rotate) + player->dirY * cos(-player->speed_rotate);
-		player->planeX = player->planeX * cos(-player->speed_rotate) - player->planeY * sin(-player->speed_rotate);
-		player->planeY = old_plane_x * sin(-player->speed_rotate) + player->planeY * cos(-player->speed_rotate);
+		player->player_pos_x += 4;
+//		old_dir_x = player->dirX;
+//		old_plane_x = player->planeX;
+//		player->dirX = player->dirX * cos(-player->speed_rotate) - player->dirY * sin(-player->speed_rotate);
+//		player->dirY = old_dir_x * sin(-player->speed_rotate) + player->dirY * cos(-player->speed_rotate);
+//		player->planeX = player->planeX * cos(-player->speed_rotate) - player->planeY * sin(-player->speed_rotate);
+//		player->planeY = old_plane_x * sin(-player->speed_rotate) + player->planeY * cos(-player->speed_rotate);
 
 	}
 	if (key[SDL_SCANCODE_UP])
 	{
-		if (!map->map[(int)(player->player_pos_x +
-				player->dirX * player->speed_move)][(int)player->player_pos_y])
-			player->player_pos_x += player->dirX * player->speed_move;
-		if (!map->map[(int)player->player_pos_x][(int)(player->player_pos_y +
-				player->dirY * player->speed_move)])
-			player->player_pos_y += player->dirY * player->speed_move;
-//		view_follow(player, map);
+//		if (!map->map[(int)(player->player_pos_y +
+//				player->dirY * player->speed_move)][(int)player->player_pos_x])
+//			player->player_pos_y += player->dirY * player->speed_move;
+//		if (!map->map[(int)player->player_pos_y][(int)(player->player_pos_x +
+//				player->dirX * player->speed_move)])
+//			player->player_pos_x += player->dirX * player->speed_move;
+		view_follow(player, map);
 	}
 	if (key[SDL_SCANCODE_DOWN])
 	{
-		if (!map->map[(int)(player->player_pos_x -
-				player->dirX * player->speed_move)][(int)player->player_pos_y])
-			player->player_pos_x -= player->dirX * player->speed_move;
-		if (!map->map[(int)player->player_pos_x][(int)(player->player_pos_y -
-				player->dirY * player->speed_move)])
-			player->player_pos_y -= player->dirY * player->speed_move;
-
-//		player->player_pos_y += 4;
+//		if (!map->map[(int)(player->player_pos_y -
+//							player->dirY * player->speed_move)][(int)player->player_pos_x])
+//			player->player_pos_y -= player->dirY * player->speed_move;
+//		if (!map->map[(int)player->player_pos_y][(int)(player->player_pos_x -
+//													   player->dirX * player->speed_move)])
+//			player->player_pos_x -= player->dirX * player->speed_move;
+//
+		player->player_pos_y += 4;
 	}
 	if (key[SDL_SCANCODE_Q])
 	{
