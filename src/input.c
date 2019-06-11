@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/11 13:23:39 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 19:37:11 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	change_speed(t_union *my_union, t_player *player)
 
 void	initialize_SDL(t_union *my_union)
 {
-
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		printf("error\n");
 	my_union->win = SDL_CreateWindow("Wolf3D",/*SDL_WINDOWPOS_CENTERED*/ 200, /*SDL_WINDOWPOS_CENTERED*/200, my_union->win_x, my_union->win_y, 0);
@@ -30,22 +29,18 @@ void	initialize_SDL(t_union *my_union)
 
 void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 {
-	my_union->win_x = 960;
-	my_union->win_y = 720;
-	my_union->scale = 1;
+	my_union->win_x = 640;
+	my_union->win_y = 480;
 	my_union->save_fdf = 0;
-	my_union->shift_y = 0;
-	my_union->half_win_x = my_union->win_x * 0.5;
-	my_union->half_win_y = my_union->win_y * 0.5;
 //	player->player_pos_x = 3;
 //	player->player_pos_y = 3;
-	player->player_pos_x = 300;
-	player->player_pos_y = 300;
-	player->player_heigth = BLOCK_SIZE >> 1;
-	player->player_width = BLOCK_SIZE >> 1;
-	player->radius = MAX(my_union->win_x, my_union->win_y);
+	player->player_pos_x = 3 * BLOCK_SIZE;
+	player->player_pos_y = 5 * BLOCK_SIZE;
+	player->player_heigth = 1;
+	player->player_width = 1;
+	player->radius = BLOCK_SIZE * 4;//200;//MAX(my_union->win_x, my_union->win_y);
 	player->degree = 45;
-	player->step_length = 4;
+	player->step_length = BLOCK_SIZE >> 4;
 	player->planeX = 0;
 	player->planeY = 0.66;
 	player->dirX = -1;

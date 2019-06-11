@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/11 13:09:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 18:10:50 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,7 @@
 # include <SDL.h>
 
 # define NUM_OF_THR 200
-# define BLOCK_SIZE	32
-
-typedef struct	s_line
-{
-	int			dx;
-	int			dy;
-	int			inclinex;
-	int			incliney;
-	int			signx;
-	int			signy;
-	int			error;
-	int			longline;
-	int			shortline;
-	int			i;
-}				t_line;
+# define BLOCK_SIZE	16
 
 typedef struct	s_int
 {
@@ -48,36 +34,25 @@ typedef struct	s_int
 
 typedef struct	s_union
 {
-	void			*image_ptr;
-	void			*mlx_ptr;
 	char			*image_data;
-	void			*win_ptr;
-	double			scale;
 	int				win_x;
-	char			delta;
-	double			shift_x;
-	int				max_iter;
-	double			cur_real;
-	double			cur_imag;
-	int				zoom_num;
-	double			temp_real;
-	double			half_win_x;
-	double			half_win_y;
-	int				cross;
-	double			var_x;
-	double			var_y;
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	double 			time;
-	char			mode;
-	double			shift_y;
 	int				win_y;
-	int				bpp;
+	int 			wall_heigth;
 	int				save_fdf;
-	int				endian;
+	int 			line_length;
+	double 			distance;
+	double 			delta_x;
+	double 			ray_x;
+	double 			ray_y;
+	int 			start;
+	int 			end;
+	int				flag;
+	double			delta_y;
 	int				sl;
 	FILE			*file;
-	t_line			*line;
 	t_int			*ints;
 }				t_union;
 
@@ -98,6 +73,7 @@ typedef struct	s_player
 	double	direct_x;
 	double	direct_y;
 
+	double 	distanse;
 	double	fov;
 	int		step_length;
 	int		radius;
@@ -114,7 +90,8 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
-void			draw_line(t_union my_union, t_map map, double x1, double y1, double x2, double y2);
+int				trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
+int				draw_line(t_union my_union, double x1, double y1, double x2, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map);

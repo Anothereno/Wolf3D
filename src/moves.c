@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/11 12:44:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 16:13:00 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int 	in_wall(t_player *player, t_map *map)
 {
-	if (map->map[(int)player->player_pos_y >> 5][(int)player->player_pos_x >> 5])
+	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
 		return (1);
-	if (map->map[((int)player->player_pos_y + (BLOCK_SIZE >> 1)) >> 5][(int)player->player_pos_x >> 5])
+	if (map->map[((int)player->player_pos_y + player->player_heigth) / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
 		return (1);
-	if (map->map[(int)player->player_pos_y >> 5][((int)player->player_pos_x + (BLOCK_SIZE >> 1)) >> 5])
+	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][((int)player->player_pos_x + player->player_width) / BLOCK_SIZE])
 		return (1);
-	if (map->map[((int)player->player_pos_y + (BLOCK_SIZE >> 1)) >> 5][((int)player->player_pos_x + (BLOCK_SIZE >> 1)) >> 5])
+	if (map->map[((int)player->player_pos_y + player->player_heigth) / BLOCK_SIZE][((int)player->player_pos_x + player->player_width) / BLOCK_SIZE])
 		return (1);
 	return (0);
 }

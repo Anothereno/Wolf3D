@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/11 13:43:25 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/11 19:20:54 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,17 @@ void	take_vector_of_view(t_player *player)
 	player->direct_y = (center_y + (player->radius * sin(player->degree * rad)));
 }
 
+void	calc_line(t_union *my_union)
+{
+	my_union->line_length = (int)(my_union->win_y / my_union->distance);
+	my_union->start = - my_union->line_length / 2 + my_union->win_y / 2;
+	if (my_union->start < 0)
+		my_union->start = 0;
+	my_union->end = my_union->line_length / 2 + my_union->win_y / 2;
+	if (my_union->end >= my_union->win_y)
+		my_union->end = my_union->win_y - 1;
+}
+
 void	raycast(t_union my_union, t_map map, t_player player)
 {
 	int		i;
@@ -43,6 +54,8 @@ void	raycast(t_union my_union, t_map map, t_player player)
 	double 	prev_angle;
 	double 	player_angle;
 	double	center_y;
+	double 	dist_x;
+	double	dist_y;
 	double	rad;
 
 	rad = 0.0174533;
@@ -50,18 +63,30 @@ void	raycast(t_union my_union, t_map map, t_player player)
 	center_x = player.player_pos_x + (player.player_width >> 1);
 	center_y = player.player_pos_y + (player.player_heigth >> 1);
 	prev_angle = player.fov / my_union.win_x * rad;
-	player_angle = player.degree * rad;
-
-	while (++i < my_union.win_x / 2)
-	{
+	player_angle = (player.degree - 30) * rad;
+	while (++i < my_union.win_x) {
+		my_union.flag = 0;
 		angle = prev_angle * i;
-		ray_x = (center_x + (player.radius * cos(player_angle + angle)));
-		ray_y = (center_y + (player.radius * sin(player_angle + angle)));
-		draw_line(my_union, map, center_x, center_y, ray_x, ray_y);
-		ray_x = (center_x + (player.radius * cos(player_angle - angle)));
-		ray_y = (center_y + (player.radius * sin(player_angle - angle)));
-		draw_line(my_union, map, center_x, center_y, ray_x, ray_y);
-
+		my_union.ray_x = (center_x + (player.radius * cos(player_angle + angle)));
+		my_union.ray_y = (center_y + (player.radius * sin(player_angle + angle)));
+		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, 360 - angle);
+		calc_line(&my_union);
+		SDL_SetRenderDrawColor(my_union.renderer, 40, 255, 40, 255);
+		draw_line(my_union, center_x, center_y, my_union.ray_x, my_union.ray_y);
+		if (my_union.flag)
+		{
+			SDL_SetRenderDrawColor(my_union.renderer, 255, 40, 40, 255);
+			printf("%f\n", my_union.distance);
+			draw_line(my_union, i, my_union.start, i, my_union.end);
+		}
+//		if (draw_line(my_union, center_x, center_y, ray_x))
+//		{
+//			SDL_SetRenderDrawColor(my_union.renderer, 255, 40, 40, 255);
+//			my_union.wall_heigth = my_union.win_y >> 1;
+//		}
+//		ray_x = (center_x + (player.radius * cos(player_angle - angle)));
+//		ray_y = (center_y + (player.radius * sin(player_angle - angle)));
+//		draw_line(my_union, map, center_x, center_y, ray_x, ray_y, 360 - angle);
 	}
 }
 
@@ -206,22 +231,22 @@ void	draw_scene(t_union my_union, t_map map)
 			{
 				SDL_RenderFillRect(my_union.renderer, &wall);
 			}
-//			else
-//			{
-//				SDL_RenderDrawRect(my_union.renderer, &wall);
-//			}
+			else
+			{
+				SDL_RenderDrawRect(my_union.renderer, &wall);
+			}
 		}
 	}
 }
 
 int 	check_wall(double cur_x, double cur_y, t_map map)
 {
-	if (map.map[(int)cur_y >> 5][(int)cur_x >> 5])
+	if (map.map[(int)cur_y / BLOCK_SIZE][(int)cur_x / BLOCK_SIZE])
 		return (1);
 	return (0);
 }
 
-void	draw_line(t_union my_union, t_map map, double x1, double y1, double x2, double y2)
+int		draw_line(t_union my_union, double x1, double y1, double x2, double y2)
 {
 	double	delta_x;
 	double	delta_y;
@@ -245,11 +270,92 @@ void	draw_line(t_union my_union, t_map map, double x1, double y1, double x2, dou
 	i = -1;
 	while (++i <= step)
 	{
-		if (check_wall(cur_x, cur_y, map))
-			break;
 		SDL_RenderDrawPoint(my_union.renderer, (int)cur_x, (int)cur_y);
 		cur_x += increm_x;
 		cur_y += increm_y;
+	}
+}
+
+
+int		trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha)
+{
+	double	delta_x;
+	double	delta_y;
+	double	step;
+	double	increm_x;
+	double	increm_y;
+	double 	intersect_begin_x;
+	double 	intersect_begin_y;
+	int 	flag;
+	double 	intersect_end_x;
+	double 	intersect_end_y;
+	double	cur_x;
+	double	cur_y;
+	int		i;
+
+	flag = 0;
+	intersect_begin_x = 0;
+	intersect_begin_y = 0;
+	intersect_end_x = 0;
+	intersect_end_y = 0;
+	delta_x = x2 - x1;
+	delta_y = y2 - y1;
+	if (fabs(delta_x) > fabs(delta_y))
+		step = fabs(delta_x);
+	else
+		step = fabs(delta_y);
+	increm_x = delta_x / (double)step;
+	increm_y = delta_y / (double)step;
+	cur_x = x1;
+	cur_y = y1;
+	i = -1;
+	while (++i <= step)
+	{
+		cur_x += increm_x;
+		cur_y += increm_y;
+//		if (!flag)
+//		{
+//			if ((int) cur_x % BLOCK_SIZE == 0)
+//				intersect_begin_x = cur_x;
+//			if (intersect_begin_x && (int) cur_x % BLOCK_SIZE == 0)
+//				intersect_end_x = cur_x;
+//			if ((int) cur_y % BLOCK_SIZE == 0)
+//			{
+//				increm_x = cur_x - intersect_begin_x;
+//				intersect_begin_y = cur_y;
+//			}
+//			if (intersect_begin_y && (int) cur_y % BLOCK_SIZE == 0)
+//			{
+//				increm_y = cur_y - intersect_begin_y;
+//				intersect_end_y = cur_y;
+//			}
+//			if (intersect_end_x && intersect_end_y)
+//				flag++;
+//		{
+//			increm_x = intersect_end_x - intersect_begin_x;
+//			increm_y = intersect_end_y - intersect_begin_y;
+//		}
+
+//		}
+		if (check_wall(cur_x, cur_y, map))
+		{
+			my_union->flag = 1;
+			my_union->ray_x = cur_x;
+			my_union->ray_y = cur_y;
+			break;
+		}
+	}
+//	my_union->delta_x = intersect_end_x - intersect_begin_x;
+//	my_union->delta_y = intersect_end_y - intersect_begin_y;
+//	if (flag)
+//		return (1);
+//	return (0);
+	if (my_union->flag)
+	{
+//		if ((int)cur_x % BLOCK_SIZE == 0 && (int)cur_y % BLOCK_SIZE != 0)
+			my_union->distance = sqrt((x1 - cur_x) * (x1 - cur_x) + (y1 - cur_y) * (y1 - cur_y));
+//		else if ((int)cur_y % BLOCK_SIZE == 0 && (int)cur_x % BLOCK_SIZE != 0)
+//			my_union->distance = sqrt((x1 - cur_x) * (x1 - cur_x) + (y1 - cur_y) * (y1 - cur_y));
 
 	}
 }
