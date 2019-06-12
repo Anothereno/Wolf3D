@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 11:06:28 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/12 17:49:48 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,19 @@ void	change_speed(t_union *my_union, t_player *player)
 	player->speed_rotate = my_union->time * 3.0;
 }
 
-void	initialize_SDL(t_union *my_union)
-{
+void	initialize_SDL(t_union *my_union) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
 		printf("error\n");
+		exit(0);
+	}
 	my_union->win = SDL_CreateWindow("Wolf3D",/*SDL_WINDOWPOS_CENTERED*/ 200, /*SDL_WINDOWPOS_CENTERED*/200, my_union->win_x, my_union->win_y, 0);
 	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	my_union->texture = SDL_CreateTexture(my_union->renderer,
+			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
+			my_union->win_x, my_union->win_y);
+
 }
 
 void	struct_initial(t_union *my_union, t_map *map, t_player *player)
@@ -37,14 +43,16 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 	player->player_pos_x = 3 * BLOCK_SIZE;
 	player->player_pos_y = 5 * BLOCK_SIZE;
 	player->player_heigth = 1;
+	player->direct_x = 1;
+	player->direct_y = 0;
 	player->player_width = 1;
-	player->radius = BLOCK_SIZE << 3;//200;//MAX(my_union->win_x, my_union->win_y);
-	player->degree = 45;
-	player->speed = BLOCK_SIZE >> 4;
+	player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * 2;
+	player->degree = 0;
+	player->speed = BLOCK_SIZE >> 5;
 //	player->speed = 1;
 	player->planeX = 0;
 	player->planeY = 0.66;
-	player->dirX = -1;
+	player->dirX = 0;
 	player->dirY = 0;
 	player->time = 0;
 	player->oldTime = 0;

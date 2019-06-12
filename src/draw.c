@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 11:36:41 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/12 17:48:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,23 @@ void	take_vector_of_view(t_player *player)
 {
 	double center_x;
 	double center_y;
+	double last_x;
 	double rad;
 
 	rad = 0.0174533;
 	center_x = player->player_pos_x + (player->player_width >> 1);
 	center_y = player->player_pos_y + (player->player_heigth >> 1);
-	player->direct_x = (center_x + (player->radius * cos(player->degree * rad)));
-	player->direct_y = (center_y + (player->radius * sin(player->degree * rad)));
+	last_x = player->direct_x;
+	player->direct_x = player->direct_x * cos(player->degree * rad) - player->direct_y * sin(player->degree * rad);
+	player->direct_y = last_x * sin(player->degree * rad) + player->direct_y * sin(player->degree * rad);
+//	printf("%f, %f\n", player->direct_x, player->direct_y);
 }
 
 void	calc_line(t_union *my_union, double betta)
 {
 	my_union->distance = my_union->distance * cos(betta);
-	my_union->line_length = BLOCK_SIZE / my_union->distance * 277;
-	my_union->start = - my_union->line_length / 2 + my_union->win_y / 2;
+	my_union->line_length = (BLOCK_SIZE << (int)(my_union->win_x / 640)) / my_union->distance * 277;
+	my_union->start = -my_union->line_length / 2 + my_union->win_y / 2;
 	if (my_union->start < 0)
 		my_union->start = 0;
 	my_union->end = my_union->line_length / 2 + my_union->win_y / 2;
@@ -47,14 +50,10 @@ void	raycast(t_union my_union, t_map map, t_player player)
 {
 	int		i;
 	double	center_x;
-	double	ray_x;
-	double	ray_y;
 	double	angle;
 	double 	one_angle;
 	double 	player_angle;
 	double	center_y;
-	double 	dist_x;
-	double	dist_y;
 	double	rad;
 
 	rad = 0.0174533;
@@ -70,24 +69,15 @@ void	raycast(t_union my_union, t_map map, t_player player)
 		my_union.ray_y = (center_y + (player.radius * sin(angle)));
 		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, 360 - angle);
 		calc_line(&my_union, angle - player.degree * rad);
-		if (my_union.flag)
+		if (my_union.flag && (my_union.end - my_union.start > 64))
 		{
 			SDL_SetRenderDrawColor(my_union.renderer, 140, 140, 140, 255);
-//			printf("%f\n", my_union.distance);
-//			SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
-			draw_line(my_union, i, my_union.start, i, my_union.end);
+			SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
+//			draw_line(my_union, (int)i, (int)my_union.start, (int)my_union.end);
+//			printf("y1 - %d, y2 - %d\n", (int)my_union.start, (int)my_union.end);
 		}
 		SDL_SetRenderDrawColor(my_union.renderer, 40, 255, 40, 255);
 		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)my_union.ray_x >> 2, (int)my_union.ray_y >> 2);
-//		draw_line(my_union, center_x / 4, center_y / 4,my_union.ray_x / 4, my_union.ray_y / 4);
-//		if (draw_line(my_union, center_x, center_y, ray_x))
-//		{
-//			SDL_SetRenderDrawColor(my_union.renderer, 255, 40, 40, 255);
-//			my_union.wall_heigth = my_union.win_y >> 1;
-//		}
-//		ray_x = (center_x + (player.radius * cos(player_angle - angle)));
-//		ray_y = (center_y + (player.radius * sin(player_angle - angle)));
-//		draw_line(my_union, map, center_x, center_y, ray_x, ray_y, 360 - angle);
 	}
 }
 
@@ -222,35 +212,41 @@ int 	check_wall(double cur_x, double cur_y, t_map map)
 	return (0);
 }
 
-int		draw_line(t_union my_union, double x1, double y1, double x2, double y2)
+int		draw_line(t_union my_union, int x, int y1, int y2)
 {
-	double	delta_x;
-	double	delta_y;
-	double	step;
-	double	increm_x;
-	double	increm_y;
-	double	cur_x;
-	double	cur_y;
-	int		i;
+	int	sign_y;
 
-	delta_x = x2 - x1;
-	delta_y = y2 - y1;
-	if (fabs(delta_x) > fabs(delta_y))
-		step = fabs(delta_x);
-	else
-		step = fabs(delta_y);
-	increm_x = delta_x / (double)step;
-	increm_y = delta_y / (double)step;
-	cur_x = x1;
-	cur_y = y1;
-	i = -1;
-	while (++i <= step)
+	sign_y = y1 < y2 ? 1 : -1;
+	SDL_RenderDrawPoint(my_union.renderer, x, y2);
+	while (y1 != y2)
 	{
-		SDL_RenderDrawPoint(my_union.renderer, (int)cur_x, (int)cur_y);
-		cur_x += increm_x;
-		cur_y += increm_y;
+		SDL_RenderDrawPoint(my_union.renderer, x, y1);
+		y1 += sign_y;
 	}
 }
+
+//int		draw_line(t_union my_union, double x, double y1, double y2)
+//{
+//	double	delta_x;
+//	double	delta_y;
+//	double	step;
+//	double	increm_x;
+//	double	increm_y;
+//	double	cur_x;
+//	double	cur_y;
+//	int		i;
+//
+//	delta_y = y2 - y1;
+//	step = fabs(delta_y);
+//	increm_y = delta_y / (double)step;
+//	cur_y = y1;
+//	i = -1;
+//	while (++i <= step)
+//	{
+//		SDL_RenderDrawPoint(my_union.renderer, x, (int)cur_y);
+//		cur_y += increm_y;
+//	}
+//}
 
 
 void	trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha)
@@ -260,20 +256,20 @@ void	trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, do
 	double	step;
 	double	increm_x;
 	double	increm_y;
-	double 	intersect_begin_x;
-	double 	intersect_begin_y;
-	int 	flag;
-	double 	intersect_end_x;
-	double 	intersect_end_y;
+//	double 	intersect_begin_x;
+//	double 	intersect_begin_y;
+//	int 	flag;
+//	double 	intersect_end_x;
+//	double 	intersect_end_y;
 	double	cur_x;
 	double	cur_y;
 	int		i;
 
-	flag = 0;
-	intersect_begin_x = 0;
-	intersect_begin_y = 0;
-	intersect_end_x = 0;
-	intersect_end_y = 0;
+//	flag = 0;
+//	intersect_begin_x = 0;
+//	intersect_begin_y = 0;
+//	intersect_end_x = 0;
+//	intersect_end_y = 0;
 	delta_x = x2 - x1;
 	delta_y = y2 - y1;
 	if (fabs(delta_x) > fabs(delta_y))

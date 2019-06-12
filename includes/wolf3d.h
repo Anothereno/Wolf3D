@@ -6,12 +6,13 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 11:18:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/12 17:27:44 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __FRACTOL_H
 # define __FRACTOL_H
+# define ABS(x) x >= 0 ? x : -x
 # define MAX(x,y) x >= y ? x : y
 # include "/usr/local/include/mlx.h"
 # include <math.h>
@@ -22,7 +23,6 @@
 # include <string.h>
 # include <pthread.h>
 # include <SDL.h>
-
 # define NUM_OF_THR 200
 # define BLOCK_SIZE	64
 
@@ -38,6 +38,8 @@ typedef struct	s_union
 	int				win_x;
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
+	SDL_Texture		*texture;
+	Uint32 			*pixel_array;
 	double 			time;
 	int				win_y;
 	SDL_Event		event;
@@ -97,7 +99,8 @@ typedef struct	s_player
 void			take_vector_of_view(t_player *player);
 void			raycast(t_union my_union, t_map map, t_player player);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
-int				draw_line(t_union my_union, double x1, double y1, double x2, double y2);
+int				draw_line(t_union my_union, int x1, int y1, int y2);
+//int				draw_line(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map);

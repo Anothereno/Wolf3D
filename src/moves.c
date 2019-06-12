@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 10:38:12 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/12 16:24:49 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 int 	in_wall(t_player *player, t_map *map)
 {
 	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
-		return (1);
-	if (map->map[((int)player->player_pos_y + player->player_heigth) / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
-		return (1);
-	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][((int)player->player_pos_x + player->player_width) / BLOCK_SIZE])
-		return (1);
-	if (map->map[((int)player->player_pos_y + player->player_heigth) / BLOCK_SIZE][((int)player->player_pos_x + player->player_width) / BLOCK_SIZE])
 		return (1);
 	return (0);
 }
@@ -31,7 +25,6 @@ void	view_follow(t_player *player, t_map *map)
 	double center_y;
 	double old_pos_x;
 	double old_pos_y;
-
 	double rad;
 
 	rad = 0.0174533;
@@ -62,7 +55,7 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_LEFT])
 	{
-		player->degree -= 2;
+		player->degree -= 3;
 //		player->player_pos_x -= 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
@@ -73,8 +66,8 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_RIGHT])
 	{
-		player->degree += 2;
-	//	player->player_pos_x += 4;
+		player->degree += 3;
+//		player->player_pos_x += 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
 //		player->dirX = player->dirX * cos(-player->speed_rotate) - player->dirY * sin(-player->speed_rotate);
@@ -85,6 +78,9 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_UP])
 	{
+
+//		player->player_pos_x += player->direct_x * player->speed;
+//		player->player_pos_y += player->direct_y * player->speed;
 //		if (!map->map[(int)(player->player_pos_y +
 //				player->dirY * player->speed_move)][(int)player->player_pos_x])
 //			player->player_pos_y += player->dirY * player->speed_move;
