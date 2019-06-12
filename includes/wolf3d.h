@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/11 18:10:50 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/12 11:18:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <SDL.h>
 
 # define NUM_OF_THR 200
-# define BLOCK_SIZE	16
+# define BLOCK_SIZE	64
 
 typedef struct	s_int
 {
@@ -40,6 +40,10 @@ typedef struct	s_union
 	SDL_Renderer	*renderer;
 	double 			time;
 	int				win_y;
+	SDL_Event		event;
+	const Uint8		*key;
+	Uint64			start_tick;
+	Uint64			end_tick;
 	int 			wall_heigth;
 	int				save_fdf;
 	int 			line_length;
@@ -75,7 +79,7 @@ typedef struct	s_player
 
 	double 	distanse;
 	double	fov;
-	int		step_length;
+	int		speed;
 	int		radius;
 	int		degree;
 	double 	speed_move;
@@ -90,7 +94,9 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
-int				trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
+void			take_vector_of_view(t_player *player);
+void			raycast(t_union my_union, t_map map, t_player player);
+void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
 int				draw_line(t_union my_union, double x1, double y1, double x2, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
