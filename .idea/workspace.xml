@@ -13,8 +13,26 @@
   <component name="ChangeListManager">
     <list default="true" id="4d371366-e000-4c94-87e8-8f8b40ae6edf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/C.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/input.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/calculate.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/colorize.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/errors.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/validation.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wolf3d.dir/src/wolf3d.c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/wolf3d.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/wolf3d.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/wolf3d.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/wolf3d.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/map" beforeDir="false" afterPath="$PROJECT_DIR$/map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/draw.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/draw.c" afterDir="false" />
@@ -34,25 +52,31 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.56845427">
+    <splitter split-orientation="horizontal" split-proportion="0.7197976">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/wolf3d.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="550">
+                <state relative-caret-position="696">
                   <caret line="43" selection-start-line="43" selection-end-line="43" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/draw.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="617">
-                  <caret line="74" selection-start-line="74" selection-end-line="74" />
+                <state relative-caret-position="225">
+                  <caret line="357" column="53" selection-start-line="357" selection-start-column="53" selection-end-line="357" selection-end-column="53" />
                   <folding>
-                    <element signature="e#3244#5505#0" />
+                    <element signature="e#913#1047#0" />
+                    <element signature="e#1049#1611#0" />
+                    <element signature="e#1613#2079#0" />
+                    <element signature="e#3434#5695#0" />
+                    <element signature="e#5697#6140#0" />
+                    <element signature="e#6293#6531#0" />
+                    <element signature="e#6535#6601#0" />
                   </folding>
                 </state>
               </provider>
@@ -61,8 +85,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/moves.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-570">
-                  <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
+                <state relative-caret-position="-194">
+                  <caret line="56" column="5" selection-start-line="56" selection-start-column="5" selection-end-line="56" selection-end-column="5" />
                 </state>
               </provider>
             </entry>
@@ -70,8 +94,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/input.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="837">
-                  <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+                <state relative-caret-position="422">
+                  <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
                 </state>
               </provider>
             </entry>
@@ -79,17 +103,17 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/colorize.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="704">
+                <state relative-caret-position="608">
                   <caret line="32" selection-start-line="32" selection-end-line="32" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/map">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="154">
-                  <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+                <state relative-caret-position="646">
+                  <caret line="34" column="119" selection-start-line="34" selection-start-column="119" selection-end-line="34" selection-end-column="119" />
                 </state>
               </provider>
             </entry>
@@ -101,8 +125,11 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/includes/wolf3d.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="331">
-                  <caret line="41" column="10" lean-forward="true" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="10" />
+                <state relative-caret-position="422">
+                  <caret line="103" column="56" lean-forward="true" selection-start-line="103" selection-start-column="56" selection-end-line="103" selection-end-column="100" />
+                  <folding>
+                    <element signature="e#998#1034#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -110,8 +137,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1980">
-                  <caret line="90" selection-start-line="90" selection-end-line="98" selection-end-column="88" />
+                <state relative-caret-position="1691">
+                  <caret line="89" column="49" lean-forward="true" selection-start-line="89" selection-start-column="49" selection-end-line="89" selection-end-column="49" />
                 </state>
               </provider>
             </entry>
@@ -119,6 +146,11 @@
         </leaf>
       </split-second>
     </splitter>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>fov</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -130,17 +162,18 @@
         <option value="$PROJECT_DIR$/src/errors.c" />
         <option value="$PROJECT_DIR$/src/keys.c" />
         <option value="$PROJECT_DIR$/src/transform.c" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/calculate.c" />
         <option value="$PROJECT_DIR$/src/plot.c" />
         <option value="$PROJECT_DIR$/src/colorize.c" />
         <option value="$PROJECT_DIR$/src/validation.c" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/wolf3d.c" />
+        <option value="$USER_HOME$/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/SDL_image.h" />
         <option value="$PROJECT_DIR$/src/moves.c" />
-        <option value="$PROJECT_DIR$/map" />
         <option value="$PROJECT_DIR$/includes/wolf3d.h" />
-        <option value="$PROJECT_DIR$/src/input.c" />
         <option value="$PROJECT_DIR$/src/draw.c" />
+        <option value="$PROJECT_DIR$/src/input.c" />
+        <option value="$PROJECT_DIR$/map" />
       </list>
     </option>
   </component>
@@ -156,7 +189,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -172,12 +204,18 @@
             <path>
               <item name="wolf3d" type="b2602c69:ProjectViewProjectNode" />
               <item name="wolf3d" type="462c0819:PsiDirectoryNode" />
+              <item name="pics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wolf3d" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wolf3d" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -250,7 +288,9 @@
       <workItem from="1560244647443" duration="5575000" />
       <workItem from="1560253243162" duration="14499000" />
       <workItem from="1560323635374" duration="10685000" />
-      <workItem from="1560340586744" duration="9316000" />
+      <workItem from="1560340586744" duration="10665000" />
+      <workItem from="1560352643893" duration="211000" />
+      <workItem from="1560421835383" duration="17597000" />
     </task>
     <task id="LOCAL-00001" summary="v.1">
       <created>1559837359893</created>
@@ -301,18 +341,25 @@
       <option name="project" value="LOCAL" />
       <updated>1560328812965</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added mini map&#10;Added Ray cast v2.1&#10;Fixed some bugs">
+      <created>1560351172530</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1560351172531</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104080000" />
+    <option name="totallyTimeSpent" value="123237000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="729" y="23" width="1831" height="1336" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49702382" visible="true" weight="0.11403018" />
-      <window_info id="Structure" order="1" sideWeight="0.5029762" side_tool="true" visible="true" weight="0.11403018" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49503967" visible="true" weight="0.11626607" />
+      <window_info id="Structure" order="1" sideWeight="0.5049603" side_tool="true" visible="true" weight="0.11626607" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -382,18 +429,10 @@
     <MESSAGE value="Added first ray-cast alg" />
     <MESSAGE value="Added mini map&#10;Added Ray cast v1.2" />
     <MESSAGE value="Added mini map&#10;Added Ray cast v1.3&#10;Fixed some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added mini map&#10;Added Ray cast v1.3&#10;Fixed some bugs" />
+    <MESSAGE value="Added mini map&#10;Added Ray cast v2.1&#10;Fixed some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added mini map&#10;Added Ray cast v2.1&#10;Fixed some bugs" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/wolf3d.c</url>
-          <line>43</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="(int)square_y" language="ObjectiveC" />
@@ -404,11 +443,23 @@
         <watch expression="player-&gt;dirX * player-&gt;speed" language="ObjectiveC" />
         <watch expression="(int)player-&gt;player_pos_y" language="ObjectiveC" />
         <watch expression="((int)player-&gt;player_pos_y &gt;&gt; 5) + BLOCK_SIZE" language="ObjectiveC" />
+        <watch expression="alpha" language="ObjectiveC" />
+        <watch expression="cur_x / 64" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>cur_x / 64</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>alpha</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>player.direct</expression-string>
         <language-id>ObjectiveC</language-id>
@@ -446,16 +497,6 @@
       </expression>
       <expression>
         <expression-string>map.map[(int)square_y][(int)square_x]</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(int)square_x</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(int)square_y</expression-string>
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -504,9 +545,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pics/eagle.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/pics/colorstone.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -516,62 +554,87 @@
     <entry file="file://$PROJECT_DIR$/pics/barrel.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/colorize.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
-          <caret line="90" selection-start-line="90" selection-end-line="98" selection-end-column="88" />
+        <state relative-caret-position="1691">
+          <caret line="89" column="49" lean-forward="true" selection-start-line="89" selection-start-column="49" selection-end-line="89" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/map">
+    <entry file="file://$USER_HOME$/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/SDL_image.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+        <state relative-caret-position="749">
+          <caret line="158" column="10" selection-start-line="158" selection-start-column="10" selection-end-line="158" selection-end-column="10" />
+          <folding>
+            <element signature="e#1094#1110#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/moves.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-570">
-          <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/pics/eagle.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/wolf3d.h">
+    <entry file="file://$PROJECT_DIR$/pics/greystone.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/colorize.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="41" column="10" lean-forward="true" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="10" />
+        <state relative-caret-position="608">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wolf3d.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
+        <state relative-caret-position="696">
           <caret line="43" selection-start-line="43" selection-end-line="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/input.c">
+    <entry file="file://$PROJECT_DIR$/src/moves.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="837">
-          <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+        <state relative-caret-position="-194">
+          <caret line="56" column="5" selection-start-line="56" selection-start-column="5" selection-end-line="56" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/wolf3d.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="103" column="56" lean-forward="true" selection-start-line="103" selection-start-column="56" selection-end-line="103" selection-end-column="100" />
+          <folding>
+            <element signature="e#998#1034#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/draw.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="617">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
+        <state relative-caret-position="225">
+          <caret line="357" column="53" selection-start-line="357" selection-start-column="53" selection-end-line="357" selection-end-column="53" />
           <folding>
-            <element signature="e#3244#5505#0" />
+            <element signature="e#913#1047#0" />
+            <element signature="e#1049#1611#0" />
+            <element signature="e#1613#2079#0" />
+            <element signature="e#3434#5695#0" />
+            <element signature="e#5697#6140#0" />
+            <element signature="e#6293#6531#0" />
+            <element signature="e#6535#6601#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/input.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="49" column="32" selection-start-line="49" selection-start-column="32" selection-end-line="49" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/map">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="34" column="119" selection-start-line="34" selection-start-column="119" selection-end-line="34" selection-end-column="119" />
         </state>
       </provider>
     </entry>

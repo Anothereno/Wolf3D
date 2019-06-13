@@ -25,6 +25,8 @@ pthread.h
 -
 SDL.h
 -
+SDL_image.h
+-
 
 ../libft/libft.h
 unistd.h
@@ -34,7 +36,7 @@ stdlib.h
 string.h
 -
 
-/Users/hdwarven/Desktop/wolf3d/src/draw.c
+/Users/hdwarven/Desktop/wolf3d/src/input.c
 wolf3d.h
 /Users/hdwarven/Desktop/wolf3d/src/wolf3d.h
 
@@ -653,6 +655,16 @@ close_code.h
 /Users/hdwarven/Library/Frameworks/SDL2.framework/Versions/A/Headers/begin_code.h
 
 /Users/hdwarven/Library/Frameworks/SDL2.framework/Versions/A/Headers/close_code.h
+
+/Users/hdwarven/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/SDL_image.h
+SDL.h
+-
+SDL_version.h
+-
+begin_code.h
+-
+close_code.h
+-
 
 /usr/local/include/mlx.h
 

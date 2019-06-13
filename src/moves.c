@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 16:24:49 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/13 19:44:36 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	view_follow(t_player *player, t_map *map)
 	center_x = player->player_pos_x + (player->player_width >> 1);
 	center_y = player->player_pos_y + (player->player_heigth >> 1);
 	player->player_pos_x = (center_x + (player->speed *
-			cos(player->degree * rad))) - (player->player_width >> 1);
+			cos(player->view_direction * rad))) - (player->player_width >> 1);
 	player->player_pos_y = (center_y + (player->speed *
-			sin(player->degree * rad))) - (player->player_width >> 1);
+			sin(player->view_direction * rad))) - (player->player_width >> 1);
 	if (in_wall(player, map))
 	{
 		player->player_pos_x = old_pos_x;
@@ -55,7 +55,7 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_LEFT])
 	{
-		player->degree -= 3;
+		player->view_direction -= 3;
 //		player->player_pos_x -= 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
@@ -66,7 +66,7 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_RIGHT])
 	{
-		player->degree += 3;
+		player->view_direction += 3;
 //		player->player_pos_x += 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
@@ -102,10 +102,10 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_Q])
 	{
-//		player->degree -= 2;
+//		player->view_direction -= 2;
 	}
 	if (key[SDL_SCANCODE_E])
 	{
-//		player->degree += 2;
+//		player->view_direction += 2;
 	}
 }

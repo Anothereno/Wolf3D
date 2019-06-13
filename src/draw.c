@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 17:48:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/13 20:41:31 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	take_vector_of_view(t_player *player)
 	center_x = player->player_pos_x + (player->player_width >> 1);
 	center_y = player->player_pos_y + (player->player_heigth >> 1);
 	last_x = player->direct_x;
-	player->direct_x = player->direct_x * cos(player->degree * rad) - player->direct_y * sin(player->degree * rad);
-	player->direct_y = last_x * sin(player->degree * rad) + player->direct_y * sin(player->degree * rad);
+	player->direct_x = player->direct_x * cos(player->view_direction * rad) - player->direct_y * sin(player->view_direction * rad);
+	player->direct_y = last_x * sin(player->view_direction * rad) + player->direct_y * sin(player->view_direction * rad);
 //	printf("%f, %f\n", player->direct_x, player->direct_y);
 }
 
@@ -54,22 +54,21 @@ void	raycast(t_union my_union, t_map map, t_player player)
 	double 	one_angle;
 	double 	player_angle;
 	double	center_y;
-	double	rad;
 
-	rad = 0.0174533;
 	i = -1;
 	center_x = player.player_pos_x + (player.player_width >> 1);
 	center_y = player.player_pos_y + (player.player_heigth >> 1);
-	one_angle = player.fov / my_union.win_x * rad;
-	player_angle = (player.degree - 30) * rad;
+	one_angle = player.fov / my_union.win_x * RAD;
+	player_angle = (player.view_direction - 30) * RAD;
 	while (++i < my_union.win_x) {
 		my_union.flag = 0;
 		angle = one_angle * i + player_angle;
 		my_union.ray_x = (center_x + (player.radius * cos(angle)));
 		my_union.ray_y = (center_y + (player.radius * sin(angle)));
-		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, 360 - angle);
-		calc_line(&my_union, angle - player.degree * rad);
-		if (my_union.flag && (my_union.end - my_union.start > 64))
+		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, angle);
+//		hor_intersect(&my_union, player, map, angle);
+		calc_line(&my_union, angle - player.view_direction * RAD);
+		if (my_union.flag/* && (my_union.end - my_union.start > 64)*/)
 		{
 			SDL_SetRenderDrawColor(my_union.renderer, 140, 140, 140, 255);
 			SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
@@ -247,6 +246,64 @@ int		draw_line(t_union my_union, int x, int y1, int y2)
 //		cur_y += increm_y;
 //	}
 //}
+
+void	hor_intersect(t_union *my_union, t_player player, t_map map, double alpha)
+{
+	int	first_intersect_y;
+	int	first_intersect_x;
+	double 	step_y;
+	double 	step_x;
+	double 	cur_point_x;
+	double 	next_point_x;
+	double 	cur_point_y;
+	double 	next_point_y;
+	int 	intersect;
+
+//	For horizontal intersect
+	intersect = 0;
+
+	if (tan(alpha) < 0.000001)
+		alpha += 0.00001;
+	printf("pos_x - %f, pos_y - %f, player - %d, angle - %f, tan - %f\n", player.player_pos_x, player.player_pos_y, player.view_direction, alpha / RAD, tan(alpha));
+	if ((int)(alpha / RAD) > 180)
+	{
+		first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE - 1;
+		step_y = -BLOCK_SIZE;
+	}
+	else
+	{
+		first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE + 64;
+		step_y = BLOCK_SIZE;
+	}
+
+	first_intersect_x = player.player_pos_x + (player.player_pos_y  - first_intersect_y) /
+			tan(alpha);
+
+	printf("x: %d, y: %d\n", (first_intersect_x), first_intersect_y);
+	step_x = BLOCK_SIZE / tan(alpha);
+	printf("%f\n", step_x);
+	cur_point_x = first_intersect_x + step_x;
+	cur_point_y = first_intersect_y + step_y;
+	while (!intersect || (cur_point_x < map.size_x && cur_point_y < map.size_y))
+	{
+		if (check_wall(cur_point_x, cur_point_y, map))
+		{
+			intersect++;
+			break;
+		}
+		if((cur_point_x + step_x) / BLOCK_SIZE < map.size_x &&
+		   cur_point_y / BLOCK_SIZE < map.size_y)
+		{
+			cur_point_x += step_x;
+			cur_point_y += step_y;
+		}
+		else
+			break;
+	}
+	my_union->ray_x = cur_point_x;
+	my_union->ray_y = cur_point_y;
+	printf("cur_x - %f, cur_y - %f\n", cur_point_x, cur_point_y);
+}
 
 
 void	trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha)

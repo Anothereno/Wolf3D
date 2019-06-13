@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/12 17:27:44 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/13 20:41:31 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 # include <string.h>
 # include <pthread.h>
 # include <SDL.h>
+# include <SDL_image.h>
 # define NUM_OF_THR 200
 # define BLOCK_SIZE	64
+# define RAD 0.0174533
 
 typedef struct	s_int
 {
@@ -83,7 +85,7 @@ typedef struct	s_player
 	double	fov;
 	int		speed;
 	int		radius;
-	int		degree;
+	int		view_direction;
 	double 	speed_move;
 	double 	speed_rotate;
 
@@ -98,6 +100,7 @@ typedef struct	s_player
 
 void			take_vector_of_view(t_player *player);
 void			raycast(t_union my_union, t_map map, t_player player);
+void			hor_intersect(t_union *my_union, t_player player, t_map map, double alpha);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
 int				draw_line(t_union my_union, int x1, int y1, int y2);
 //int				draw_line(t_union my_union, double x1, double y1, double y2);

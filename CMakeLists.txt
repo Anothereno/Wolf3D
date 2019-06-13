@@ -89,6 +89,8 @@ target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")
 target_link_libraries(wolf3d "-framework Appkit")
 target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")
+target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_image")
+
 
 include_directories("includes")
 include_directories("resources")
@@ -99,3 +101,5 @@ include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2.framework/Version
 target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")
 #target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_mixer")
 #target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_ttf")
+include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/")
+target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_image")

@@ -88,6 +88,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "../resources"
   "../libft/includes"
   "/Users/hdwarven/Library/Frameworks/SDL2.framework/Versions/A/Headers"
+  "/Users/hdwarven/Library/Frameworks/SDL2_image.framework/Versions/A/Headers"
   )
 
 # Targets to which this target links.
