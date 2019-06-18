@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/13 20:41:31 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/14 12:26:33 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct	s_player
 	int		player_width;
 	double	direct_x;
 	double	direct_y;
+	int 	rotate_angle;
 
 	double 	distanse;
 	double	fov;
@@ -99,6 +100,7 @@ typedef struct	s_player
 }				t_player;
 
 void			take_vector_of_view(t_player *player);
+void			vert_intersect(t_union *my_union, t_player player, t_map map, double alpha);
 void			raycast(t_union my_union, t_map map, t_player player);
 void			hor_intersect(t_union *my_union, t_player player, t_map map, double alpha);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);

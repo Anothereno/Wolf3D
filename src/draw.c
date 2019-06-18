@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/13 20:41:31 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/18 18:03:35 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,24 @@ void	raycast(t_union my_union, t_map map, t_player player)
 	i = -1;
 	center_x = player.player_pos_x + (player.player_width >> 1);
 	center_y = player.player_pos_y + (player.player_heigth >> 1);
-	one_angle = player.fov / my_union.win_x * RAD;
-	player_angle = (player.view_direction - 30) * RAD;
+//	one_angle = player.fov / my_union.win_x * RAD;
+//	player_angle = (player.view_direction - 30) * RAD;
+	one_angle = player.fov / my_union.win_x;
+	player_angle = (player.view_direction - 30);
 	while (++i < my_union.win_x) {
+
 		my_union.flag = 0;
 		angle = one_angle * i + player_angle;
+		if (angle < 0)
+			angle = (360 + angle);
+		if (angle >= 360)
+			angle = (angle - 360);
+		angle *= RAD;
 		my_union.ray_x = (center_x + (player.radius * cos(angle)));
 		my_union.ray_y = (center_y + (player.radius * sin(angle)));
-		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, angle);
-//		hor_intersect(&my_union, player, map, angle);
+//		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, angle);
+		hor_intersect(&my_union, player, map, angle);
+		vert_intersect(&my_union, player, map, angle);
 		calc_line(&my_union, angle - player.view_direction * RAD);
 		if (my_union.flag/* && (my_union.end - my_union.start > 64)*/)
 		{
@@ -211,6 +220,11 @@ int 	check_wall(double cur_x, double cur_y, t_map map)
 	return (0);
 }
 
+int 	check_bound(int	x, int y, t_map map)
+{
+	if ()
+}
+
 int		draw_line(t_union my_union, int x, int y1, int y2)
 {
 	int	sign_y;
@@ -254,57 +268,189 @@ void	hor_intersect(t_union *my_union, t_player player, t_map map, double alpha)
 	double 	step_y;
 	double 	step_x;
 	double 	cur_point_x;
-	double 	next_point_x;
 	double 	cur_point_y;
-	double 	next_point_y;
 	int 	intersect;
+	double  tan_alpha;
 
-//	For horizontal intersect
 	intersect = 0;
 
-	if (tan(alpha) < 0.000001)
-		alpha += 0.00001;
-	printf("pos_x - %f, pos_y - %f, player - %d, angle - %f, tan - %f\n", player.player_pos_x, player.player_pos_y, player.view_direction, alpha / RAD, tan(alpha));
-	if ((int)(alpha / RAD) > 180)
-	{
+	tan_alpha = tan(alpha);
+	printf("pos_x - %f, pos_y - %f, player - %d, angle - %f, tan - %f\n", player.player_pos_x, player.player_pos_y,
+		   player.view_direction, alpha / RAD, tan(alpha));
+	if ((int) (alpha / RAD) % 360 > 180 && (int) (alpha / RAD) % 360 < 360) {
 		first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE - 1;
 		step_y = -BLOCK_SIZE;
-	}
-	else
-	{
+	} else {
 		first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE + 64;
 		step_y = BLOCK_SIZE;
 	}
 
-	first_intersect_x = player.player_pos_x + (player.player_pos_y  - first_intersect_y) /
-			tan(alpha);
+	first_intersect_x = player.player_pos_x + (player.player_pos_y - first_intersect_y) /
+											  tan_alpha;
 
 	printf("x: %d, y: %d\n", (first_intersect_x), first_intersect_y);
-	step_x = BLOCK_SIZE / tan(alpha);
-	printf("%f\n", step_x);
-	cur_point_x = first_intersect_x + step_x;
-	cur_point_y = first_intersect_y + step_y;
-	while (!intersect || (cur_point_x < map.size_x && cur_point_y < map.size_y))
+	step_x = BLOCK_SIZE / tan_alpha;
+	if (step_x < -200 || step_x > 200) {
+		my_union->distance = 15000;
+		return;
+	}
+	printf("step_x - %f\n", step_x);
+	cur_point_x = first_intersect_x;
+	cur_point_y = first_intersect_y;
+	while (!intersect|| (cur_point_x < map.size_x && cur_point_y < map.size_y))
 	{
 		if (check_wall(cur_point_x, cur_point_y, map))
 		{
 			intersect++;
 			break;
 		}
-		if((cur_point_x + step_x) / BLOCK_SIZE < map.size_x &&
-		   cur_point_y / BLOCK_SIZE < map.size_y)
-		{
-			cur_point_x += step_x;
-			cur_point_y += step_y;
-		}
-		else
-			break;
+		cur_point_x += step_x;
+		cur_point_y += step_y;
 	}
 	my_union->ray_x = cur_point_x;
 	my_union->ray_y = cur_point_y;
+	my_union->distance = fabs(player.player_pos_x - cur_point_x) / cos(alpha);
 	printf("cur_x - %f, cur_y - %f\n", cur_point_x, cur_point_y);
 }
 
+//void	hor_intersect(t_union *my_union, t_player player, t_map map, double alpha)
+//{
+//	int	first_intersect_y;
+//	int	first_intersect_x;
+//	double 	step_y;
+//	double 	step_x;
+//	double 	cur_point_x;
+//	double 	cur_point_y;
+//	int 	intersect;
+//	double  tan_alpha;
+//
+//	intersect = 0;
+//
+//	if (alpha / RAD == 90 || alpha / RAD == 270) {
+//		step_x = 0;
+//		if (alpha / RAD == 90)
+//		{
+//			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE + 64;
+//			step_y = BLOCK_SIZE;
+//		}
+//		else
+//			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE - 1;
+//		step_y = -BLOCK_SIZE;
+//	}
+//	else {
+//		tan_alpha = tan(alpha);
+//		printf("pos_x - %f, pos_y - %f, player - %d, angle - %f, tan - %f\n", player.player_pos_x, player.player_pos_y,
+//			   player.view_direction, alpha / RAD, tan(alpha));
+//		if ((int) (alpha / RAD) % 360 > 180 && (int) (alpha / RAD) % 360 < 360) {
+//			first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE - 1;
+//			step_y = -BLOCK_SIZE;
+//		} else {
+//			first_intersect_y = floor(player.player_pos_y / BLOCK_SIZE) * BLOCK_SIZE + 64;
+//			step_y = BLOCK_SIZE;
+//		}
+//
+//		first_intersect_x = player.player_pos_x + (player.player_pos_y - first_intersect_y) /
+//												  tan_alpha;
+//
+//		printf("x: %d, y: %d\n", (first_intersect_x), first_intersect_y);
+//		step_x = BLOCK_SIZE / tan_alpha;
+//		if (step_x < -200 || step_x > 200) {
+//			my_union->distance = 15000;
+//			return;
+//		}
+//	}
+//	printf("step_x - %f\n", step_x);
+//	cur_point_x = first_intersect_x;
+//	cur_point_y = first_intersect_y;
+//	while (!intersect|| (cur_point_x < map.size_x && cur_point_y < map.size_y))
+//	{
+//		if (check_wall(cur_point_x, cur_point_y, map))
+//		{
+//			intersect++;
+//			break;
+//		}
+//
+//			cur_point_x += step_x;
+//			cur_point_y += step_y;
+//	}
+//	my_union->ray_x = cur_point_x;
+//	my_union->ray_y = cur_point_y;
+//	my_union->distance = fabs(player.player_pos_x - cur_point_x) / cos(alpha);
+//	printf("cur_x - %f, cur_y - %f\n", cur_point_x, cur_point_y);
+//}
+
+void	vert_intersect(t_union *my_union, t_player player, t_map map, double alpha)
+{
+	int	first_intersect_y;
+	int	first_intersect_x;
+	double 	distance;
+	double 	step_y;
+	double 	step_x;
+	double 	cur_point_x;
+	double 	cur_point_y;
+	int 	intersect;
+	double  tan_alpha;
+
+	intersect = 0;
+
+	if (alpha / RAD == 0 || alpha / RAD == 180)
+	{
+		step_x = 0;
+		if (alpha / RAD == 0)
+		{
+			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE + 64;
+			step_y = BLOCK_SIZE;
+		}
+		else
+			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE - 1;
+			step_y = -BLOCK_SIZE;
+	}
+	else
+	{
+		tan_alpha = tan(alpha);
+		printf("pos_x - %f, pos_y - %f, player - %d, angle - %f, tan - %f\n", player.player_pos_x, player.player_pos_y,
+			   player.view_direction, alpha / RAD, tan(alpha));
+		if (alpha / RAD > 90 && alpha / RAD < 270) {
+			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE - 1;
+			step_x = -BLOCK_SIZE;
+		} else {
+			first_intersect_x = floor(player.player_pos_x / BLOCK_SIZE) * BLOCK_SIZE + 64;
+			step_x = BLOCK_SIZE;
+		}
+
+		first_intersect_y = player.player_pos_y + (player.player_pos_x - first_intersect_x) /
+												  tan_alpha;
+
+		printf("x: %d, y: %d\n", (first_intersect_x), first_intersect_y);
+		step_y = BLOCK_SIZE / tan_alpha;
+		if (step_y < -200 || step_y > 200) {
+			my_union->distance = 15000;
+			return;
+		}
+	}
+	printf("step_y - %f\n", step_y);
+	cur_point_x = first_intersect_x;
+	cur_point_y = first_intersect_y;
+	while (!intersect|| (cur_point_x < map.size_x && cur_point_x >= 0 && cur_point_y >= 0 && cur_point_y < map.size_y))
+	{
+		if (check_wall(cur_point_x, cur_point_y, map))
+		{
+			intersect++;
+			break;
+		}
+
+		cur_point_x += step_x;
+		cur_point_y += step_y;
+	}
+	distance = fabs(player.player_pos_x - cur_point_x) / cos(alpha);
+	if (distance < my_union->distance)
+	{
+		my_union->ray_x = cur_point_x;
+		my_union->ray_y = cur_point_y;
+		my_union->distance = distance;
+	}
+	printf("cur_x - %f, cur_y - %f\n", cur_point_x, cur_point_y);
+}
 
 void	trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha)
 {

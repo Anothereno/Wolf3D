@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/13 19:44:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/18 17:33:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 {
 	double 	old_dir_x;
 	double 	old_plane_x;
+	int		temp;
 
 	if (key[SDL_SCANCODE_ESCAPE])
 	{
@@ -55,7 +56,13 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_LEFT])
 	{
-		player->view_direction -= 3;
+		if (player->view_direction - player->rotate_angle >= 0)
+			player->view_direction -= player->rotate_angle;
+		else
+		{
+			temp = 360 + player->view_direction - player->rotate_angle;
+			player->view_direction = temp;
+		}
 //		player->player_pos_x -= 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
@@ -66,7 +73,13 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 	}
 	if (key[SDL_SCANCODE_RIGHT])
 	{
-		player->view_direction += 3;
+		if (player->view_direction + player->rotate_angle < 360)
+			player->view_direction += player->rotate_angle;
+		else
+		{
+			temp = 360 - player->view_direction - player->rotate_angle;
+			player->view_direction = -temp;
+		}
 //		player->player_pos_x += 4;
 //		old_dir_x = player->dirX;
 //		old_plane_x = player->planeX;
