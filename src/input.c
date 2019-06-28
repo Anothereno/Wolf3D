@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/18 17:16:05 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/26 17:33:19 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 	my_union->save_fdf = 0;
 //	player->player_pos_x = 3;
 //	player->player_pos_y = 3;
-	player->player_pos_x = 100;
-	player->player_pos_y = 100;
+	player->player_pos_x = 300;
+	player->player_pos_y = 300;
 	player->player_heigth = 1;
 	player->direct_x = 1;
 	player->direct_y = 0;
 	player->player_width = 1;
 	player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * my_union->win_x;
-	player->view_direction = 120;
+	player->view_direction = 180;
 	player->speed = BLOCK_SIZE >> 4;
 //	player->speed = 1;
 	player->planeX = 0;

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/14 12:26:32 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/28 14:04:12 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		main(int argc, char **argv)
 	t_union		my_union;
 	t_map		map;
 	t_player	player;
+	t_ray		ray;
 
 	my_union.start_tick = 0;
 	if (argc == 2)
@@ -39,14 +40,15 @@ int		main(int argc, char **argv)
 			check_event(&my_union, &map, &player, my_union.key);
 			clear_window(my_union);
 			take_vector_of_view(&player);
-			raycast(my_union, map, player);
 			draw_scene(my_union, map);
+			raycast(my_union, map, player, ray);
+
 			my_union.end_tick = my_union.start_tick;
 			my_union.start_tick = SDL_GetTicks();
 			my_union.time = (my_union.start_tick - my_union.end_tick) / 1000.0f;
 			change_speed(&my_union, &player);
 			SDL_RenderPresent(my_union.renderer);
-			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
+//			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 		}
 	}
 	else

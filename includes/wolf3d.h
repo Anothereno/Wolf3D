@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/14 12:26:33 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/28 14:56:16 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,19 @@ typedef struct 	s_map
 	int	**map;
 }				t_map;
 
+typedef struct	s_ray
+{
+	double	vert_distance;
+	double 	hor_distance;
+	double 	end_hor_x;
+	double 	end_hor_y;
+	double 	end_vert_x;
+	double 	end_vert_y;
+	double 	x;
+	double 	y;
+	double	res_distance;
+}				t_ray;
+
 typedef struct	s_player
 {
 	double	player_pos_x;
@@ -99,12 +112,13 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
-void			vert_intersect(t_union *my_union, t_player player, t_map map, double alpha);
-void			raycast(t_union my_union, t_map map, t_player player);
-void			hor_intersect(t_union *my_union, t_player player, t_map map, double alpha);
+void			vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
+void			raycast(t_union my_union, t_map map, t_player player, t_ray ray);
+void			hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
-int				draw_line(t_union my_union, int x1, int y1, int y2);
+int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 //int				draw_line(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
