@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/05 18:30:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 12:36:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@ void	set_pixel(t_union *my_union, int y, int x, int num)
 		my_union->image_data[point + 1] = 255;
 		my_union->image_data[point + 2] = 255;
 	}
+}
+
+void	change_walls_color(t_union my_union, t_ray ray, t_player player)
+{
+	if (!ray.mode)
+		SDL_SetRenderDrawColor(my_union.renderer, 61, 64, 252, 255);
+	else
+		SDL_SetRenderDrawColor(my_union.renderer, 117, 34, 130, 255);
 }
 
 /*

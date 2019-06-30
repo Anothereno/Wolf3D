@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 11:59:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 13:23:49 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,14 @@ void	choose_distance(t_ray *ray) {
 		ray->x = ray->end_hor_x;
 		ray->y = ray->end_hor_y;
 		ray->res_distance = ray->hor_distance;
+		ray->mode = 0;
 	}
 	else
 	{
 		ray->x = ray->end_vert_x;
 		ray->y = ray->end_vert_y;
 		ray->res_distance = ray->vert_distance;
+		ray->mode = 1;
 	}
 }
 
@@ -105,12 +107,16 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		vert_distance(&my_union, player, map, &ray, angle * RAD);
 		choose_distance(&ray);
 		calc_line(&my_union, ray, angle * RAD - player.view_direction * RAD);
-		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
-		SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
+		change_walls_color(my_union, ray, player);
+//		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
+//		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
+		SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end); // Отрисовка линий СДЛ
 //		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
 //		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
+	load_texture(&my_union);
+//	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
 }
 
 // ПРАВИЛЬНЫЙ РЭЙКАСТ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

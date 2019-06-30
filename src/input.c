@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 11:23:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 12:20:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ void	initialize_SDL(t_union *my_union) {
 	my_union->win = SDL_CreateWindow("Wolf3D",/*SDL_WINDOWPOS_CENTERED*/ 200, /*SDL_WINDOWPOS_CENTERED*/200, my_union->win_x, my_union->win_y, 0);
 	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	my_union->texture = SDL_CreateTexture(my_union->renderer,
-			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
-			my_union->win_x, my_union->win_y);
+//	my_union->texture = NULL;
+//	my_union->texture = SDL_CreateTexture(my_union->renderer,
+//			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
+//			my_union->win_x, my_union->win_y);
 
 }
 

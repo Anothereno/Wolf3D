@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 11:23:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 13:04:00 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <string.h>
 # include <pthread.h>
 # include <SDL.h>
-//# include <SDL_image.h>
+# include <SDL_image.h>
 # define NUM_OF_THR 200
 # define BLOCK_SIZE	64
 # define RAD 0.0174533
@@ -80,6 +80,7 @@ typedef struct	s_ray
 	double 	end_hor_y;
 	double 	end_vert_x;
 	double 	end_vert_y;
+	int 	mode;
 	double 	x;
 	double 	y;
 	double	res_distance;
@@ -112,6 +113,8 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			load_texture(t_union *my_union);
+void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
 void			vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
