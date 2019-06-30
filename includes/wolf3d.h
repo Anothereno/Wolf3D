@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 11:21:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 11:23:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <string.h>
 # include <pthread.h>
 # include <SDL.h>
-# include <SDL_image.h>
+//# include <SDL_image.h>
 # define NUM_OF_THR 200
 # define BLOCK_SIZE	64
 # define RAD 0.0174533
