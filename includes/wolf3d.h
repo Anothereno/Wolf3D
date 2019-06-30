@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 13:04:00 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 15:55:21 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@ typedef struct	s_union
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
+	SDL_Surface		*surface;
 	Uint32 			*pixel_array;
 	double 			time;
 	int				win_y;
 	SDL_Event		event;
 	const Uint8		*key;
+	Uint32 			*pixels;
 	Uint64			start_tick;
 	Uint64			end_tick;
 	int 			wall_heigth;
@@ -62,6 +64,7 @@ typedef struct	s_union
 	int				sl;
 	FILE			*file;
 	t_int			*ints;
+	SDL_Color		color;
 }				t_union;
 
 
@@ -113,6 +116,10 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			put_pixel(t_union *my_union, int x, int y);
+void			get_surface_pixel(t_union *my_union, int x, int y);
+void			draw_line(t_union *my_union, t_ray ray, int x);
+void			draw_ceiling_and_floor(t_union my_union);
 void			load_texture(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);

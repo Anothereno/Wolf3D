@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 13:12:54 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 13:21:56 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 void	load_texture(t_union *my_union)
 {
-	SDL_Surface	*surface = IMG_Load("pics/purplestone.png");
-	if (!surface)
-		ft_putstr("Image not loaded\n");
-	else
-	{
-		my_union->texture = SDL_CreateTextureFromSurface(my_union->renderer, surface);
-		if (!my_union->texture)
-			ft_putstr("Texture not created");
-		SDL_FreeSurface(surface);
-	}
+	my_union->surface = IMG_Load("pics/purplestone.png");
+	if (!my_union->surface)
+		ft_putstr("Surface not loaded\n");
 }

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 13:23:49 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 16:15:45 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	clear_window(t_union my_union)
 {
-	SDL_SetRenderDrawColor(my_union.renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(my_union.renderer, 66, 245, 227, 255);
 	SDL_RenderClear(my_union.renderer);
 }
 
@@ -87,20 +87,21 @@ double take_range_angle(double angle)
 
 void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 {
-	int		i;
+	int		x;
 	double	center_x;
 	double	angle;
 	double 	one_angle;
 	double 	begin_angle;
 	double	center_y;
 
-	i = -1;
+	x = -1;
+//	draw_ceiling_and_floor(my_union);
 	center_x = player.player_pos_x + (player.player_width >> 1);
 	center_y = player.player_pos_y + (player.player_heigth >> 1);
 	one_angle = player.fov / my_union.win_x;
 	begin_angle = (player.view_direction - (player.fov / 2));
 	angle = begin_angle;
-	while (++i < my_union.win_x) {
+	while (++x < my_union.win_x) {
 		my_union.flag = 0;
 		angle = take_range_angle(angle);
 		hor_distance(&my_union, player, map, &ray, angle * RAD);
@@ -108,60 +109,46 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		choose_distance(&ray);
 		calc_line(&my_union, ray, angle * RAD - player.view_direction * RAD);
 		change_walls_color(my_union, ray, player);
+		draw_line(&my_union, ray, x);
+//		draw_line(my_union, ray, x, my_union.start, my_union.end);
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
-		SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end); // Отрисовка линий СДЛ
+//		SDL_RenderDrawLine(my_union.renderer, x, my_union.start, x, my_union.end); // Отрисовка линий СДЛ
 //		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
 //		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
-	load_texture(&my_union);
+	SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
+	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
 //	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
 }
 
-// ПРАВИЛЬНЫЙ РЭЙКАСТ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//void	raycast(t_union my_union, t_map map, t_player player)
-//{
-//	int		i;
-//	double	center_x;
-//	double	angle;
-//	double 	one_angle;
-//	double 	player_angle;
-//	double	center_y;
-//
-//	i = -1;
-//	center_x = player.player_pos_x + (player.player_width >> 1);
-//	center_y = player.player_pos_y + (player.player_heigth >> 1);
-////	one_angle = player.fov / my_union.win_x * RAD;
-////	player_angle = (player.view_direction - 30) * RAD;
-//	one_angle = player.fov / my_union.win_x;
-//	player_angle = (player.view_direction - 30);
-//	while (++i < my_union.win_x) {
-//
-//		my_union.flag = 0;
-//		angle = one_angle * i + player_angle;
-//		if (angle < 0)
-//			angle = (360 + angle);
-//		if (angle >= 360)
-//			angle = (angle - 360);
-//		angle *= RAD;
-//		my_union.ray_x = (center_x + (player.radius * cos(angle)));
-//		my_union.ray_y = (center_y + (player.radius * sin(angle)));
-//		trace_ray(&my_union, map, center_x, center_y, my_union.ray_x, my_union.ray_y, angle);
-////		hor_intersect(&my_union, player, map, angle);
-////		vert_intersect(&my_union, player, map, angle);
-//		calc_line(&my_union, angle - player.view_direction * RAD);
-//		if (my_union.flag/* && (my_union.end - my_union.start > 64)*/)
-//		{
-//			SDL_SetRenderDrawColor(my_union.renderer, 66, 152, 244, 255);
-//			SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
-////			draw_line(my_union, (int)i, (int)my_union.start, (int)my_union.end);
-////			printf("y1 - %d, y2 - %d\n", (int)my_union.start, (int)my_union.end);
-//		}
-//		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
-//		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)my_union.ray_x >> 2, (int)my_union.ray_y >> 2);
-//	}
-//}
+void	draw_ceiling_and_floor(t_union my_union)
+{
+	SDL_Rect rect;
+
+	rect.x = 0;
+	rect.y = my_union.win_y / 2;
+	rect.w = my_union.win_x;
+	rect.h = rect.y;
+
+	SDL_SetRenderDrawColor(my_union.renderer, 45, 161, 53, 255);
+	SDL_RenderFillRect(my_union.renderer, &rect);
+}
+
+void	draw_line(t_union *my_union, t_ray ray, int x)
+{
+	int	start;
+
+	start = my_union->start - 1;
+
+	while (++start < my_union->end)
+	{
+		get_surface_pixel(my_union, x, start);
+		put_pixel(my_union, x, start);
+	}
+}
+
 
 void	draw_rays(t_union my_union, t_player player, t_map map)
 {
