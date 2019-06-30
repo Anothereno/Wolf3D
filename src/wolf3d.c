@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/28 14:04:12 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 11:23:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ int		main(int argc, char **argv)
 			check_event(&my_union, &map, &player, my_union.key);
 			clear_window(my_union);
 			take_vector_of_view(&player);
-			draw_scene(my_union, map);
+//			draw_scene(my_union, map);
 			raycast(my_union, map, player, ray);
-
 			my_union.end_tick = my_union.start_tick;
 			my_union.start_tick = SDL_GetTicks();
 			my_union.time = (my_union.start_tick - my_union.end_tick) / 1000.0f;

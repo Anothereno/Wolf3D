@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/28 18:09:52 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/06/30 11:31:35 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	take_vector_of_view(t_player *player)
 
 void	calc_line(t_union *my_union, t_ray ray, double betta)
 {
-	my_union->distance = ray.res_distance * cos(betta);
+	ray.res_distance = ray.res_distance * cos(betta);
 	my_union->line_length = (BLOCK_SIZE << (int)(my_union->win_x / 640)) / ray.res_distance * 277;
 	my_union->start = -my_union->line_length / 2 + my_union->win_y / 2;
 	if (my_union->start < 0)
@@ -73,6 +73,16 @@ void	choose_distance(t_ray *ray) {
 	}
 }
 
+double take_range_angle(double angle)
+{
+	if (angle < 0)
+		angle = (360 + angle);
+	if (angle >= 360)
+		angle = (angle - 360);
+	return angle;
+
+}
+
 void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 {
 	int		i;
@@ -90,18 +100,15 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	angle = begin_angle;
 	while (++i < my_union.win_x) {
 		my_union.flag = 0;
-		if (angle < 0)
-			angle = (360 + angle);
-		if (angle >= 360)
-			angle = (angle - 360);
+		angle = take_range_angle(angle);
 		hor_distance(&my_union, player, map, &ray, angle * RAD);
 		vert_distance(&my_union, player, map, &ray, angle * RAD);
 		choose_distance(&ray);
-		calc_line(&my_union, ray, angle - player.view_direction * RAD);
+		calc_line(&my_union, ray, angle * RAD - player.view_direction * RAD);
 		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 		SDL_RenderDrawLine(my_union.renderer, i, my_union.start, i, my_union.end);
-		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
-		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
+//		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
+//		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
 }
