@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 17:41:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 19:20:53 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,26 @@ void	change_walls_color(t_union my_union, t_ray ray, t_player player)
 		SDL_SetRenderDrawColor(my_union.renderer, 117, 34, 130, 255);
 }
 
-void	get_surface_pixel(t_union *my_union, int x, int y)
+void	get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 {
 	Uint8		*pixel;
 
 	x %= 64;
 	y %= 64;
-	pixel = my_union->surface->pixels + y * my_union->surface->pitch + x
-			* my_union->surface->format->BytesPerPixel;
-	SDL_GetRGB((Uint32)pixel, my_union->surface->format,
-			&my_union->color.r, &my_union->color.g, &my_union->color.b);
+//	printf("%d, %d\n", x, y);
+	pixel = my_union->surface->pixels + y * my_union->surface->pitch;
+	pixel += x * my_union->surface->format->BytesPerPixel;
+	SDL_GetRGBA(*pixel, my_union->surface->format,
+			&color->r, &color->g, &color->b, &color->a);
 }
 
-void		put_pixel(t_union *my_union, int x, int y)
+void		put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 {
 	int shift;
 
 	shift = y * my_union->win_x + x;
-	my_union->pixel_array[shift] = ((Uint32)((my_union->color.r << 16) +
-			(my_union->color.g << 8) + my_union->color.b));
+	my_union->pixel_array[shift] = ((Uint32)((color->r << 16) +
+			(color->g << 8) + color->b));
 }
 
 void		put_black_pixel(t_union *my_union, int x, int y)
@@ -65,7 +66,7 @@ void		put_black_pixel(t_union *my_union, int x, int y)
 	int shift;
 
 	shift = y * my_union->win_x + x;
-	my_union->pixel_array[shift] = (Uint32)0;
+	my_union->pixel_array[shift] = 0;
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 17:41:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 18:50:16 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	change_speed(t_union *my_union, t_player *player)
 void	init_texture(t_union *my_union)
 {
 	my_union->texture = SDL_CreateTexture(my_union->renderer,
-			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
+			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
 			my_union->win_x, my_union->win_y);
 }
 
@@ -35,8 +35,9 @@ void	initialize_SDL(t_union *my_union) {
 	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	my_union->pixel_array = (Uint32*)malloc(sizeof(Uint32) * my_union->win_x * my_union->win_y);
-	load_texture(my_union);
 	init_texture(my_union);
+	load_texture(my_union);
+	my_union->color = (SDL_Color*)malloc(sizeof(SDL_Color));
 //	my_union->texture = NULL;
 //	my_union->texture = SDL_CreateTexture(my_union->renderer,
 //										  SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
