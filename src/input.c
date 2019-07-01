@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 16:01:49 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 14:15:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@ void	change_speed(t_union *my_union, t_player *player)
 {
 	player->speed_move = my_union->time * 5.0;
 	player->speed_rotate = my_union->time * 3.0;
+}
+
+void	init_texture(t_union *my_union)
+{
+	my_union->texture = SDL_CreateTexture(my_union->renderer,
+			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
+			my_union->win_x, my_union->win_y);
 }
 
 void	initialize_SDL(t_union *my_union) {
@@ -29,10 +36,11 @@ void	initialize_SDL(t_union *my_union) {
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	my_union->pixel_array = (Uint32*)malloc(sizeof(Uint32) * my_union->win_x * my_union->win_y);
 	load_texture(my_union);
+	init_texture(my_union);
 //	my_union->texture = NULL;
-	my_union->texture = SDL_CreateTexture(my_union->renderer,
-			SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
-			my_union->win_x, my_union->win_y);
+//	my_union->texture = SDL_CreateTexture(my_union->renderer,
+//										  SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
+//										  my_union->win_x, my_union->win_y);
 
 }
 

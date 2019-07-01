@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 16:15:45 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 15:14:55 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	clear_window(t_union my_union)
 {
-	SDL_SetRenderDrawColor(my_union.renderer, 66, 245, 227, 255);
+//	SDL_SetRenderDrawColor(my_union.renderer, 66, 245, 227, 255); // закрашивает окно бирюзовым цветом
+	SDL_SetRenderDrawColor(my_union.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(my_union.renderer);
 }
 
@@ -85,6 +86,23 @@ double take_range_angle(double angle)
 
 }
 
+void	clear_texture(t_union *my_union)
+{
+	int i;
+	int j;
+
+	i = -1;
+	while (++i < my_union->win_y)
+	{
+		j = -1;
+		while (++j < my_union->win_x)
+			put_black_pixel(my_union, j, i);
+	}
+	SDL_UpdateTexture(my_union->texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
+	SDL_RenderCopy(my_union->renderer, my_union->texture, NULL, NULL);
+
+}
+
 void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 {
 	int		x;
@@ -95,7 +113,9 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	double	center_y;
 
 	x = -1;
+//	init_texture(&my_union);
 //	draw_ceiling_and_floor(my_union);
+	clear_texture(&my_union);
 	center_x = player.player_pos_x + (player.player_width >> 1);
 	center_y = player.player_pos_y + (player.player_heigth >> 1);
 	one_angle = player.fov / my_union.win_x;

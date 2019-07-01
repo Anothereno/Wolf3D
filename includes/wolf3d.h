@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 15:55:21 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 14:15:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			put_black_pixel(t_union *my_union, int x, int y);
+void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y);
 void			get_surface_pixel(t_union *my_union, int x, int y);
 void			draw_line(t_union *my_union, t_ray ray, int x);

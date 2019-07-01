@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/30 15:59:06 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 15:14:32 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	get_surface_pixel(t_union *my_union, int x, int y)
 {
 	Uint8		*pixel;
 
+	x %= 64;
+	y %= 64;
 	pixel = my_union->surface->pixels + y * my_union->surface->pitch + x
 			* my_union->surface->format->BytesPerPixel;
 	SDL_GetRGB((Uint32)pixel, my_union->surface->format,
@@ -56,6 +58,14 @@ void		put_pixel(t_union *my_union, int x, int y)
 	shift = y * my_union->win_x + x;
 	my_union->pixel_array[shift] = ((Uint32)((my_union->color.r << 16) +
 			(my_union->color.g << 8) + my_union->color.b));
+}
+
+void		put_black_pixel(t_union *my_union, int x, int y)
+{
+	int shift;
+
+	shift = y * my_union->win_x + x;
+	my_union->pixel_array[shift] = (Uint32)0;
 }
 
 /*

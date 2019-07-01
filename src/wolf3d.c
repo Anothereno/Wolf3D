@@ -38,7 +38,7 @@ int		main(int argc, char **argv)
 			if(my_union.event.type == SDL_QUIT)
 				break;
 			check_event(&my_union, &map, &player, my_union.key);
-			clear_window(my_union);
+//			clear_window(my_union);
 			take_vector_of_view(&player);
 //			draw_scene(my_union, map);
 			raycast(my_union, map, player, ray);
