@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 16:54:30 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 15:14:55 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	clear_window(t_union my_union)
 	SDL_SetRenderDrawColor(my_union.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(my_union.renderer);
 }
-
-//sometest
 
 void	take_vector_of_view(t_player *player)
 {
@@ -104,7 +102,7 @@ void	clear_texture(t_union *my_union)
 	SDL_RenderCopy(my_union->renderer, my_union->texture, NULL, NULL);
 
 }
-//dit
+
 void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 {
 	int		x;
@@ -170,7 +168,6 @@ void	draw_line(t_union *my_union, t_ray ray, int x)
 		put_pixel(my_union, x, start);
 	}
 }
-
 
 
 void	draw_rays(t_union my_union, t_player player, t_map map)
