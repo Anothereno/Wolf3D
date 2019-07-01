@@ -1,4 +1,4 @@
-"/Users/hdwarven/Applications/CLion 2.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/hdwarven/Desktop/wolf3d
+/Users/ofrost-g/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/ofrost-g/work/Wolf3D
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/hdwarven/Desktop/wolf3d/cmake-build-debug
+-- Build files have been written to: /Users/ofrost-g/work/Wolf3D/cmake-build-debug
