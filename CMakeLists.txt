@@ -1,16 +1,14 @@
-cmake_minimum_required(VERSION 3.13)
-project(wolf3d)
+cmake_minimum_required(VERSION 3.12)
+project(Wolf3D)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(includes)
 include_directories(libft)
-include_directories(src)
 
-add_executable(wolf3d
-        includes/wolf3d.h
+add_executable(Wolf3D
         includes/mlx.h
-        libft/author
+        includes/wolf3d.h
         libft/ft_atoi.c
         libft/ft_bzero.c
         libft/ft_clear_list.c
@@ -76,29 +74,44 @@ add_executable(wolf3d
         libft/libft.h
         libft/Makefile
         libft/powd.c
+        pics/barrel.png
+        pics/bluestone.png
+        pics/colorstone.png
+        pics/eagle.png
+        pics/greenlight.png
+        pics/greystone.png
+        pics/mossy.png
+        pics/pillar.png
+        pics/purplestone.png
+        pics/redbrick.png
+        pics/wood.png
         src/calculate.c
         src/colorize.c
-        src/wolf3d.c
+        src/draw.c
+        src/errors.c
         src/input.c
         src/keys.c
+        src/load.c
+        src/moves.c
         src/transform.c
-        author
-        src/validation.c src/errors.c src/draw.c src/moves.c src/load.c)
+        src/validation.c
+        src/wolf3d.c
+        Makefile
+        map_big
+        map_middle
+        map_small)
 
-target_link_libraries(wolf3d "-lmlx")
-target_link_libraries(wolf3d "-framework OpenGl")
-target_link_libraries(wolf3d "-framework Appkit")
-target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")
-target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_image")
+target_link_libraries(Wolf3D "-F /Users/ofrost-g/Library/Frameworks/ -framework SDL2")
 
 include_directories("includes")
 include_directories("resources")
 include_directories("libft/includes")
-include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2.framework/Versions/A/Headers/")
-include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/")
+include_directories("/Users/ofrost-g/Library/Frameworks/SDL2.framework/Versions/A/Headers/")
+include_directories("/Users/ofrost-g/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/")
 #include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_mixer.framework/Versions/A/Headers/")
 #include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_ttf.framework/Versions/A/Headers/")
-target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")
-target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_image")
-#target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_mixer")
-#target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2_ttf")
+target_link_libraries(Wolf3D "-F /Users/ofrost-g/Library/Frameworks/ -framework SDL2")
+target_link_libraries(Wolf3D "-F /Users/ofrost-g/Library/Frameworks/ -framework SDL2_image")
+target_link_libraries(Wolf3D "-lmlx")
+target_link_libraries(Wolf3D "-framework OpenGL")
+target_link_libraries(Wolf3D "-framework Appkit")
