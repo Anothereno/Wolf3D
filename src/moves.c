@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/06/26 14:31:33 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 17:37:02 by ofrost-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 //		if (!map->map[(int)player->player_pos_y][(int)(player->player_pos_x +
 //				player->dirX * player->speed_move)])
 //			player->player_pos_x += player->dirX * player->speed_move;
+		player->speed = BLOCK_SIZE >> 3;
 		view_follow(player, map);
 	}
 	if (key[SDL_SCANCODE_DOWN])
@@ -112,6 +113,9 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 //			player->player_pos_x -= player->dirX * player->speed_move;
 //
 //		player->player_pos_y += 4;
+		player->speed = -(BLOCK_SIZE >> 3);
+		view_follow(player, map);
+
 	}
 	if (key[SDL_SCANCODE_Q])
 	{
