@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 15:43:47 by ofrost-g         ###   ########.fr       */
+/*   Updated: 2019/07/01 16:04:37 by ofrost-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	take_vector_of_view(t_player *player)
 //	printf("%f, %f\n", player->direct_x, player->direct_y);
 }
 
+//hello
 void	calc_line(t_union *my_union, t_ray ray, double betta)
 {
 	ray.res_distance = ray.res_distance * cos(betta);
