@@ -6,11 +6,13 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 15:38:14 by ofrost-g         ###   ########.fr       */
+/*   Updated: 2019/07/01 15:43:47 by ofrost-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+//fjfgjgfsd
 
 void	clear_window(t_union my_union)
 {
