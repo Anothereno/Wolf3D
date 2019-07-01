@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 17:41:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 18:50:16 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct	s_union
 	int				sl;
 	FILE			*file;
 	t_int			*ints;
-	SDL_Color		color;
+	SDL_Color		*color;
 }				t_union;
 
 
@@ -118,8 +118,8 @@ typedef struct	s_player
 
 void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
-void			put_pixel(t_union *my_union, int x, int y);
-void			get_surface_pixel(t_union *my_union, int x, int y);
+void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
+void			get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void			draw_line(t_union *my_union, t_ray ray, int x);
 void			draw_ceiling_and_floor(t_union my_union);
 void			load_texture(t_union *my_union);

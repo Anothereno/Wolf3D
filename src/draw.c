@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 15:14:55 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 18:43:43 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	take_vector_of_view(t_player *player)
 void	calc_line(t_union *my_union, t_ray ray, double betta)
 {
 	ray.res_distance = ray.res_distance * cos(betta);
-	my_union->line_length = (BLOCK_SIZE << (int)(my_union->win_x / 640)) / ray.res_distance * 277;
-	my_union->start = -my_union->line_length / 2 + my_union->win_y / 2;
+	my_union->wall_heigth = (BLOCK_SIZE << (int)(my_union->win_x / 640)) / ray.res_distance * 277;
+	my_union->start = -my_union->wall_heigth / 2 + my_union->win_y / 2;
 	if (my_union->start < 0)
 		my_union->start = 0;
-	my_union->end = my_union->line_length / 2 + my_union->win_y / 2;
+	my_union->end = my_union->wall_heigth / 2 + my_union->win_y / 2;
 	if (my_union->end >= my_union->win_y)
 		my_union->end = my_union->win_y - 1;
 }
@@ -128,7 +128,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		vert_distance(&my_union, player, map, &ray, angle * RAD);
 		choose_distance(&ray);
 		calc_line(&my_union, ray, angle * RAD - player.view_direction * RAD);
-		change_walls_color(my_union, ray, player);
+//		change_walls_color(my_union, ray, player);
 		draw_line(&my_union, ray, x);
 //		draw_line(my_union, ray, x, my_union.start, my_union.end);
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
@@ -158,14 +158,15 @@ void	draw_ceiling_and_floor(t_union my_union)
 
 void	draw_line(t_union *my_union, t_ray ray, int x)
 {
-	int	start;
+	int			start;
+	SDL_Color	color;
 
 	start = my_union->start - 1;
 
 	while (++start < my_union->end)
 	{
-		get_surface_pixel(my_union, x, start);
-		put_pixel(my_union, x, start);
+		get_surface_pixel(my_union, x, start, &color);
+		put_pixel(my_union, x, start, &color);
 	}
 }
 

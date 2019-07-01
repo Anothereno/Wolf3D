@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 17:41:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 19:27:03 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	load_texture(t_union *my_union)
 {
-	my_union->surface = IMG_Load("pics/purplestone.png");
+	my_union->surface = SDL_LoadBMP("pics/WALL92.bmp");
 	if (!my_union->surface)
 		ft_putstr("Surface not loaded\n");
+	printf("%d, %d\n", my_union->surface->w, my_union->surface->h);
 }
