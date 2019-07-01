@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 15:15:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/01 16:54:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	clear_window(t_union my_union)
 	SDL_SetRenderDrawColor(my_union.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(my_union.renderer);
 }
+
+//sometest
 
 void	take_vector_of_view(t_player *player)
 {
