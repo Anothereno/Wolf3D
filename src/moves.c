@@ -12,6 +12,7 @@
 
 #include "wolf3d.h"
 
+//ВОЗВРАЩАЕТ 1, ЕСЛИ ИГРОК ОКАЗАЛСЯ В СТЕНЕ
 int 	in_wall(t_player *player, t_map *map)
 {
 	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
@@ -19,6 +20,7 @@ int 	in_wall(t_player *player, t_map *map)
 	return (0);
 }
 
+//ПЕРЕДВИЖЕНИЕ В СТОРОНУ ВЗГЛЯДА
 void	view_follow(t_player *player, t_map *map)
 {
 	double center_x;
@@ -44,10 +46,9 @@ void	view_follow(t_player *player, t_map *map)
 
 }
 
+//ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
 void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key)
 {
-	double 	old_dir_x;
-	double 	old_plane_x;
 	int		temp;
 
 	if (key[SDL_SCANCODE_ESCAPE])
@@ -63,13 +64,6 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 			temp = 360 + player->view_direction - player->rotate_angle;
 			player->view_direction = temp;
 		}
-//		player->player_pos_x -= 4;
-//		old_dir_x = player->dirX;
-//		old_plane_x = player->planeX;
-//		player->dirX = player->dirX * cos(player->speed_rotate) - player->dirY * sin(player->speed_rotate);
-//		player->dirY = old_dir_x * sin(player->speed_rotate) + player->dirY * cos(player->speed_rotate);
-//		player->planeX = player->planeX * cos(player->speed_rotate) - player->planeY * sin(player->speed_rotate);
-//		player->planeY = old_plane_x * sin(player->speed_rotate) + player->planeY * cos(player->speed_rotate);
 	}
 	if (key[SDL_SCANCODE_RIGHT])
 	{
@@ -80,49 +74,15 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*k
 			temp = 360 - player->view_direction - player->rotate_angle;
 			player->view_direction = -temp;
 		}
-//		player->player_pos_x += 4;
-//		old_dir_x = player->dirX;
-//		old_plane_x = player->planeX;
-//		player->dirX = player->dirX * cos(-player->speed_rotate) - player->dirY * sin(-player->speed_rotate);
-//		player->dirY = old_dir_x * sin(-player->speed_rotate) + player->dirY * cos(-player->speed_rotate);
-//		player->planeX = player->planeX * cos(-player->speed_rotate) - player->planeY * sin(-player->speed_rotate);
-//		player->planeY = old_plane_x * sin(-player->speed_rotate) + player->planeY * cos(-player->speed_rotate);
-
 	}
 	if (key[SDL_SCANCODE_UP])
 	{
-
-//		player->player_pos_x += player->direct_x * player->speed;
-//		player->player_pos_y += player->direct_y * player->speed;
-//		if (!map->map[(int)(player->player_pos_y +
-//				player->dirY * player->speed_move)][(int)player->player_pos_x])
-//			player->player_pos_y += player->dirY * player->speed_move;
-//		if (!map->map[(int)player->player_pos_y][(int)(player->player_pos_x +
-//				player->dirX * player->speed_move)])
-//			player->player_pos_x += player->dirX * player->speed_move;
 		player->speed = BLOCK_SIZE >> 3;
 		view_follow(player, map);
 	}
 	if (key[SDL_SCANCODE_DOWN])
 	{
-//		if (!map->map[(int)(player->player_pos_y -
-//							player->dirY * player->speed_move)][(int)player->player_pos_x])
-//			player->player_pos_y -= player->dirY * player->speed_move;
-//		if (!map->map[(int)player->player_pos_y][(int)(player->player_pos_x -
-//													   player->dirX * player->speed_move)])
-//			player->player_pos_x -= player->dirX * player->speed_move;
-//
-//		player->player_pos_y += 4;
 		player->speed = -(BLOCK_SIZE >> 3);
 		view_follow(player, map);
-
-	}
-	if (key[SDL_SCANCODE_Q])
-	{
-//		player->view_direction -= 2;
-	}
-	if (key[SDL_SCANCODE_E])
-	{
-//		player->view_direction += 2;
 	}
 }

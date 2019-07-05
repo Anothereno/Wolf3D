@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 project(wolf3d)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -76,12 +76,10 @@ add_executable(wolf3d
         libft/libft.h
         libft/Makefile
         libft/powd.c
-        src/calculate.c
         src/colorize.c
         src/wolf3d.c
-        src/input.c
+        src/init.c
         src/keys.c
-        src/transform.c
         author
         src/validation.c src/errors.c src/draw.c src/moves.c src/load.c)
 
