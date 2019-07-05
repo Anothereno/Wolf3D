@@ -12,11 +12,13 @@
 
 #include "wolf3d.h"
 
+//ВЫВОДИТ ЮЗЭДЖ
 void	usage(void)
 {
 	ft_putstr("usage: ./wolf3d <argument>\n");
 }
 
+//ОСУЩЕСТВЛЯЕТ МЭЙН ЛУП
 int		main(int argc, char **argv)
 {
 	t_union		my_union;

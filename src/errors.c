@@ -12,6 +12,7 @@
 
 #include "wolf3d.h"
 
+//ВЫВОДИТ ОШИБКИ
 void	msg(char *message, t_map *my_union)
 {
 	ft_putendl(message);

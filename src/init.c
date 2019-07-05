@@ -6,26 +6,22 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 18:50:16 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/05 17:25:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
+//РАССЧИТЫВАЕТ СКОРОСТЬ ПЕРЕДВИЖЕНИЯ И ПОВОРОТА В ЗАВИСИМОСТИ ОТ ФРЭЙМРЭЙТА
 void	change_speed(t_union *my_union, t_player *player)
 {
 	player->speed_move = my_union->time * 5.0;
 	player->speed_rotate = my_union->time * 3.0;
 }
 
-void	init_texture(t_union *my_union)
+//ИНИЦИАЛИЗИРУЕТ СДЛ ПЕРЕМЕННЫЕ
+void	initialize_SDL(t_union *my_union)
 {
-	my_union->texture = SDL_CreateTexture(my_union->renderer,
-			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
-			my_union->win_x, my_union->win_y);
-}
-
-void	initialize_SDL(t_union *my_union) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("error\n");
@@ -35,16 +31,15 @@ void	initialize_SDL(t_union *my_union) {
 	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	my_union->pixel_array = (Uint32*)malloc(sizeof(Uint32) * my_union->win_x * my_union->win_y);
-	init_texture(my_union);
-	load_texture(my_union);
+	my_union->texture = SDL_CreateTexture(my_union->renderer,
+										  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
+										  my_union->win_x, my_union->win_y);
 	my_union->color = (SDL_Color*)malloc(sizeof(SDL_Color));
-//	my_union->texture = NULL;
-//	my_union->texture = SDL_CreateTexture(my_union->renderer,
-//										  SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STATIC,
-//										  my_union->win_x, my_union->win_y);
-
+	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
+	load_textures(my_union);
 }
 
+//ИНИЦИАЛИЗИРУЕТ ПЕРЕМЕННЫЕ СТРУКТУРЫ
 void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 {
 	my_union->win_x = 640;
@@ -73,29 +68,3 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 	initialize_SDL(my_union);
 }
 
-/*
-void	create_fdf(t_map *my_union)
-{
-	int x;
-	int y;
-
-	my_union->file = fopen("fractol.fdf", "wt");
-	my_union->save_fdf = 1;
-	y = -1;
-	while (++y < my_union->win_y)
-	{
-		x = -1;
-		while (++x < my_union->win_x)
-		{
-			if (my_union->mode == 's')
-				ship(my_union, x, y);
-			else if (my_union->mode == 'j' || my_union->mode == 'f')
-				julia(my_union, x, y);
-			else if (my_union->mode == 'm')
-				mandelbrot(my_union, x, y);
-		}
-		fprintf(my_union->file, "\n");
-	}
-	fclose(my_union->file);
-	my_union->save_fdf = 0;
-}*/
