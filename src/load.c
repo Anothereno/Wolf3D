@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/05 17:46:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/08 13:50:31 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	load_textures(t_union *my_union)
 	int i;
 
 	i = -1;
-	my_union->surface = SDL_LoadBMP("pics/WALL20.bmp");
+	my_union->surface = SDL_LoadBMP("pics/WALL14.bmp");
 	if (!my_union->surface)
 		ft_putstr("Surface not loaded\n");
-	my_union->surface_array[0] = SDL_LoadBMP("pics/WALL14.bmp");
+	my_union->surface_array[0] = SDL_LoadBMP("pics/WALL20.bmp");
 	my_union->surface_array[1] = SDL_LoadBMP("pics/WALL12.bmp");
 	my_union->surface_array[2] = SDL_LoadBMP("pics/WALL24.bmp");
 	my_union->surface_array[3] = SDL_LoadBMP("pics/WALL46.bmp");

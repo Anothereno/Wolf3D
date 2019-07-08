@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/05 16:59:23 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/08 18:48:35 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,12 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
+
+//void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle);
+void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
+void			choose_surface_floor_and_ceiling(t_union *my_union, char mode);
+void			choose_surface(t_union *my_union, t_ray ray, t_map map);
 void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
@@ -144,23 +150,6 @@ void			clear_window(t_union my_union);
 void			initialize_SDL(t_union *my_union);
 void			msg(char *message, t_map *my_union);
 int				val_set(char *argv, t_map *my_union);
-void			create_fdf(t_map *my_union);
-void			pixel_fdf(t_map *my_union, int n);
-void			ship(t_map *my_union, int x, int y);
-void			put_cross(t_map *my_union);
-void			mandelbrot(t_map *my_union, int x, int y);
-int				mouse_move(int x, int y, t_map *param);
-int				mouse_press(int key, int x, int y, t_map *param);
-void			julia(t_map *my_union, int x, int y);
-void			set_pixel(t_union *my_union, int y, int x, int num);
-void			image_init(t_union *my_union);
-void			change_mode(t_map *my_union);
-void			shift_x(int key, t_map *my_union);
-void			shift_y(int key, t_map *my_union);
-void			zoom(int key, t_map *my_union);
-int				exit_(t_map *my_union);
-void			plot(t_union *my_union, t_map *map);
-int				deal_key(int key, t_map *param);
 void			usage(void);
 void			struct_initial(t_union *my_union, t_map *map, t_player *player);
 
