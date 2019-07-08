@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/05 17:46:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/08 19:52:02 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,9 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	double	center_y;
 
 	x = -1;
-//	draw_ceiling_and_floor(my_union);
 	clear_texture(&my_union);
-	center_x = player.player_pos_x + (player.player_width >> 1);
-	center_y = player.player_pos_y + (player.player_heigth >> 1);
+//	center_x = player.player_pos_x + (player.player_width >> 1);
+//	center_y = player.player_pos_y + (player.player_heigth >> 1);
 	one_angle = player.fov / my_union.win_x;
 	begin_angle = (player.view_direction - (player.fov / 2));
 	angle = begin_angle;
@@ -137,7 +136,11 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		calc_line(&my_union, ray, angle * RAD - player.view_direction * RAD);
 //		change_walls_color(my_union, ray, player);
 		ray.offset = take_textures_offset(ray);
+		choose_surface(&my_union, ray, map);
 		draw_line(&my_union, ray, x, map);
+		draw_floor(my_union, ray, x, map, angle * RAD, player);
+//		draw_floor(my_union, ray, x, map, angle * RAD);
+//		draw_ceiling_and_floor(my_union);
 //		draw_line(my_union, ray, x, my_union.start, my_union.end);
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
@@ -149,6 +152,60 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
 	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
 }
+
+void	draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player)
+{
+	double		dist;
+	double 		cur_dist;
+	int			y;
+	SDL_Color	color;
+	double		cur_x;
+	double		cur_y;
+
+	y = my_union.end;
+	dist = (my_union.win_x / (tan(player.fov / 2) * 2));
+	while (++y < my_union.win_y) {
+		cur_dist = dist * -360 / (y - my_union.win_y / 2);
+		cur_x = (cur_dist * cos(angle) + player.player_pos_x);
+		cur_y = (cur_dist * sin(angle) + player.player_pos_y);
+		choose_surface_floor_and_ceiling(&my_union, 'f');
+//		printf("%f, %f\n", cur_x, cur_y);
+		get_surface_pixel(&my_union, cur_x, cur_y, &color, ray);
+		if (check_bound(x, y, map))
+			put_pixel(&my_union, x, y, &color);
+		choose_surface_floor_and_ceiling(&my_union, 'c');
+		get_surface_pixel(&my_union, (int)cur_x, (int)(cur_y), &color, ray);
+		if (check_bound(x, my_union.win_y - y, map))
+			put_pixel(&my_union, x, my_union.win_y - y, &color);
+	}
+}
+
+//void	draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle)
+//{
+//	int			cur_dist;
+//	double		weight;
+//	int			y;
+//	SDL_Color	color;
+//	double		cur_x;
+//	double		cur_y;
+//
+//	y = my_union.end;
+//	while (++y < my_union.win_y) {
+//		cur_dist = my_union.win_y / (2 * y - my_union.win_y);
+//		weight = cur_dist / ray.res_distance;
+////		cur_x = (weight *
+//		cur_x = x * cos(angle);
+//		cur_y = y * sin(angle);
+//		choose_surface_floor_and_ceiling(&my_union, 'f');
+//		get_surface_pixel(&my_union, cur_x, cur_y, &color, ray);
+//		if (check_bound(x, y, map))
+//			put_pixel(&my_union, x, y, &color);
+//		choose_surface_floor_and_ceiling(&my_union, 'c');
+//		get_surface_pixel(&my_union, x, my_union.win_y - y, &color, ray);
+//		if (check_bound(x, my_union.win_y - y, map))
+//			put_pixel(&my_union, x, my_union.win_y - y, &color);
+//	}
+//}
 
 //ОТРИСОВЫВАЕТ ПОЛ И ПОТОЛОК
 void	draw_ceiling_and_floor(t_union my_union)
@@ -165,7 +222,7 @@ void	draw_ceiling_and_floor(t_union my_union)
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
-int 	get_start_draw(t_union my_union, t_ray ray, t_map map)
+int 	get_start_draw(t_union my_union)
 {
 	if (my_union.wall_heigth >= my_union.win_y)
 		return (my_union.wall_heigth / 2 - my_union.win_y / 2);
@@ -180,9 +237,8 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map)
 	double		wall_scale;
 	SDL_Color	color;
 
-
 	start = my_union->start - 1;
-	y = get_start_draw(*my_union, ray, map);
+	y = get_start_draw(*my_union);
 	wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;;
 	while (++start < my_union->end)
 	{
@@ -222,7 +278,7 @@ int 	check_wall(double cur_x, double cur_y, t_map map)
 {
 	if (cur_x >= map.size_x * BLOCK_SIZE || cur_x < 0 ||
 			cur_y >= map.size_y * BLOCK_SIZE || cur_y < 0 ||
-			map.map[(int)cur_y / BLOCK_SIZE][(int)cur_x / BLOCK_SIZE])
+			map.map[(int)cur_y >> 6][(int)cur_x >> 6])
 		return (1);
 	return (0);
 }
