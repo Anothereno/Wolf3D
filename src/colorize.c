@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/08 16:17:26 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/09 13:40:21 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void		put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 	int shift;
 
 	shift = y * my_union->win_x + x;
-	my_union->pixel_array[shift] = ((Uint32)((color->r << 16) +
-			(color->g << 8) + color->b));
+	my_union->pixel_array[shift] = (Uint32)((color->r << 16) +
+			(color->g << 8) + color->b);
 }
 
 //ЗАКРАШИВАЕТ ПИКСЕЛЬ ЧЕРНЫМ ЦВЕТОМ (ДЛЯ ОЧИЩЕНИЯ ТЕКСТУРЫ)

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/08 18:48:35 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/09 16:52:44 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ typedef struct	s_union
 	Uint32 			*pixel_array;
 	double 			time;
 	int				win_y;
+	int             half_win_y;
+	int             half_win_x;
 	SDL_Event		event;
 	const Uint8		*key;
 	Uint32 			*pixels;
 	Uint64			start_tick;
 	Uint64			end_tick;
 	int 			wall_heigth;
+	double          dist;
 	int				save_fdf;
 	int 			line_length;
 	double 			distance;
@@ -103,6 +106,7 @@ typedef struct	s_player
 
 	double 	distanse;
 	double	fov;
+	double  half_fov;
 	int		speed;
 	int		radius;
 	int		view_direction;
@@ -128,7 +132,8 @@ void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void			get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color, t_ray ray);
-void			draw_line(t_union *my_union, t_ray ray, int x, t_map map);
+void			draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
+//void			draw_line(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
 void			load_textures(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
@@ -152,5 +157,6 @@ void			msg(char *message, t_map *my_union);
 int				val_set(char *argv, t_map *my_union);
 void			usage(void);
 void			struct_initial(t_union *my_union, t_map *map, t_player *player);
+void	        put_cross(t_union *my_union);
 
 #endif

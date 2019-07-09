@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/05 17:25:46 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/09 16:45:32 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,31 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player)
 {
 	my_union->win_x = 640;
 	my_union->win_y = 480;
+	my_union->half_win_y = my_union->win_y >> 1;
+	my_union->half_win_x = my_union->win_x >> 1;
 	my_union->save_fdf = 0;
 //	player->player_pos_x = 3;
 //	player->player_pos_y = 3;
-	player->player_pos_x = 300;
-	player->player_pos_y = 300;
-	player->player_heigth = 1;
-	player->direct_x = 1;
-	player->direct_y = 0;
-	player->player_width = 1;
-	player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * my_union->win_x;
-	player->view_direction = 180;
-	player->speed = BLOCK_SIZE >> 3;
+    player->player_pos_x = 300;
+    player->player_pos_y = 300;
+    player->player_heigth = 1;
+    player->direct_x = 1;
+    player->direct_y = 0;
+    player->player_width = 1;
+    player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * my_union->win_x;
+    player->view_direction = 180;
+    player->speed = BLOCK_SIZE >> 3;
 //	player->speed = 1;
-	player->planeX = 0;
-	player->planeY = 0.66;
-	player->dirX = 0;
-	player->dirY = 0;
-	player->rotate_angle = 3;
-	player->time = 0;
-	player->oldTime = 0;
-	player->fov = 60;
-	initialize_SDL(my_union);
+    player->planeX = 0;
+    player->planeY = 0.66;
+    player->dirX = 0;
+    player->dirY = 0;
+    player->rotate_angle = 3;
+    player->time = 0;
+    player->oldTime = 0;
+    player->fov = 60;
+    player->half_fov = player->fov / 2;
+    my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
+    initialize_SDL(my_union);
 }
 
