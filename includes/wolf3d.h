@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/09 16:52:44 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/10 09:59:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct	s_player
 	double	direct_x;
 	double	direct_y;
 	int 	rotate_angle;
+	int     move_indicate;
 
 	double 	distanse;
 	double	fov;
@@ -148,15 +149,16 @@ int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map);
-void			check_event(t_union *my_union, t_map *map, t_player *player, const Uint8	*key);
+void			check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
 void			initialize_SDL(t_union *my_union);
 void			msg(char *message, t_map *my_union);
-int				val_set(char *argv, t_map *my_union);
+int				val_set(char *argv, t_map *my_union, t_map *objects);
 void			usage(void);
 void			struct_initial(t_union *my_union, t_map *map, t_player *player);
-void	        put_cross(t_union *my_union);
+void	        put_cross(t_union *my_union, t_player *player);
+void            check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union);
 
 #endif

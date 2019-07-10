@@ -1,78 +1,93 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.c                                             :+:      :+:    :+:   */
+/*   moves.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/17 14:55:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/09 13:40:20 by hdwarven         ###   ########.fr       */
+/*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
+/*   Updated: 2019/07/10 11:05:03 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-//ФАЙЛ ПОКА НЕ ИСПОЛЬЗУЕТСЯ
-
-/*
-int		exit_(t_map *my_union)
+//ВОЗВРАЩАЕТ 1, ЕСЛИ ИГРОК ОКАЗАЛСЯ В СТЕНЕ
+int 	in_wall(t_player *player, t_map *map)
 {
-	mlx_destroy_image(my_union->mlx_ptr, my_union->image_ptr);
-	mlx_destroy_window(my_union->mlx_ptr, my_union->win_ptr);
-	exit(0);
-}
-
-void	max_plus(int key, t_map *my_union)
-{
-	if (key == 69)
-		my_union->max_iter += 5;
-	if (key == 78)
-		my_union->max_iter -= 5;
-	plot(my_union);
-}
-
-int		mouse_move(int x, int y, t_map *my_union)
-{
-	if (my_union->mode != 'f')
-		return (0);
-	else
-	{
-		my_union->cur_real = (double)x * 4 / my_union->win_x - 2.5;
-		my_union->cur_imag = (double)y * 4 / my_union->win_y - 2.5;
-		plot(my_union);
-	}
-	return (1);
-}
-
-int		mouse_press(int key, int x, int y, t_map *my_union)
-{
-	if (key == 1 && (my_union->mode == 'j' || my_union->mode == 'f'))
-		change_mode(my_union);
-	if (key == 5 || key == 4)
-		zoom(key, my_union);
-	return (x + y);
-}
-
-int		deal_key(int key, t_map *param)
-{
-	if (key == 53)
-		exit_(param);
-	if (key == 126 || key == 125)
-		shift_y(key, param);
-	if (key == 123 || key == 124)
-		shift_x(key, param);
-	if (key == 69 || key == 78)
-		max_plus(key, param);
-	if (key == 14)
-		create_fdf(param);
-	if (key == 8)
-	{
-		if (param->cross)
-			param->cross = 0;
-		else
-			param->cross = 1;
-		plot(param);
-	}
+	if (map->map[(int)player->player_pos_y / BLOCK_SIZE][(int)player->player_pos_x / BLOCK_SIZE])
+		return (1);
 	return (0);
 }
-*/
+
+//ПЕРЕДВИЖЕНИЕ В СТОРОНУ ВЗГЛЯДА
+void	view_follow(t_player *player, t_map *map)
+{
+	double center_x;
+	double center_y;
+	double old_pos_x;
+	double old_pos_y;
+	double rad;
+
+	rad = 0.0174533;
+	old_pos_x = player->player_pos_x;
+	old_pos_y = player->player_pos_y;
+	center_x = player->player_pos_x + (player->player_width >> 1);
+	center_y = player->player_pos_y + (player->player_heigth >> 1);
+	player->player_pos_x = (center_x + (player->speed *
+			cos(player->view_direction * rad))) - (player->player_width >> 1);
+	player->player_pos_y = (center_y + (player->speed *
+			sin(player->view_direction * rad))) - (player->player_width >> 1);
+	if (in_wall(player, map))
+	{
+		player->player_pos_x = old_pos_x;
+		player->player_pos_y = old_pos_y;
+	}
+
+}
+
+//ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
+void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
+{
+	int		temp;
+
+	if (key[SDL_SCANCODE_ESCAPE])
+	{
+		exit(0);
+	}
+	if (key[SDL_SCANCODE_LEFT])
+	{
+		if (player->view_direction - player->rotate_angle >= 0)
+			player->view_direction -= player->rotate_angle;
+		else
+		{
+			temp = 360 + player->view_direction - player->rotate_angle;
+			player->view_direction = temp;
+		}
+	}
+	if (key[SDL_SCANCODE_RIGHT])
+	{
+		if (player->view_direction + player->rotate_angle < 360)
+			player->view_direction += player->rotate_angle;
+		else
+		{
+			temp = 360 - player->view_direction - player->rotate_angle;
+			player->view_direction = -temp;
+		}
+	}
+	if (key[SDL_SCANCODE_UP])
+	{
+		player->speed = BLOCK_SIZE >> 3;
+		player->move_indicate = 5;
+		view_follow(player, map);
+	}
+	if (key[SDL_SCANCODE_DOWN])
+	{
+		player->speed = -(BLOCK_SIZE >> 3);
+        player->move_indicate = 5;
+		view_follow(player, map);
+	}
+	if (key[SDL_SCANCODE_SPACE])
+	    check_door(map, objects, player, my_union);
+
+}

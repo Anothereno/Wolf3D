@@ -79,9 +79,8 @@ add_executable(wolf3d
         src/colorize.c
         src/wolf3d.c
         src/init.c
-        src/keys.c
         author
-        src/validation.c src/errors.c src/draw.c src/moves.c src/load.c)
+        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c)
 
 target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")
