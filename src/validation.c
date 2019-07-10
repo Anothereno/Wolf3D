@@ -6,11 +6,18 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/01 17:41:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/10 10:16:52 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+int     ft_is_uppercase(char c)
+{
+    if (ft_isalpha(c) && c >= 'A' && c <='Z')
+        return (1);
+    return (0);
+}
 
 // Получаю размер поля
 void	take_size(t_map *map, char *map_coordinates)
@@ -22,7 +29,7 @@ void	take_size(t_map *map, char *map_coordinates)
 	str = map_coordinates;
 	while (*str)
 	{
-		if (!ft_isalnum(*str) && *str != ' ' && *str != '\n')
+		if (!ft_isdigit(*str) && *str != ' ' && *str != '\n' && !ft_is_uppercase(*str))
 		{
 			ft_putstr("Not a valid file\n");
 			exit(0);
@@ -38,7 +45,7 @@ void	take_size(t_map *map, char *map_coordinates)
 }
 
 // Инициализирую массив с координатами карты
-void	set_array(t_map *map, char *map_coordinates)
+void	set_array(t_map *map, char *map_coordinates, t_map *objects)
 {
 	int		y;
 	int		x;
@@ -48,17 +55,39 @@ void	set_array(t_map *map, char *map_coordinates)
 	y = -1;
 	take_size(map, map_coordinates);
 	map->map = (int**)malloc(sizeof(int*) * map->size_y);
+	objects->map = (int**)malloc(sizeof(int*) * map->size_y);
 	while (++y < map->size_y)
-		map->map[y] = (int*)malloc(sizeof(int) * map->size_x);
+    {
+        map->map[y] = (int*)malloc(sizeof(int) * map->size_x);
+        objects->map[y] = (int*)malloc(sizeof(int) * map->size_x);
+    }
 	y = -1;
 	res = ft_strsplit(map_coordinates, '\n');
 	while (++y < map->size_y)
 	{
 		x = -1;
-		while (++x < map->size_x)
+        tmp = ft_strsplit(res[y], ' ');
+        while (++x < map->size_x)
 		{
-			tmp = ft_strsplit(res[y], ' ');
-			map->map[y][x] = ft_atoi(tmp[x]);
+            if (ft_isdigit(tmp[x][0]))
+            {
+                map->map[y][x] = ft_atoi(tmp[x]);
+                objects->map[y][x] = 0;
+            }
+            else
+            {
+                if (tmp[x][0] == 'D')
+                {
+                    map->map[y][x] = 9;
+                    objects->map[y][x] = tmp[x][0];
+                }
+                else
+                {
+                    map->map[y][x] = 0;
+                    objects->map[y][x] = tmp[x][0];
+                }
+
+            }
 		}
 	}
 }
@@ -89,7 +118,7 @@ char	*reading(int fd)
 }
 
 // Открываю карту на чтение
-int		val_set(char *file, t_map *map)
+int		val_set(char *file, t_map *map, t_map *objects)
 {
 	int		fd;
 	char	*map_coordinates;
@@ -100,6 +129,6 @@ int		val_set(char *file, t_map *map)
 		return (0);
 	}
 	map_coordinates = reading(fd);
-	set_array(map, map_coordinates);
+	set_array(map, map_coordinates, objects);
 	return (1);
 }

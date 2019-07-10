@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/09 17:10:58 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/10 10:57:25 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 
 	x = -1;
 	clear_texture(&my_union);
+//	player.move_indicate = 0;
 //	center_x = player.player_pos_x + (player.player_width >> 1);
 //	center_y = player.player_pos_y + (player.player_heigth >> 1);
 	one_angle = player.fov / my_union.win_x;
@@ -143,79 +144,10 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 //		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
-	put_cross(&my_union);
+	put_cross(&my_union, &player);
+	player.move_indicate = 0;
 	SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
 	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
-}
-
-void	draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player)
-{
-	double		dist;
-	double 		cur_dist;
-	int			y;
-	SDL_Color	color;
-	double		cur_x;
-	double		cur_y;
-
-	y = my_union.end;
-	dist = (my_union.win_x / (tan(player.half_fov) * 2)) * -360 / cos(angle - player.view_direction * RAD);
-	while (++y < my_union.win_y) {
-		cur_dist = dist / (y - my_union.half_win_y);
-		cur_x = (cur_dist * cos(angle) + player.player_pos_x);
-		cur_y = (cur_dist * sin(angle) + player.player_pos_y);
-		choose_surface_floor_and_ceiling(&my_union, 'f');
-		get_surface_pixel(&my_union, cur_x, cur_y, &color, ray);
-		if (check_bound(x, y, map))
-			put_pixel(&my_union, x, y, &color);
-		choose_surface_floor_and_ceiling(&my_union, 'c');
-		get_surface_pixel(&my_union, (int)cur_x, (int)(cur_y), &color, ray);
-		if (check_bound(x, my_union.win_y - y, map))
-			put_pixel(&my_union, x, my_union.win_y - y, &color);
-	}
-}
-
-//void	draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player)
-//{
-//	int			cur_dist;
-//	double		weight;
-//	int			y;
-//	SDL_Color	color;
-//	double		cur_x;
-//	double		cur_y;
-//
-//	y = my_union.end;
-//	while (++y < my_union.win_y) {
-//		cur_dist = my_union.win_y / (2 * y - my_union.win_y);
-//		weight = cur_dist / ray.res_distance;
-//		cur_x = weight * (ray.x + player.player_pos_x) + (1.0 - weight) * player.player_pos_x;
-//		cur_y = weight * player.player_pos_y + (1.0 - weight) * player.player_pos_y;
-//		cur_x = (int)(cur_x * BLOCK_SIZE) % BLOCK_SIZE;
-//		cur_y = (int)(cur_y * BLOCK_SIZE) % BLOCK_SIZE;
-////		cur_x = x * cos(angle);
-////		cur_y = y * sin(angle);
-//		choose_surface_floor_and_ceiling(&my_union, 'f');
-//		get_surface_pixel(&my_union, cur_x, cur_y, &color, ray);
-//		if (check_bound(x, y, map))
-//			put_pixel(&my_union, x, y, &color);
-//		choose_surface_floor_and_ceiling(&my_union, 'c');
-//		get_surface_pixel(&my_union, x, my_union.win_y - y, &color, ray);
-//		if (check_bound(x, my_union.win_y - y, map))
-//			put_pixel(&my_union, x, my_union.win_y - y, &color);
-//	}
-//}
-
-//ОТРИСОВЫВАЕТ ПОЛ И ПОТОЛОК
-void	draw_ceiling_and_floor(t_union my_union)
-{
-	SDL_Rect rect;
-
-	rect.x = 0;
-	rect.y = my_union.win_y / 2;
-	rect.w = my_union.win_x;
-	rect.h = rect.y;
-
-	SDL_SetRenderDrawColor(my_union.renderer, 45, 161, 53, 255);
-	SDL_RenderFillRect(my_union.renderer, &rect);
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
@@ -294,7 +226,6 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     }
 }
 
-
 //ОТРИСОВЫВАЕТ МИНИКАРТУ
 void	draw_scene(t_union my_union, t_map map)
 {
@@ -360,17 +291,19 @@ void	hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, dou
 	double 	step_x;
 	double 	cur_point_x;
 	double 	cur_point_y;
+	double  sin_alpha;
 
-	if (sin(alpha) < 0)
-	{
-		first_intersect_y = ((int)player.player_pos_y & 0xffc0) - 0.001;
-		step_y = -BLOCK_SIZE;
-	}
-	else if (sin(alpha) > 0)
-	{
-		first_intersect_y = ((int)player.player_pos_y & 0xffc0) + 64.001;
-		step_y = BLOCK_SIZE;
-	}
+	sin_alpha = sin(alpha);
+	if (sin_alpha < 0)
+    {
+        first_intersect_y = ((int)player.player_pos_y & 0xffc0) - 0.001;
+        step_y = -BLOCK_SIZE;
+    }
+	else if (sin_alpha > 0)
+    {
+        first_intersect_y = ((int)player.player_pos_y & 0xffc0) + 64.001;
+        step_y = BLOCK_SIZE;
+    }
 	else
 	{
 		ray->hor_distance = 99999;
@@ -389,7 +322,7 @@ void	hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, dou
 	}
 	ray->end_hor_x = cur_point_x;
 	ray->end_hor_y = cur_point_y;
-	ray->hor_distance = fabs((player.player_pos_y - cur_point_y) / sin(alpha));
+	ray->hor_distance = fabs((player.player_pos_y - cur_point_y) / sin_alpha);
 }
 
 //РАССЧИТЫВАЕТ ВЕРТИКАЛЬНОЕ ПЕРЕСЕЧЕНИЕ СО СТЕНОЙ
@@ -401,13 +334,15 @@ void	vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, do
 	double 	step_x;
 	double 	cur_point_x;
 	double 	cur_point_y;
+	double  cos_alpha;
 
-	if (cos(alpha) < 0)
+	cos_alpha = cos(alpha);
+	if (cos_alpha < 0)
 	{
 		first_intersect_x = ((int)player.player_pos_x & 0xffc0) - 0.001;
 		step_x = -BLOCK_SIZE;
 	}
-	else if (cos(alpha) > 0)
+	else if (cos_alpha > 0)
 	{
 		first_intersect_x = ((int)player.player_pos_x & 0xffc0) + 64.001;
 		step_x = BLOCK_SIZE;
@@ -430,16 +365,16 @@ void	vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, do
 	}
 	ray->end_vert_x = cur_point_x;
 	ray->end_vert_y = cur_point_y;
-	ray->vert_distance = fabs((player.player_pos_x - cur_point_x) / cos(alpha));
+	ray->vert_distance = fabs((player.player_pos_x - cur_point_x) / cos_alpha);
 }
 
 //ВЫВОДИТ ПЕРЕКРЕСТЬЕ ПРИЦЕЛА))
-void	put_cross(t_union *my_union)
+void	put_cross(t_union *my_union, t_player *player)
 {
 	int         i;
 
-	i = 3;
-	while (++i < 10)
+	i = 3 + player->move_indicate;
+	while (++i < 10 + player->move_indicate)
 	{
         my_union->pixel_array[my_union->half_win_y *
         my_union->win_x + my_union->half_win_x + i] = 0xFFFFFF;
@@ -450,4 +385,25 @@ void	put_cross(t_union *my_union)
         my_union->pixel_array[(my_union->half_win_y - i) *
         my_union->win_x + my_union->half_win_x] = 0xFFFFFF;
 	}
+}
+
+void    check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union)
+{
+    double	angle_rad;
+    double	angle;
+    t_ray   ray;
+
+    angle = player->view_direction;
+    my_union->flag = 0;
+    angle = take_range_angle(angle);
+    angle_rad = angle * RAD;
+    hor_distance(my_union, *player, *map, &ray, angle_rad);
+    vert_distance(my_union, *player, *map, &ray, angle_rad);
+    choose_distance(&ray);
+    printf("%c, %d\n", objects->map[(int)ray.y >> 6][(int)ray.x >> 6], map->map[(int)ray.y >> 6][(int)ray.x >> 6]);
+    if (objects->map[(int)ray.y >> 6][(int)ray.x >> 6] == 'D')
+        if (map->map[(int)ray.y >> 6][(int)ray.x >> 6] != 0)
+            map->map[(int)ray.y >> 6][(int)ray.x >> 6] = 0;
+        else
+            map->map[(int)ray.y >> 6][(int)ray.x >> 6] = 9;
 }

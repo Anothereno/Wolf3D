@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/09 15:21:29 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/10 10:54:17 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ int		main(int argc, char **argv)
 {
 	t_union		my_union;
 	t_map		map;
+	t_map       objects;
 	t_player	player;
 	t_ray		ray;
 
 	my_union.start_tick = 0;
 	if (argc == 2)
 	{
-		if (!val_set(argv[1], &map))
+		if (!val_set(argv[1], &map, &objects))
 			exit(0);
 		struct_initial(&my_union, &map, &player);
 		my_union.key = SDL_GetKeyboardState(NULL);
@@ -39,9 +40,10 @@ int		main(int argc, char **argv)
 			SDL_PollEvent(&my_union.event);
 			if(my_union.event.type == SDL_QUIT)
 				break;
-			check_event(&my_union, &map, &player, my_union.key);
+            player.move_indicate = 0;
+            check_event(&my_union, &map, &player, &objects, my_union.key);
 //			clear_window(my_union);
-			take_vector_of_view(&player);
+            take_vector_of_view(&player);
 //			draw_scene(my_union, map);
 			raycast(my_union, map, player, ray);
 			my_union.end_tick = my_union.start_tick;
@@ -49,7 +51,7 @@ int		main(int argc, char **argv)
 			my_union.time = (my_union.start_tick - my_union.end_tick) / 1000.0f;
 			change_speed(&my_union, &player);
 			SDL_RenderPresent(my_union.renderer);
-			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
+//			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 		}
 	}
 	else
