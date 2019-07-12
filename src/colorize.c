@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/10 09:09:31 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:24:19 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@ void	get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color, t_ray 
 {
 	Uint8		*pixel;
 
-	x %= 64;
-	y %= 64;
-//	printf("%d, %d\n", x, y);
-//	my_union->surface = get_surface(my_union, map);
 	pixel = my_union->surface->pixels + y * my_union->surface->pitch;
 	pixel += x * my_union->surface->format->BytesPerPixel;
 	SDL_GetRGBA(*pixel, my_union->surface->format,
@@ -47,7 +43,7 @@ void		put_black_pixel(t_union *my_union, int x, int y)
 }
 
 //ВЫБИРАЕТ САРФЭЙС ИЗ МАССИВА СПРАЙТОВ
-void		choose_surface(t_union *my_union, t_ray ray, t_map map)
+void		choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
 {
 	int wall;
 
@@ -56,10 +52,12 @@ void		choose_surface(t_union *my_union, t_ray ray, t_map map)
 }
 
 //ВЫБИРАЕТ САРФЭЙС ИЗ МАССИВА СПРАЙТОВ
-void		choose_surface_floor_and_ceiling(t_union *my_union, char mode)
+void		choose_surface_floor_ceiling_hud(t_union *my_union, char mode)
 {
 	if (mode =='c')
 		my_union->surface = my_union->surface_array[0];
+	else if (mode == 'h')
+	    my_union->surface = my_union->hud;
 	else
 		my_union->surface = my_union->surface_array[1];
 }

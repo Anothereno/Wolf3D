@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/10 09:59:46 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:05:36 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ typedef struct	s_union
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
 	SDL_Surface		*surface;
+	SDL_Surface     *hud;
 	SDL_Surface		**surface_array;
 	Uint32 			*pixel_array;
 	double 			time;
 	int				win_y;
+	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
 	SDL_Event		event;
@@ -55,17 +57,9 @@ typedef struct	s_union
 	Uint64			end_tick;
 	int 			wall_heigth;
 	double          dist;
-	int				save_fdf;
-	int 			line_length;
-	double 			distance;
-	double 			delta_x;
-	double 			ray_x;
-	double 			ray_y;
 	int 			start;
 	int 			end;
-	int				flag;
-	double			delta_y;
-	int				sl;
+	int             flag;
 	FILE			*file;
 	t_int			*ints;
 	SDL_Color		*color;
@@ -127,8 +121,8 @@ void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle,
 
 //void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle);
 void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
-void			choose_surface_floor_and_ceiling(t_union *my_union, char mode);
-void			choose_surface(t_union *my_union, t_ray ray, t_map map);
+void			choose_surface_floor_ceiling_hud(t_union *my_union, char mode);
+void			choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
 void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
@@ -155,9 +149,9 @@ void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
 void			initialize_SDL(t_union *my_union);
 void			msg(char *message, t_map *my_union);
-int				val_set(char *argv, t_map *my_union, t_map *objects);
+int				val_set(char *argv, t_map *my_union, t_map *objects, t_player *player);
 void			usage(void);
-void			struct_initial(t_union *my_union, t_map *map, t_player *player);
+void			struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *objects);
 void	        put_cross(t_union *my_union, t_player *player);
 void            check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union);
 
