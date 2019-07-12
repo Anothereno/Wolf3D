@@ -6,21 +6,21 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 15:24:19 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 16:29:54 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
 //ПОЛУЧАЕТ ЦВЕТ ПИКСЕЛЯ ИЗ СПРАЙТА
-void	get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color, t_ray ray)
+void get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 {
 	Uint8		*pixel;
 
 	pixel = my_union->surface->pixels + y * my_union->surface->pitch;
 	pixel += x * my_union->surface->format->BytesPerPixel;
-	SDL_GetRGBA(*pixel, my_union->surface->format,
-			&color->r, &color->g, &color->b, &color->a);
+	SDL_GetRGB(*pixel, my_union->surface->format,
+			&color->r, &color->g, &color->b);
 }
 
 //УСТАНАВЛИВАЕТ ПИКСЕЛЬ В ЗАДАННЫЙ ЦВЕТ
@@ -31,6 +31,7 @@ void		put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 	shift = y * my_union->win_x + x;
 	my_union->pixel_array[shift] = (Uint32)((color->r << 16) +
 			(color->g << 8) + color->b);
+
 }
 
 //ЗАКРАШИВАЕТ ПИКСЕЛЬ ЧЕРНЫМ ЦВЕТОМ (ДЛЯ ОЧИЩЕНИЯ ТЕКСТУРЫ)

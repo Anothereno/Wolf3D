@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 15:47:46 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 16:34:18 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,6 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     int         it;
     double		wall_scale;
     double      hud_scale_width;
-    double      hud_scale_heigth;
     double      cur_dist;
     double      cur_x;
     double      cur_y;
@@ -200,16 +199,19 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
         if (start >= my_union->hud_start)
         {
             choose_surface_floor_ceiling_hud(my_union, 'h');
-            get_surface_pixel(my_union, x * hud_scale_width, it * hud_scale_width, &color, ray);
+            get_surface_pixel(my_union, x * hud_scale_width, it * hud_scale_width, &color);
             it++;
             if (check_bound(x, start, map))
                 put_pixel(my_union, x, start, &color);
+//            if (color.r == 0 && color.g == 0)
+//                printf("%u\n", (Uint32)((color.r << 16) +
+//                                      (color.g << 8) + color.b));
         }
         if (start >= my_union->start && start < my_union->end)
         {
             if (start > my_union->hud_start)
                 continue;
-            get_surface_pixel(my_union, ray.offset, y * wall_scale, &color, ray);
+            get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
             y++;
             if (check_bound(x, start, map))
                 put_pixel(my_union, x, start, &color);
@@ -221,12 +223,12 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             cur_y = (cur_dist * sin_angle + player.player_pos_y);
             if (start < my_union->hud_start) {
                 choose_surface_floor_ceiling_hud(my_union, 'f');
-                get_surface_pixel(my_union, (int)cur_x % 64, (int)cur_y % 64, &color, ray);
+                get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
                 if (check_bound(x, start, map))
                     put_pixel(my_union, x, start, &color);
             }
             choose_surface_floor_ceiling_hud(my_union, 'c');
-            get_surface_pixel(my_union, (int)cur_x % 64, (int)cur_y % 64, &color, ray);
+            get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
             if (check_bound(x, my_union->win_y - start, map))
                 put_pixel(my_union, x, my_union->win_y - start, &color);
         }
