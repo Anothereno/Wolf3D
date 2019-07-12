@@ -21,6 +21,7 @@ void	load_textures(t_union *my_union)
 	my_union->surface = SDL_LoadBMP("pics/WALL14.bmp");
 	if (!my_union->surface)
 		ft_putstr("Surface not loaded\n");
+	my_union->hud = SDL_LoadBMP("pics/HUD.bmp");
 	my_union->surface_array[0] = SDL_LoadBMP("pics/WALL77.bmp");
 	my_union->surface_array[1] = SDL_LoadBMP("pics/WALL76.bmp");
 	my_union->surface_array[2] = SDL_LoadBMP("pics/WALL21.bmp");

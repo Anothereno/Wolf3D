@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/10 10:57:25 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 15:47:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,15 +128,8 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		vert_distance(&my_union, player, map, &ray, angle_rad);
 		choose_distance(&ray);
 		calc_line(&my_union, ray, angle_rad - player.view_direction * RAD);
-//		change_walls_color(my_union, ray, player);
 		ray.offset = take_textures_offset(ray);
-//		choose_surface(&my_union, ray, map);
-//		draw_line(&my_union, ray, x, map);
         draw_line(&my_union, ray, x, map, player, angle_rad);
-//		draw_floor(my_union, ray, x, map, angle * RAD, player);
-//		draw_floor(my_union, ray, x, map, angle * RAD);
-//		draw_ceiling_and_floor(my_union);
-//		draw_line(my_union, ray, x, my_union.start, my_union.end);
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
 //		SDL_RenderDrawLine(my_union.renderer, x, my_union.start, x, my_union.end); // Отрисовка линий СДЛ
@@ -145,7 +138,6 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		angle += one_angle;
 	}
 	put_cross(&my_union, &player);
-	player.move_indicate = 0;
 	SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
 	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
 }
@@ -182,7 +174,10 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
 {
     int			start;
     int			y;
+    int         it;
     double		wall_scale;
+    double      hud_scale_width;
+    double      hud_scale_heigth;
     double      cur_dist;
     double      cur_x;
     double      cur_y;
@@ -191,18 +186,29 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     double      sin_angle;
     SDL_Color	color;
 
+    it = 0;
     cos_angle = cos(angle);
     sin_angle = sin(angle);
     start = my_union->start - 1;
     y = get_start_draw(*my_union);
     wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
+    hud_scale_width = (float)my_union->hud->w / my_union->win_x;
     dist = my_union->dist / cos(angle - player.view_direction * RAD);
-    choose_surface(my_union, ray, map);
+    choose_surface_wall(my_union, ray, map);
     while (++start < my_union->win_y)
     {
+        if (start >= my_union->hud_start)
+        {
+            choose_surface_floor_ceiling_hud(my_union, 'h');
+            get_surface_pixel(my_union, x * hud_scale_width, it * hud_scale_width, &color, ray);
+            it++;
+            if (check_bound(x, start, map))
+                put_pixel(my_union, x, start, &color);
+        }
         if (start >= my_union->start && start < my_union->end)
         {
-
+            if (start > my_union->hud_start)
+                continue;
             get_surface_pixel(my_union, ray.offset, y * wall_scale, &color, ray);
             y++;
             if (check_bound(x, start, map))
@@ -213,12 +219,14 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             cur_dist = dist / (start - my_union->half_win_y);
             cur_x = (cur_dist * cos_angle + player.player_pos_x);
             cur_y = (cur_dist * sin_angle + player.player_pos_y);
-            choose_surface_floor_and_ceiling(my_union, 'f');
-            get_surface_pixel(my_union, cur_x, cur_y, &color, ray);
-            if (check_bound(x, start, map))
-                put_pixel(my_union, x, start, &color);
-            choose_surface_floor_and_ceiling(my_union, 'c');
-            get_surface_pixel(my_union, cur_x, cur_y, &color, ray);
+            if (start < my_union->hud_start) {
+                choose_surface_floor_ceiling_hud(my_union, 'f');
+                get_surface_pixel(my_union, (int)cur_x % 64, (int)cur_y % 64, &color, ray);
+                if (check_bound(x, start, map))
+                    put_pixel(my_union, x, start, &color);
+            }
+            choose_surface_floor_ceiling_hud(my_union, 'c');
+            get_surface_pixel(my_union, (int)cur_x % 64, (int)cur_y % 64, &color, ray);
             if (check_bound(x, my_union->win_y - start, map))
                 put_pixel(my_union, x, my_union->win_y - start, &color);
         }
@@ -401,7 +409,7 @@ void    check_door(t_map *map, t_map *objects, t_player *player, t_union *my_uni
     vert_distance(my_union, *player, *map, &ray, angle_rad);
     choose_distance(&ray);
     printf("%c, %d\n", objects->map[(int)ray.y >> 6][(int)ray.x >> 6], map->map[(int)ray.y >> 6][(int)ray.x >> 6]);
-    if (objects->map[(int)ray.y >> 6][(int)ray.x >> 6] == 'D')
+    if (objects->map[(int)ray.y >> 6][(int)ray.x >> 6] == 'D' && ray.res_distance <= BLOCK_SIZE << 1)
         if (map->map[(int)ray.y >> 6][(int)ray.x >> 6] != 0)
             map->map[(int)ray.y >> 6][(int)ray.x >> 6] = 0;
         else

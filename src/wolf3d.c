@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/10 10:54:17 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 14:12:37 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ int		main(int argc, char **argv)
 	t_ray		ray;
 
 	my_union.start_tick = 0;
+	player.player_pos_y = -1;
+	player.player_pos_x = -1;
 	if (argc == 2)
 	{
-		if (!val_set(argv[1], &map, &objects))
+		if (!val_set(argv[1], &map, &objects, &player))
 			exit(0);
-		struct_initial(&my_union, &map, &player);
+		struct_initial(&my_union, &map, &player, &objects);
 		my_union.key = SDL_GetKeyboardState(NULL);
 		while (1)
 		{
