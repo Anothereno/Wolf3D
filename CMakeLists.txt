@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(includes)
 include_directories(libft)
 include_directories(src)
+include_directories(resourses)
 
 add_executable(wolf3d
         includes/wolf3d.h

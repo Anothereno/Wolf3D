@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 16:34:18 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 17:29:38 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,9 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		angle += one_angle;
 	}
 	put_cross(&my_union, &player);
-	SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
-	SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
+    SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
+    SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
+    SDL_RenderCopy(my_union.renderer, my_union.hud_texture, NULL, &my_union.hud_rect);
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
@@ -191,22 +192,11 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     start = my_union->start - 1;
     y = get_start_draw(*my_union);
     wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
-    hud_scale_width = (float)my_union->hud->w / my_union->win_x;
+    hud_scale_width = (float)my_union->hud_surface->w / my_union->win_x;
     dist = my_union->dist / cos(angle - player.view_direction * RAD);
     choose_surface_wall(my_union, ray, map);
     while (++start < my_union->win_y)
     {
-        if (start >= my_union->hud_start)
-        {
-            choose_surface_floor_ceiling_hud(my_union, 'h');
-            get_surface_pixel(my_union, x * hud_scale_width, it * hud_scale_width, &color);
-            it++;
-            if (check_bound(x, start, map))
-                put_pixel(my_union, x, start, &color);
-//            if (color.r == 0 && color.g == 0)
-//                printf("%u\n", (Uint32)((color.r << 16) +
-//                                      (color.g << 8) + color.b));
-        }
         if (start >= my_union->start && start < my_union->end)
         {
             if (start > my_union->hud_start)

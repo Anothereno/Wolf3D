@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 16:22:19 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 17:40:56 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	initialize_SDL(t_union *my_union)
 										  my_union->win_x, my_union->win_y);
 	my_union->color = (SDL_Color*)malloc(sizeof(SDL_Color));
 	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
-	load_textures(my_union);
 }
 
 //ИНИЦИАЛИЗИРУЕТ ПЕРЕМЕННЫЕ СТРУКТУРЫ
@@ -65,6 +64,13 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
     player->half_fov = player->fov / 2;
     my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
     initialize_SDL(my_union);
-    my_union->hud_start = my_union->win_y - (my_union->hud->h * (my_union->win_x / my_union->hud->w));
+    load_textures(my_union);
+    my_union->hud_start = my_union->win_y - (my_union->hud_surface->h * (my_union->win_x / my_union->hud_surface->w));
+    my_union->hud_rect.w = my_union->win_x;
+    my_union->hud_rect.h = 80;
+    my_union->hud_rect.x = 0;
+    my_union->hud_rect.y = my_union->hud_start;
+    my_union->hud_texture = SDL_CreateTextureFromSurface(my_union->renderer, my_union->hud_surface);
+
 }
 

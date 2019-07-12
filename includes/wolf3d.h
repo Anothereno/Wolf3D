@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 16:29:54 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 17:25:00 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ typedef struct	s_union
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*texture;
+	SDL_Texture     *hud_texture;
 	SDL_Surface		*surface;
-	SDL_Surface     *hud;
+	SDL_Surface     *hud_surface;
 	SDL_Surface		**surface_array;
 	Uint32 			*pixel_array;
 	double 			time;
@@ -59,6 +60,7 @@ typedef struct	s_union
 	double          dist;
 	int 			start;
 	int 			end;
+	SDL_Rect        hud_rect;
 	int             flag;
 	FILE			*file;
 	t_int			*ints;

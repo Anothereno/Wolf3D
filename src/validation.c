@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 14:17:51 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 17:34:29 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int    set_player(t_map *map, t_map *objects, char ch, int x, int y, t_player *p
 {
     if (ch == 'P')
     {
-        player->player_pos_x = x << 6;
-        player->player_pos_y = y << 6;
+        player->player_pos_x = (x << 6) + 10;
+        player->player_pos_y = (y << 6) + 10;
         map->map[y][x] = 0;
         objects->map[y][x] = 0;
         return (1);
@@ -155,7 +155,9 @@ int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
 		usage();
 		return (0);
 	}
-	map_coordinates = reading(fd);
+    player->player_pos_y = -1;
+    player->player_pos_x = -1;
+    map_coordinates = reading(fd);
 	set_array(map, map_coordinates, objects, player);
 	if (player->player_pos_x == -1 || player->player_pos_y == -1)
 	{
