@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 16:29:54 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 16:33:00 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		choose_surface_floor_ceiling_hud(t_union *my_union, char mode)
 	if (mode =='c')
 		my_union->surface = my_union->surface_array[0];
 	else if (mode == 'h')
-	    my_union->surface = my_union->hud;
+	    my_union->surface = my_union->hud_surface;
 	else
 		my_union->surface = my_union->surface_array[1];
 }

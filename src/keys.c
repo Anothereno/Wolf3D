@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/10 11:05:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/12 18:26:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	view_follow(t_player *player, t_map *map)
 	}
 
 }
+
+//void    strafe()
 
 //ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
 void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
