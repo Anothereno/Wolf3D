@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 17:25:00 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/17 16:39:12 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,16 @@ typedef struct	s_union
 	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
+	int             mouse_x;
+	double          sens;
+	int             mouse_y;
 	SDL_Event		event;
 	const Uint8		*key;
 	Uint32 			*pixels;
 	Uint64			start_tick;
 	Uint64			end_tick;
+	Uint64          door_timer_start;
+	Uint64          door_timer_end;
 	int 			wall_heigth;
 	double          dist;
 	int 			start;
@@ -105,6 +110,7 @@ typedef struct	s_player
 	double	fov;
 	double  half_fov;
 	int		speed;
+	int     strafe_speed;
 	int		radius;
 	int		view_direction;
 	double 	speed_move;
@@ -144,7 +150,7 @@ int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 //int				draw_line(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
-void			view_follow(t_player *player, t_map *map);
+void			view_follow(t_player *player, t_map *map, int mode);
 void			check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);
@@ -156,5 +162,8 @@ void			usage(void);
 void			struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *objects);
 void	        put_cross(t_union *my_union, t_player *player);
 void            check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union);
+int 	        check_wall(double cur_x, double cur_y, t_map map);
+double          take_range_angle(double angle);
+void	        choose_distance(t_ray *ray);
 
 #endif
