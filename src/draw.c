@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 17:29:38 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/17 17:39:06 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
 //		SDL_RenderDrawLine(my_union.renderer, x, my_union.start, x, my_union.end); // Отрисовка линий СДЛ
 //		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
-//		SDL_RenderDrawLine(my_union.renderer, (int) center_x >> 2, (int)center_y >> 2, (int)ray.x >> 2, (int)ray.y >> 2);
+//		SDL_RenderDrawLine(my_union.renderer, (int)player.player_pos_x, player.player_pos_y, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
 	put_cross(&my_union, &player);
@@ -387,23 +387,3 @@ void	put_cross(t_union *my_union, t_player *player)
 	}
 }
 
-void    check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union)
-{
-    double	angle_rad;
-    double	angle;
-    t_ray   ray;
-
-    angle = player->view_direction;
-    my_union->flag = 0;
-    angle = take_range_angle(angle);
-    angle_rad = angle * RAD;
-    hor_distance(my_union, *player, *map, &ray, angle_rad);
-    vert_distance(my_union, *player, *map, &ray, angle_rad);
-    choose_distance(&ray);
-    printf("%c, %d\n", objects->map[(int)ray.y >> 6][(int)ray.x >> 6], map->map[(int)ray.y >> 6][(int)ray.x >> 6]);
-    if (objects->map[(int)ray.y >> 6][(int)ray.x >> 6] == 'D' && ray.res_distance <= BLOCK_SIZE << 1)
-        if (map->map[(int)ray.y >> 6][(int)ray.x >> 6] != 0)
-            map->map[(int)ray.y >> 6][(int)ray.x >> 6] = 0;
-        else
-            map->map[(int)ray.y >> 6][(int)ray.x >> 6] = 9;
-}
