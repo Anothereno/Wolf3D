@@ -81,7 +81,7 @@ add_executable(wolf3d
         src/wolf3d.c
         src/init.c
         author
-        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c src/doors.c)
+        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c src/doors.c src/stats.c)
 
 target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")
@@ -94,6 +94,7 @@ include_directories("resources")
 include_directories("libft/includes")
 include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2.framework/Versions/A/Headers/")
 include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_image.framework/Versions/A/Headers/")
+include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_ttf-2.0.15")
 #include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_mixer.framework/Versions/A/Headers/")
 #include_directories("/Users/$ENV{USER}/Library/Frameworks/SDL2_ttf.framework/Versions/A/Headers/")
 target_link_libraries(wolf3d "-F /Users/$ENV{USER}/Library/Frameworks/ -framework SDL2")

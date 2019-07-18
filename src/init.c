@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/17 16:39:12 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/18 18:26:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,17 @@ void	initialize_SDL(t_union *my_union)
 	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
 }
 
+void    initialize_TTF(t_union *my_union)
+{
+    if (TTF_Init() == -1)
+    {
+        printf("Unable to init SDL_TTF: %s", TTF_GetError());
+    }
+    my_union->font = TTF_OpenFont("resources/Fonts/score_font.ttf", 36);
+    if (my_union->font == NULL)
+        printf("Unable to load font: %s", TTF_GetError());
+}
+
 //ИНИЦИАЛИЗИРУЕТ ПЕРЕМЕННЫЕ СТРУКТУРЫ
 void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
@@ -49,6 +60,8 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
 	my_union->sens = 0.3;
 	my_union->mouse_x = my_union->half_win_x;
 	my_union->mouse_y = my_union->half_win_y;
+	my_union->rel_mouse_mode_timer = 0;
+	my_union->font = NULL;
     player->player_heigth = 1;
     player->direct_x = 1;
     player->direct_y = 0;
@@ -67,7 +80,9 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
     player->oldTime = 0;
     player->fov = 60;
     player->half_fov = player->fov * 0.5;
+    player->score = 0;
     my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
+    initialize_TTF(my_union);
     initialize_SDL(my_union);
     load_textures(my_union);
     my_union->hud_start = my_union->win_y - (my_union->hud_surface->h * (my_union->win_x / my_union->hud_surface->w));

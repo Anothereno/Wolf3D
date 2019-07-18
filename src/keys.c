@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/17 18:20:38 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/18 17:15:54 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,47 @@ void    strafe(t_player *player, t_map *map, int mode)
     }
 }
 
+//ОБРАБАТЫВАЕТ ПОВЕДЕНИЕ МЫШИ, ЕСЛИ КУРСОР ВКЛЮЧЕН
 void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
     int x;
     int y;
 
-    x = my_union->event.motion.x;
-    y = my_union->event.motion.y;
-    if (x < my_union->mouse_x)
+    SDL_GetMouseState(&x, &y);
+    printf("%d, %d\n", x, y);
+    if (x < 0)
     {
-        player->view_direction -= (int)((my_union->mouse_x - x) * my_union->sens);
+        player->view_direction -= ((my_union->half_win_x - x) * my_union->sens);
         my_union->mouse_x = x;
     }
-    else if (x > my_union->mouse_x)
+    else if (x > 0)
     {
-        player->view_direction += (int)((x - my_union->mouse_x) * my_union->sens);
+        player->view_direction += ((x - my_union->half_win_x) * my_union->sens);
         my_union->mouse_x = x;
     }
+    SDL_WarpMouseInWindow(my_union->win, my_union->half_win_x, my_union->half_win_y);
+
+}
+
+//ОБРАБАТЫВАЕТ ПОВЕДЕНИЕ МЫШИ, ЕСЛИ КУРСОР ВЫКЛЮЧЕН
+void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player, t_map *objects)
+{
+    int x;
+    int y;
+
+    SDL_GetRelativeMouseState(&x, &y);
+    printf("%d, %d\n", x, y);
+    if (x < 0)
+    {
+        player->view_direction -= ((- x) * my_union->sens);
+        my_union->mouse_x = x;
+    }
+    else if (x > 0)
+    {
+        player->view_direction += ((x) * my_union->sens);
+        my_union->mouse_x = x;
+    }
+    SDL_WarpMouseInWindow(my_union->win, my_union->half_win_x, my_union->half_win_y);
 
 }
 
@@ -87,11 +111,20 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 
 
     if (my_union->event.type == SDL_MOUSEMOTION)
-        mouse_handling(my_union, map, player, objects);
+    {
+        if (!my_union->mouse_state)
+            mouse_handling(my_union, map, player, objects);
+        else
+            mouse_relative_handling(my_union, map, player, objects);
+    }
     if (key[SDL_SCANCODE_ESCAPE])
-	{
 		exit(0);
-	}
+    if (key[SDL_SCANCODE_BACKSPACE] && !my_union->rel_mouse_mode_timer)
+    {
+        my_union->rel_mouse_mode_timer = SDL_GetTicks();
+        my_union->mouse_state = (my_union->mouse_state == 0) ? 1 : 0;
+        SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
+    }
 	if (key[SDL_SCANCODE_Q])
 	{
 		if (player->view_direction - player->rotate_angle >= 0)

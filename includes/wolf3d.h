@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/17 16:39:12 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/18 18:22:41 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <string.h>
 # include <pthread.h>
 # include <SDL.h>
+# include <SDL_ttf.h>
 # include <SDL_image.h>
 # define NUM_OF_THR 200
 # define BLOCK_SIZE	64
@@ -52,6 +53,7 @@ typedef struct	s_union
 	int             half_win_y;
 	int             half_win_x;
 	int             mouse_x;
+	int             mouse_state;
 	double          sens;
 	int             mouse_y;
 	SDL_Event		event;
@@ -59,7 +61,7 @@ typedef struct	s_union
 	Uint32 			*pixels;
 	Uint64			start_tick;
 	Uint64			end_tick;
-	Uint64          door_timer_start;
+	Uint64          rel_mouse_mode_timer;
 	Uint64          door_timer_end;
 	int 			wall_heigth;
 	double          dist;
@@ -70,6 +72,7 @@ typedef struct	s_union
 	FILE			*file;
 	t_int			*ints;
 	SDL_Color		*color;
+	TTF_Font        *font;
 }				t_union;
 
 
@@ -105,6 +108,7 @@ typedef struct	s_player
 	double	direct_y;
 	int 	rotate_angle;
 	int     move_indicate;
+	int     score;
 
 	double 	distanse;
 	double	fov;
@@ -112,7 +116,7 @@ typedef struct	s_player
 	int		speed;
 	int     strafe_speed;
 	int		radius;
-	int		view_direction;
+    double	view_direction;
 	double 	speed_move;
 	double 	speed_rotate;
 
@@ -165,5 +169,6 @@ void            check_door(t_map *map, t_map *objects, t_player *player, t_union
 int 	        check_wall(double cur_x, double cur_y, t_map map);
 double          take_range_angle(double angle);
 void	        choose_distance(t_ray *ray);
+void            show_stats(t_union *my_union, t_map *map, t_map *objects, t_player *player);
 
 #endif
