@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/17 18:31:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/07/26 19:33:49 by ofrost-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	usage(void)
 {
 	ft_putstr("usage: ./wolf3d <argument>\n");
 }
+//TEST
 
 //ОСУЩЕСТВЛЯЕТ МЭЙН ЛУП
 int		main(int argc, char **argv)
