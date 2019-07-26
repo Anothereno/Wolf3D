@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/12 15:59:47 by ofrost-g         ###   ########.fr       */
+/*   Updated: 2019/07/25 21:39:47 by ofrost-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void			choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
 void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
-void			get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color, t_ray ray);
+void            get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color, t_ray ray);
 void			draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
 //void			draw_line(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
