@@ -16,7 +16,7 @@
 
 void    show_stats(t_union *my_union, t_map *map, t_map *objects, t_player *player)
 {
-    print_score(my_union, player);
+//    print_score(my_union, player);
 }
 
 
