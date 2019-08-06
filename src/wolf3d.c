@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/18 15:45:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/06 15:26:49 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //ВЫВОДИТ ЮЗЭДЖ
 void	usage(void)
 {
-	ft_putstr("usage: ./wolf3d <argument>\n");
+    ft_putstr("usage: ./wolf3d <argument>\n");
 }
 
 void    changing_key_states(t_union *my_union)
@@ -29,20 +29,21 @@ void    changing_key_states(t_union *my_union)
 //ОСУЩЕСТВЛЯЕТ МЭЙН ЛУП
 int		main(int argc, char **argv)
 {
-	t_union		my_union;
-	t_map		map;
-	t_map       objects;
-	t_player	player;
-	t_ray		ray;
+    t_union		my_union;
+    t_map		map;
+    t_map       objects;
+    t_player	player;
+    t_ray		ray;
 
-	my_union.start_tick = 0;
-	if (argc == 2)
-	{
-		if (!val_set(argv[1], &map, &objects, &player))
-			exit(0);
-		struct_initial(&my_union, &map, &player, &objects);
-		my_union.key = SDL_GetKeyboardState(NULL);
-		while (1) {
+    my_union.start_tick = 0;
+    if (argc == 2)
+    {
+        if (!val_set(argv[1], &map, &objects, &player))
+            exit(0);
+        struct_initial(&my_union, &map, &player, &objects);
+        my_union.key = SDL_GetKeyboardState(NULL);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        while (1) {
 
             SDL_PollEvent(&my_union.event);
             if (my_union.event.type == SDL_QUIT)
@@ -59,11 +60,10 @@ int		main(int argc, char **argv)
             change_speed(&my_union, &player);
             SDL_RenderPresent(my_union.renderer);
             changing_key_states(&my_union);
-            show_stats(&my_union, &map, &objects, &player);
-//			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
-		}
-	}
-	else
-		usage();
-	return (0);
+			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
+        }
+    }
+    else
+        usage();
+    return (0);
 }

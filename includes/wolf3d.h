@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/18 18:22:41 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/06 16:58:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct	s_union
 	SDL_Texture		*texture;
 	SDL_Texture     *hud_texture;
 	SDL_Surface		*surface;
+	SDL_Surface     *stats_surface;
+	SDL_Texture     *stats_texture;
 	SDL_Surface     *hud_surface;
 	SDL_Surface		**surface_array;
 	Uint32 			*pixel_array;
@@ -52,10 +54,10 @@ typedef struct	s_union
 	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
-	int             mouse_x;
 	int             mouse_state;
-	double          sens;
-	int             mouse_y;
+    double          sens;
+    int             mouse_x;
+    int             mouse_y;
 	SDL_Event		event;
 	const Uint8		*key;
 	Uint32 			*pixels;
@@ -68,10 +70,11 @@ typedef struct	s_union
 	int 			start;
 	int 			end;
 	SDL_Rect        hud_rect;
+	SDL_Rect        *stat_rects;
 	int             flag;
 	FILE			*file;
 	t_int			*ints;
-	SDL_Color		*color;
+	SDL_Color		font_color;
 	TTF_Font        *font;
 }				t_union;
 
@@ -108,7 +111,14 @@ typedef struct	s_player
 	double	direct_y;
 	int 	rotate_angle;
 	int     move_indicate;
+
+	//STATS
 	int     score;
+	int     level;
+	int		lives;
+	int 	health;
+	int 	ammo;
+	int 	weapon;
 
 	double 	distanse;
 	double	fov;
@@ -142,7 +152,7 @@ void            get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *co
 void			draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
 //void			draw_line(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
-void			load_textures(t_union *my_union);
+void			load_wall_textures(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
@@ -169,6 +179,6 @@ void            check_door(t_map *map, t_map *objects, t_player *player, t_union
 int 	        check_wall(double cur_x, double cur_y, t_map map);
 double          take_range_angle(double angle);
 void	        choose_distance(t_ray *ray);
-void            show_stats(t_union *my_union, t_map *map, t_map *objects, t_player *player);
+void            show_stats(t_union *my_union, t_map *map, t_player *player);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/18 17:15:54 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/06 16:48:39 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *o
     int y;
 
     SDL_GetMouseState(&x, &y);
-    printf("%d, %d\n", x, y);
+//    printf("%d, %d\n", x, y);
     if (x < 0)
     {
         player->view_direction -= ((my_union->half_win_x - x) * my_union->sens);
@@ -78,7 +78,7 @@ void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *o
         player->view_direction += ((x - my_union->half_win_x) * my_union->sens);
         my_union->mouse_x = x;
     }
-    SDL_WarpMouseInWindow(my_union->win, my_union->half_win_x, my_union->half_win_y);
+//    SDL_WarpMouseInWindow(my_union->win, my_union->half_win_x, my_union->half_win_y);
 
 }
 
@@ -89,19 +89,13 @@ void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player,
     int y;
 
     SDL_GetRelativeMouseState(&x, &y);
-    printf("%d, %d\n", x, y);
-    if (x < 0)
+    if (x)
     {
-        player->view_direction -= ((- x) * my_union->sens);
-        my_union->mouse_x = x;
-    }
-    else if (x > 0)
-    {
-        player->view_direction += ((x) * my_union->sens);
-        my_union->mouse_x = x;
-    }
-    SDL_WarpMouseInWindow(my_union->win, my_union->half_win_x, my_union->half_win_y);
+        player->view_direction += (x * my_union->sens * my_union->time);
+//        printf("%d, %f\n", x, player->view_direction);
 
+        my_union->mouse_x = x;
+    }
 }
 
 //ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
@@ -112,9 +106,9 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 
     if (my_union->event.type == SDL_MOUSEMOTION)
     {
-        if (!my_union->mouse_state)
-            mouse_handling(my_union, map, player, objects);
-        else
+//        if (my_union->mouse_state)
+//            mouse_handling(my_union, map, player, objects);
+//        else
             mouse_relative_handling(my_union, map, player, objects);
     }
     if (key[SDL_SCANCODE_ESCAPE])
@@ -156,4 +150,24 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 	if (key[SDL_SCANCODE_SPACE])
 	    check_door(map, objects, player, my_union);
 
+
+
+
+	//FOR DEBUG
+	if (key[SDL_SCANCODE_KP_PLUS])
+	{
+		player->score += 100;
+		player->health += 10;
+		player->ammo += 10;
+		player->lives++;
+		player->level++;
+	}
+	if (key[SDL_SCANCODE_KP_MINUS])
+	{
+		player->score -= 100;
+		player->health -= 10;
+		player->ammo -= 10;
+		player->lives--;
+		player->level--;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/07/17 17:39:06 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/06 15:48:34 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,12 @@ int	take_textures_offset(t_ray ray)
 		return ((int)ray.y % BLOCK_SIZE);
 }
 
+void    draw_hud(t_union *my_union, t_player *player, t_map *map)
+{
+    SDL_RenderCopy(my_union->renderer, my_union->hud_texture, NULL, &my_union->hud_rect);
+    show_stats(my_union, map, player);
+}
+
 //ПРОВОДИТ РЭЙКАСТ
 void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 {
@@ -122,13 +128,13 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	angle = begin_angle;
 	while (++x < my_union.win_x) {
 		my_union.flag = 0;
-		angle = take_range_angle(angle);
-		angle_rad = angle * RAD;
-		hor_distance(&my_union, player, map, &ray, angle_rad);
-		vert_distance(&my_union, player, map, &ray, angle_rad);
-		choose_distance(&ray);
-		calc_line(&my_union, ray, angle_rad - player.view_direction * RAD);
-		ray.offset = take_textures_offset(ray);
+        angle = take_range_angle(angle);
+        angle_rad = angle * RAD;
+        hor_distance(&my_union, player, map, &ray, angle_rad);
+        vert_distance(&my_union, player, map, &ray, angle_rad);
+        choose_distance(&ray);
+        calc_line(&my_union, ray, angle_rad - player.view_direction * RAD);
+        ray.offset = take_textures_offset(ray);
         draw_line(&my_union, ray, x, map, player, angle_rad);
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
@@ -140,7 +146,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	put_cross(&my_union, &player);
     SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
     SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
-    SDL_RenderCopy(my_union.renderer, my_union.hud_texture, NULL, &my_union.hud_rect);
+    draw_hud(&my_union, &player, &map);
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
@@ -170,6 +176,14 @@ int 	get_start_draw(t_union my_union)
 //		y++;
 //	}
 //}
+
+//ПРОВЕРЯЕТ, ЧТО ПЕРЕДАННЫЕ Х И У НАХОДЯТСЯ В ПРЕДЕЛАХ КАРТЫ
+int 	check_window(double	x, double y, t_union my_union)
+{
+    if (x < 0 || x > my_union.win_x || y < 0 || y > my_union.win_y)
+        return (0);
+    return (1);
+}
 
 void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
 {
@@ -203,7 +217,7 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
                 continue;
             get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
             y++;
-            if (check_bound(x, start, map))
+            if (check_window(x, start, *my_union))
                 put_pixel(my_union, x, start, &color);
         }
         else
@@ -214,12 +228,12 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             if (start < my_union->hud_start) {
                 choose_surface_floor_ceiling_hud(my_union, 'f');
                 get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
-                if (check_bound(x, start, map))
+                if (check_window(x, start, *my_union))
                     put_pixel(my_union, x, start, &color);
             }
             choose_surface_floor_ceiling_hud(my_union, 'c');
             get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
-            if (check_bound(x, my_union->win_y - start, map))
+            if (check_window(x, my_union->win_y - start, *my_union))
                 put_pixel(my_union, x, my_union->win_y - start, &color);
         }
 
