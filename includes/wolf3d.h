@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 16:58:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/07 17:58:53 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,27 @@ typedef struct	s_union
 	SDL_Texture     *stats_texture;
 	SDL_Surface     *hud_surface;
 	SDL_Surface		**surface_array;
+	SDL_Surface		**weapons_mini_array;
+	SDL_Surface		**menu_array;
 	Uint32 			*pixel_array;
 	double 			time;
+	int				menu_mode;
+	int 			menu_frame;
 	int				win_y;
 	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
 	int             mouse_state;
     double          sens;
+    int				FPS;
     int             mouse_x;
     int             mouse_y;
 	SDL_Event		event;
-	const Uint8		*key;
+	const Uint8		*key_menu;
+	const Uint8 	*key_game;
 	Uint32 			*pixels;
 	Uint64			start_tick;
+	Uint64 			menu_tick;
 	Uint64			end_tick;
 	Uint64          rel_mouse_mode_timer;
 	Uint64          door_timer_end;
@@ -139,8 +146,11 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void 			start_game(t_union my_union, t_map map, t_player player, t_map objects);
+void 			show_menu(t_union my_union, t_map map, t_player player, t_map objects);
+void			load_menu(t_union *my_union);
 void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
-
+void			load_weapons_textures(t_union *my_union);
 //void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle);
 void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
 void			choose_surface_floor_ceiling_hud(t_union *my_union, char mode);

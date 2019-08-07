@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 15:48:34 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/07 16:51:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	double	center_y;
 
 	x = -1;
-	clear_texture(&my_union);
+//	clear_texture(&my_union);
 //	player.move_indicate = 0;
 //	center_x = player.player_pos_x + (player.player_width >> 1);
 //	center_y = player.player_pos_y + (player.player_heigth >> 1);

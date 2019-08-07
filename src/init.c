@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 16:40:54 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/07 15:20:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,36 @@ void	initialize_SDL(t_union *my_union)
 										  my_union->win_x, my_union->win_y);
 //	my_union->font_color = (SDL_Color*)malloc(sizeof(SDL_Color));
 	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
+	my_union->weapons_mini_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 3);
 }
 
 void    init_stats_rects(t_union *my_union) {
     int i;
 
-	my_union->stat_rects = (SDL_Rect*)malloc(sizeof(SDL_Rect) * 6);
+	my_union->stat_rects = (SDL_Rect*)malloc(sizeof(SDL_Rect) * 7);
 	i = -1;
 	while (++i < 6)
 	{
 		my_union->stat_rects[i].h = my_union->hud_rect.h - 20;
 		my_union->stat_rects[i].y = my_union->hud_rect.y + 20;
 	}
+	my_union->stat_rects[0].x = my_union->hud_rect.x + 50;
+	my_union->stat_rects[0].w = my_union->stat_rects[0].h >> 1;
+	my_union->stat_rects[1].x = my_union->hud_rect.x + 165;
+	my_union->stat_rects[1].w = my_union->stat_rects[1].h << 1;
+	my_union->stat_rects[2].x = my_union->hud_rect.x + 440;
+	my_union->stat_rects[2].w = my_union->stat_rects[2].h >> 1;
+	my_union->stat_rects[3].x = my_union->hud_rect.x + 670;
+	my_union->stat_rects[3].w = (my_union->stat_rects[3].h << 1) - 50;
+	my_union->stat_rects[4].x = my_union->hud_rect.x + 850;
+	my_union->stat_rects[4].w = my_union->stat_rects[4].h;
+	my_union->stat_rects[5].x = my_union->hud_rect.x + 1040;
+	my_union->stat_rects[5].y -= 5;
+	my_union->stat_rects[5].w = my_union->stat_rects[4].h << 1;
+	my_union->stat_rects[6].h = 40;
+	my_union->stat_rects[6].w = 40;
+	my_union->stat_rects[6].x = 0;
+	my_union->stat_rects[6].y = -10;
 }
 
 void    initialize_TTF(t_union *my_union)
@@ -78,6 +96,9 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
 	my_union->mouse_y = my_union->half_win_y;
 	my_union->rel_mouse_mode_timer = 0;
 	my_union->font = NULL;
+	my_union->menu_mode = 1;
+	my_union->menu_tick = 0;
+	my_union->menu_frame = 0;
     player->player_heigth = 1;
     player->direct_x = 1;
     player->direct_y = 0;
@@ -102,10 +123,13 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
     player->lives = 3;
     player->health = 100;
     player->ammo = 40;
+    player->weapon = 1;
 
     my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
     initialize_SDL(my_union);
+    load_menu(my_union);
 	load_wall_textures(my_union);
+	load_weapons_textures(my_union);
 	my_union->hud_rect.w = my_union->win_x;
 	my_union->hud_rect.h = my_union->win_y / 6;
 	my_union->hud_rect.x = 0;

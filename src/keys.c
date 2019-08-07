@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 16:48:39 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/07 18:18:00 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,16 @@ void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *o
 
 }
 
+void	change_weapon(t_player *player, const Uint8	*key)
+{
+	if (key[SDL_SCANCODE_1] && player->weapon != 0)
+		player->weapon = 0;
+	else if (key[SDL_SCANCODE_2] && player->weapon != 1)
+		player->weapon = 1;
+	else if (key[SDL_SCANCODE_3] && player->weapon != 2)
+		player->weapon = 2;
+}
+
 //ОБРАБАТЫВАЕТ ПОВЕДЕНИЕ МЫШИ, ЕСЛИ КУРСОР ВЫКЛЮЧЕН
 void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
@@ -98,11 +108,41 @@ void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player,
     }
 }
 
+void	change_menu_choise(t_union *my_union, char mode)
+{
+	if (my_union->menu_mode && !my_union->menu_tick)
+	{
+		my_union->menu_tick = SDL_GetTicks();
+		if (mode == 'u')
+		{
+			if (my_union->menu_frame == 0)
+				my_union->menu_frame = 3;
+			else
+				my_union->menu_frame--;
+		}
+		else
+		{
+			if (my_union->menu_frame == 3)
+				my_union->menu_frame = 0;
+			else
+				my_union->menu_frame++;
+		}
+	}
+}
+
+void	choise_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects)
+{
+	if (my_union->menu_frame == 0)
+//		start_game(*my_union, *map, *player, *objects);
+		my_union->menu_mode = 0;
+	else if (my_union->menu_frame == 3)
+		exit(0);
+}
+
 //ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
 void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
 {
 	int		temp;
-
 
     if (my_union->event.type == SDL_MOUSEMOTION)
     {
@@ -111,9 +151,11 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 //        else
             mouse_relative_handling(my_union, map, player, objects);
     }
+    if (my_union->menu_mode && key[SDL_SCANCODE_KP_ENTER])
+    	choise_menu(my_union, map, player, objects);
     if (key[SDL_SCANCODE_ESCAPE])
 		exit(0);
-    if (key[SDL_SCANCODE_BACKSPACE] && !my_union->rel_mouse_mode_timer)
+    if (!my_union->rel_mouse_mode_timer && key[SDL_SCANCODE_BACKSPACE])
     {
         my_union->rel_mouse_mode_timer = SDL_GetTicks();
         my_union->mouse_state = (my_union->mouse_state == 0) ? 1 : 0;
@@ -149,10 +191,12 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 	    strafe(player, map, 1);
 	if (key[SDL_SCANCODE_SPACE])
 	    check_door(map, objects, player, my_union);
-
-
-
-
+	if (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] || key[SDL_SCANCODE_3])
+		change_weapon(player, key);
+	if (key[SDL_SCANCODE_UP])
+		change_menu_choise(my_union, 'u');
+	if (key[SDL_SCANCODE_DOWN])
+		change_menu_choise(my_union, 'd');
 	//FOR DEBUG
 	if (key[SDL_SCANCODE_KP_PLUS])
 	{
