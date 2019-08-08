@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/07 15:20:46 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/08 18:22:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	change_speed(t_union *my_union, t_player *player)
 //ИНИЦИАЛИЗИРУЕТ СДЛ ПЕРЕМЕННЫЕ
 void	initialize_SDL(t_union *my_union)
 {
+	int i;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("error\n");
@@ -31,12 +32,16 @@ void	initialize_SDL(t_union *my_union)
 	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	my_union->pixel_array = (Uint32*)malloc(sizeof(Uint32) * my_union->win_x * my_union->win_y);
-	my_union->texture = SDL_CreateTexture(my_union->renderer,
-										  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
-										  my_union->win_x, my_union->win_y);
+	my_union->main_window_texture = SDL_CreateTexture(my_union->renderer,
+													  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
+													  my_union->win_x, my_union->win_y);
 //	my_union->font_color = (SDL_Color*)malloc(sizeof(SDL_Color));
 	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
 	my_union->weapons_mini_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 3);
+	my_union->weapons_surfaces = (SDL_Surface***)malloc(sizeof(SDL_Surface**) * 3);
+	i = -1;
+	while (++i < 3)
+		my_union->weapons_surfaces[i] = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
 }
 
 void    init_stats_rects(t_union *my_union) {
@@ -60,8 +65,8 @@ void    init_stats_rects(t_union *my_union) {
 	my_union->stat_rects[4].x = my_union->hud_rect.x + 850;
 	my_union->stat_rects[4].w = my_union->stat_rects[4].h;
 	my_union->stat_rects[5].x = my_union->hud_rect.x + 1040;
-	my_union->stat_rects[5].y -= 5;
 	my_union->stat_rects[5].w = my_union->stat_rects[4].h << 1;
+	my_union->stat_rects[5].y -= 5;
 	my_union->stat_rects[6].h = 40;
 	my_union->stat_rects[6].w = 40;
 	my_union->stat_rects[6].x = 0;
@@ -83,14 +88,14 @@ void    initialize_TTF(t_union *my_union)
     my_union->font_color.b = 255;
 }
 
-//ИНИЦИАЛИЗИРУЕТ ПЕРЕМЕННЫЕ СТРУКТУРЫ
-void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *objects)
+void	init_union(t_union *my_union)
 {
 	my_union->win_x = 1280;
 	my_union->win_y = 720;
 	my_union->half_win_y = my_union->win_y >> 1;
 	my_union->half_win_x = my_union->win_x >> 1;
 	my_union->door_timer_end = 0;
+	my_union->escape_timer = 0;
 	my_union->sens = 2.4;
 	my_union->mouse_x = my_union->half_win_x;
 	my_union->mouse_y = my_union->half_win_y;
@@ -98,45 +103,78 @@ void	struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *obje
 	my_union->font = NULL;
 	my_union->menu_mode = 1;
 	my_union->menu_tick = 0;
+	my_union->go_to_menu = 0;
 	my_union->menu_frame = 0;
-    player->player_heigth = 1;
-    player->direct_x = 1;
-    player->direct_y = 0;
-    player->player_width = 1;
-    player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * my_union->win_x;
-    player->view_direction = 0;
-    player->speed = BLOCK_SIZE >> 3;
-    player->strafe_speed = (BLOCK_SIZE >> 4) + 1;
-    player->planeX = 0;
-    player->planeY = 0.66;
-    player->dirX = 0;
-    player->dirY = 0;
-    player->move_indicate = 0;
-    player->rotate_angle = 3;
-    player->time = 0;
-    player->oldTime = 0;
-    player->fov = 60;
-    player->half_fov = player->fov * 0.5;
+}
 
-    player->score = 19999;
-    player->level = 2;
-    player->lives = 3;
-    player->health = 100;
-    player->ammo = 40;
-    player->weapon = 1;
+void	init_player(t_union *my_union, t_player *player)
+{
+	player->player_heigth = 1;
+	player->direct_x = 1;
+	player->direct_y = 0;
+	player->player_width = 1;
+	player->radius = /*BLOCK_SIZE << 2;//200;//MAX(my_union->win_x, my_union->win_y)*/my_union->win_x * my_union->win_x;
+	player->view_direction = 0;
+	player->speed = BLOCK_SIZE >> 3;
+	player->strafe_speed = (BLOCK_SIZE >> 4) + 1;
+	player->planeX = 0;
+	player->planeY = 0.66;
+	player->dirX = 0;
+	player->dirY = 0;
+	player->move_indicate = 0;
+	player->rotate_angle = 3;
+	player->time = 0;
+	player->oldTime = 0;
+	player->fov = 60;
+	player->half_fov = player->fov * 0.5;
 
-    my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
-    initialize_SDL(my_union);
-    load_menu(my_union);
-	load_wall_textures(my_union);
-	load_weapons_textures(my_union);
+	player->score = 19999;
+	player->level = 2;
+	player->lives = 3;
+	player->health = 100;
+	player->ammo = 40;
+	player->weapon = 1;
+	player->weapon_frame = 0;
+}
+
+void	init_weapon(t_union *my_union)
+{
+//	my_union->weapon_place.w = my_union->win_x * 0.66;
+//	my_union->weapon_place.h = my_union->weapon_place.w;
+//	my_union->weapon_place.x = my_union->win_x * 0.25;
+//	my_union->weapon_place.y = my_union->half_win_y;
+	my_union->weapon_plce.y_start = my_union->half_win_y;
+	my_union->weapon_plce.y_end = my_union->win_y - 1;
+	my_union->weapon_plce.x_start = my_union->half_win_x - (my_union->half_win_y >> 1);
+	my_union->weapon_plce.x_end = my_union->half_win_x + (my_union->half_win_y >> 1);
+	my_union->weapon_plce.width = my_union->weapon_plce.x_end - my_union->weapon_plce.x_start;
+	my_union->weapon_plce.scale = (float)BLOCK_SIZE / my_union->weapon_plce.width;
+}
+
+void	init_HUD(t_union *my_union)
+{
 	my_union->hud_rect.w = my_union->win_x;
 	my_union->hud_rect.h = my_union->win_y / 6;
 	my_union->hud_rect.x = 0;
 	my_union->hud_rect.y = my_union->win_y - my_union->hud_rect.h;//my_union->hud_start;
 	my_union->hud_start = my_union->hud_rect.y;//my_union->win_y - (my_union->hud_surface->h * (my_union->win_x / my_union->hud_surface->w));
 	my_union->hud_texture = SDL_CreateTextureFromSurface(my_union->renderer, my_union->hud_surface);
-	initialize_TTF(my_union);
+}
 
+//ИНИЦИАЛИЗИРУЕТ ПЕРЕМЕННЫЕ СТРУКТУРЫ
+void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
+{
+	init_union(my_union);
+	init_weapon(my_union);
+	init_player(my_union, player);
+    my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
+    initialize_SDL(my_union);
+    load_menu(my_union);
+	load_wall_textures(my_union);
+	load_weapons(my_union);
+	load_HUD(my_union);
+	load_weapons_minimize(my_union);
+	init_HUD(my_union);
+	initialize_TTF(my_union);
 }
 

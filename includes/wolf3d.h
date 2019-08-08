@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/07 17:58:53 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/08 18:22:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,18 @@ typedef struct	s_int
 {
 	int			i;
 	int			j;
-}				t_int;
+}
+t_int;
+
+typedef struct	s_weapon
+{
+	int		x_start;
+	int 	x_end;
+	int		y_start;
+	int 	y_end;
+	int		width;
+	double 	scale;
+}				t_weapon;
 
 typedef struct	s_union
 {
@@ -41,7 +52,8 @@ typedef struct	s_union
 	int				win_x;
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
-	SDL_Texture		*texture;
+	SDL_Texture		*main_window_texture;
+	SDL_Texture		*weapon_texture;
 	SDL_Texture     *hud_texture;
 	SDL_Surface		*surface;
 	SDL_Surface     *stats_surface;
@@ -50,6 +62,7 @@ typedef struct	s_union
 	SDL_Surface		**surface_array;
 	SDL_Surface		**weapons_mini_array;
 	SDL_Surface		**menu_array;
+	SDL_Surface		***weapons_surfaces;
 	Uint32 			*pixel_array;
 	double 			time;
 	int				menu_mode;
@@ -59,6 +72,7 @@ typedef struct	s_union
 	int             half_win_y;
 	int             half_win_x;
 	int             mouse_state;
+	int 			go_to_menu;
     double          sens;
     int				FPS;
     int             mouse_x;
@@ -72,17 +86,20 @@ typedef struct	s_union
 	Uint64			end_tick;
 	Uint64          rel_mouse_mode_timer;
 	Uint64          door_timer_end;
+	Uint64 			escape_timer;
 	int 			wall_heigth;
 	double          dist;
 	int 			start;
 	int 			end;
 	SDL_Rect        hud_rect;
 	SDL_Rect        *stat_rects;
+	SDL_Rect		weapon_place;
 	int             flag;
 	FILE			*file;
 	t_int			*ints;
 	SDL_Color		font_color;
 	TTF_Font        *font;
+	t_weapon		weapon_plce;
 }				t_union;
 
 
@@ -92,6 +109,8 @@ typedef struct 	s_map
 	int size_y;
 	int	**map;
 }				t_map;
+
+
 
 typedef struct	s_ray
 {
@@ -126,6 +145,7 @@ typedef struct	s_player
 	int 	health;
 	int 	ammo;
 	int 	weapon;
+	int 	weapon_frame;
 
 	double 	distanse;
 	double	fov;
@@ -146,11 +166,16 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			draw_weapon(t_union *my_union, t_player *player, t_map *map);
+void			print_FPS(t_union *my_union);
+void			check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void 			start_game(t_union my_union, t_map map, t_player player, t_map objects);
 void 			show_menu(t_union my_union, t_map map, t_player player, t_map objects);
 void			load_menu(t_union *my_union);
+void			load_HUD(t_union *my_union);
+void			load_weapons(t_union *my_union);
+void			load_weapons_minimize(t_union *my_union);
 void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
-void			load_weapons_textures(t_union *my_union);
 //void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle);
 void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
 void			choose_surface_floor_ceiling_hud(t_union *my_union, char mode);
@@ -175,7 +200,7 @@ int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
 void			view_follow(t_player *player, t_map *map, int mode);
-void			check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
+void			check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
@@ -183,7 +208,7 @@ void			initialize_SDL(t_union *my_union);
 void			msg(char *message, t_map *my_union);
 int				val_set(char *argv, t_map *my_union, t_map *objects, t_player *player);
 void			usage(void);
-void			struct_initial(t_union *my_union, t_map *map, t_player *player, t_map *objects);
+void			init(t_union *my_union, t_map *map, t_player *player, t_map *objects);
 void	        put_cross(t_union *my_union, t_player *player);
 void            check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union);
 int 	        check_wall(double cur_x, double cur_y, t_map map);

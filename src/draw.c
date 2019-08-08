@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/07 16:51:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/08 18:54:04 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	clear_texture(t_union *my_union)
 		while (++j < my_union->win_x)
 			put_black_pixel(my_union, j, i);
 	}
-	SDL_UpdateTexture(my_union->texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
-	SDL_RenderCopy(my_union->renderer, my_union->texture, NULL, NULL);
+	SDL_UpdateTexture(my_union->main_window_texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
+	SDL_RenderCopy(my_union->renderer, my_union->main_window_texture, NULL, NULL);
 }
 
 //ВОЗВРАЩАЕТ ВЕРТИКАЛЬНУЮ ЛИНИЮ ДЛЯ ОТРИСОВКИ СПРАЙТА В ЗАВИСИМОСТИ ОТ ГОР/ВЕРТ СТОЛКНОВЕНИЯ
@@ -136,6 +136,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
         calc_line(&my_union, ray, angle_rad - player.view_direction * RAD);
         ray.offset = take_textures_offset(ray);
         draw_line(&my_union, ray, x, map, player, angle_rad);
+
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
 //		SDL_RenderDrawLine(my_union.renderer, x, my_union.start, x, my_union.end); // Отрисовка линий СДЛ
@@ -144,9 +145,10 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 		angle += one_angle;
 	}
 	put_cross(&my_union, &player);
-    SDL_UpdateTexture(my_union.texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
-    SDL_RenderCopy(my_union.renderer, my_union.texture, NULL, NULL);
-    draw_hud(&my_union, &player, &map);
+    SDL_UpdateTexture(my_union.main_window_texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
+    SDL_RenderCopy(my_union.renderer, my_union.main_window_texture, NULL, NULL);
+//	draw_weapon(&my_union, &player, &map);
+	draw_hud(&my_union, &player, &map);
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
@@ -183,6 +185,14 @@ int 	check_window(double	x, double y, t_union my_union)
     if (x < 0 || x > my_union.win_x || y < 0 || y > my_union.win_y)
         return (0);
     return (1);
+}
+
+int 	check_weapon_place(t_union *my_union, int x, int y)
+{
+	if (x >= my_union->weapon_plce.x_start && x <= my_union->weapon_plce.x_end &&
+			y >= my_union->weapon_plce.x_start && y <= my_union->weapon_plce.y_end)
+		return (1);
+	return (0);
 }
 
 void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
@@ -236,9 +246,27 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             if (check_window(x, my_union->win_y - start, *my_union))
                 put_pixel(my_union, x, my_union->win_y - start, &color);
         }
-
     }
 }
+
+
+
+//if (check_weapon_place(my_union, x, start))
+//{
+//my_union->surface = my_union->weapons_surfaces[player.weapon][0];
+//get_surface_pixel(my_union, x * my_union->weapon_plce.scale,
+//y * my_union->weapon_plce.scale, &color);
+//put_pixel(my_union, x, start, &color);
+//}
+
+//			if (start > my_union->hud_start)
+//				continue;
+//			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
+//			get_surface_pixel(my_union, (x - my_union->half_win_y / 2) * my_union->weapon_plce.scale,
+//					it * my_union->weapon_plce.scale, &color);
+//			it++;
+//			if (check_window(x, start, *my_union))
+//				put_pixel(my_union, x, start, &color);
 
 //ОТРИСОВЫВАЕТ МИНИКАРТУ
 void	draw_scene(t_union my_union, t_map map)

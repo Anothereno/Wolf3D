@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/07 18:18:00 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/08 15:19:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,27 @@ void	choise_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects
 		exit(0);
 }
 
+void	check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
+{
+	if (my_union->menu_mode && key[SDL_SCANCODE_RETURN])
+		choise_menu(my_union, map, player, objects);
+	if (key[SDL_SCANCODE_UP])
+		change_menu_choise(my_union, 'u');
+	if (key[SDL_SCANCODE_DOWN])
+		change_menu_choise(my_union, 'd');
+	if (key[SDL_SCANCODE_ESCAPE])
+	{
+		if (!my_union->escape_timer) {
+			my_union->escape_timer = SDL_GetTicks();
+			if (!my_union->go_to_menu && my_union->menu_mode)
+				exit(0);
+			my_union->go_to_menu = 0;
+		}
+	}
+}
+
 //ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
-void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
+void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
 {
 	int		temp;
 
@@ -151,10 +170,11 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 //        else
             mouse_relative_handling(my_union, map, player, objects);
     }
-    if (my_union->menu_mode && key[SDL_SCANCODE_KP_ENTER])
-    	choise_menu(my_union, map, player, objects);
-    if (key[SDL_SCANCODE_ESCAPE])
-		exit(0);
+    if (!my_union->escape_timer && key[SDL_SCANCODE_ESCAPE])
+	{
+    	my_union->escape_timer = SDL_GetTicks();
+		my_union->go_to_menu = 1;
+	}
     if (!my_union->rel_mouse_mode_timer && key[SDL_SCANCODE_BACKSPACE])
     {
         my_union->rel_mouse_mode_timer = SDL_GetTicks();
@@ -193,10 +213,6 @@ void	check_event(t_union *my_union, t_map *map, t_player *player, t_map *objects
 	    check_door(map, objects, player, my_union);
 	if (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] || key[SDL_SCANCODE_3])
 		change_weapon(player, key);
-	if (key[SDL_SCANCODE_UP])
-		change_menu_choise(my_union, 'u');
-	if (key[SDL_SCANCODE_DOWN])
-		change_menu_choise(my_union, 'd');
 	//FOR DEBUG
 	if (key[SDL_SCANCODE_KP_PLUS])
 	{
