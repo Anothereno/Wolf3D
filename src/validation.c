@@ -6,18 +6,11 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 17:55:47 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:53:57 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-int     ft_is_uppercase(char c)
-{
-    if (ft_isalpha(c) && c >= 'A' && c <='Z')
-        return (1);
-    return (0);
-}
 
 // Получаю размер поля
 void	take_size(t_map *map, char *map_coordinates)
@@ -44,6 +37,7 @@ void	take_size(t_map *map, char *map_coordinates)
 		map->size_y++;
 }
 
+//УСТАНАВЛИВАЕТ ДВЕРИ
 int    set_doors(t_map *map, t_map *objects, char ch, int x, int y)
 {
     if (ch == 'D')
@@ -55,6 +49,7 @@ int    set_doors(t_map *map, t_map *objects, char ch, int x, int y)
     return (0);
 }
 
+//УСТАНАВЛИВАЕТ ИГРОКА
 int    set_player(t_map *map, t_map *objects, char ch, int x, int y, t_player *player)
 {
     if (ch == 'P')

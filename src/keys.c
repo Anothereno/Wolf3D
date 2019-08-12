@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/08 15:19:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:42:04 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *o
 
 }
 
+// МЕНЯЕТ ОРУЖИЕ
 void	change_weapon(t_player *player, const Uint8	*key)
 {
 	if (key[SDL_SCANCODE_1] && player->weapon != 0)
@@ -108,6 +109,7 @@ void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player,
     }
 }
 
+//ПОЗВОЛЯЕТ ВЫБИРАТЬ ПУНКТЫ МЕНЮ
 void	change_menu_choise(t_union *my_union, char mode)
 {
 	if (my_union->menu_mode && !my_union->menu_tick)
@@ -130,6 +132,7 @@ void	change_menu_choise(t_union *my_union, char mode)
 	}
 }
 
+//ДЕЛАЕТ ВЫБОРА ОПРЕДЕЛЕНОГО ПУНКТА МЕНЮ
 void	choise_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
 	if (my_union->menu_frame == 0)
@@ -139,6 +142,7 @@ void	choise_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects
 		exit(0);
 }
 
+//ОТЛАВЛИВАЕТ ИВЕНТЫ В МЕНЮ
 void	check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
 {
 	if (my_union->menu_mode && key[SDL_SCANCODE_RETURN])
@@ -158,7 +162,7 @@ void	check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *ob
 	}
 }
 
-//ПОЛУЧАЕТ НАЖАТИЯ КЛАВИШ
+//ОТЛАВЛИВАЕТ ИВЕНТЫ В ИГРЕ
 void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
 {
 	int		temp;
@@ -213,6 +217,8 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 	    check_door(map, objects, player, my_union);
 	if (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] || key[SDL_SCANCODE_3])
 		change_weapon(player, key);
+
+
 	//FOR DEBUG
 	if (key[SDL_SCANCODE_KP_PLUS])
 	{

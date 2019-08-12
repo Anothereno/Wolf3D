@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/06 17:55:47 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 18:08:42 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,26 @@ void get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 			&color->r, &color->g, &color->b);
 }
 
+//ПРОВЕРЯЕТ ПИКСЕЛЬ НА ФИОЛЕТОВЫЙ ЦВЕТ
+int 		check_invisible_pixels(SDL_Color *color)
+{
+//	printf("r = %d, g = %d, b = %d\n", color->r, color->g, color->b);
+	if ((color->r >= 130 && color->r <= 160) &&
+			(color->g >= 0 && color->g <= 35) &&
+			(color->b >= 125 && color->b <= 140))
+		return (1);
+	return (0);
+}
+
 //УСТАНАВЛИВАЕТ ПИКСЕЛЬ В ЗАДАННЫЙ ЦВЕТ
 void		put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 {
 	int shift;
 
-	shift = y * my_union->win_x + x;
-	my_union->pixel_array[shift] = (Uint32)((color->r << 16) +
-			(color->g << 8) + color->b);
 
+	shift = y * my_union->win_x + x;
+	my_union->pixel_array[shift] = (Uint32) ((color->r << 16) +
+				 (color->g << 8) + color->b);
 }
 
 //ЗАКРАШИВАЕТ ПИКСЕЛЬ ЧЕРНЫМ ЦВЕТОМ (ДЛЯ ОЧИЩЕНИЯ ТЕКСТУРЫ)

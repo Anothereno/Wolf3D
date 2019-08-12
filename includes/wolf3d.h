@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/08 18:22:28 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 15:55:20 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef struct	s_weapon
 	int 	y_end;
 	int		width;
 	double 	scale;
+	int		cur_x;
+	int		changing_flag;
 }				t_weapon;
 
 typedef struct	s_union
@@ -61,6 +63,7 @@ typedef struct	s_union
 	SDL_Surface     *hud_surface;
 	SDL_Surface		**surface_array;
 	SDL_Surface		**weapons_mini_array;
+	SDL_Surface		*pistol;
 	SDL_Surface		**menu_array;
 	SDL_Surface		***weapons_surfaces;
 	Uint32 			*pixel_array;
@@ -166,6 +169,7 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+int 			check_invisible_pixels(SDL_Color *color);
 void			draw_weapon(t_union *my_union, t_player *player, t_map *map);
 void			print_FPS(t_union *my_union);
 void			check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);

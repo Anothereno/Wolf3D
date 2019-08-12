@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/08 18:22:28 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 19:37:56 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	initialize_SDL(t_union *my_union)
 		my_union->weapons_surfaces[i] = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
 }
 
+//ГОТОВИТ МАССИВ ПРЯУГОЛЬНИКОВ ДЛЯ СТАТИСТИКИ В ХУДЕ
 void    init_stats_rects(t_union *my_union) {
     int i;
 
@@ -73,6 +74,7 @@ void    init_stats_rects(t_union *my_union) {
 	my_union->stat_rects[6].y = -10;
 }
 
+// ИНИЦИАЛИЗИРУЕТ ТТФ
 void    initialize_TTF(t_union *my_union)
 {
     if (TTF_Init() == -1)
@@ -86,8 +88,10 @@ void    initialize_TTF(t_union *my_union)
     my_union->font_color.r = 255;
     my_union->font_color.g = 255;
     my_union->font_color.b = 255;
+    my_union->font_color.a = 255;
 }
 
+//ГОТОВИТ ГЛАВНУЮ СТРУКТУРУ
 void	init_union(t_union *my_union)
 {
 	my_union->win_x = 1280;
@@ -107,6 +111,7 @@ void	init_union(t_union *my_union)
 	my_union->menu_frame = 0;
 }
 
+//ГОТОВИТ СТРУКТУРУ ДЛЯ ИГРОКА
 void	init_player(t_union *my_union, t_player *player)
 {
 	player->player_heigth = 1;
@@ -137,20 +142,25 @@ void	init_player(t_union *my_union, t_player *player)
 	player->weapon_frame = 0;
 }
 
+//ГОТОВИТ СТРУКТУРУ ДЛЯ ОРУЖИЯ
 void	init_weapon(t_union *my_union)
 {
 //	my_union->weapon_place.w = my_union->win_x * 0.66;
 //	my_union->weapon_place.h = my_union->weapon_place.w;
 //	my_union->weapon_place.x = my_union->win_x * 0.25;
 //	my_union->weapon_place.y = my_union->half_win_y;
-	my_union->weapon_plce.y_start = my_union->half_win_y;
-	my_union->weapon_plce.y_end = my_union->win_y - 1;
-	my_union->weapon_plce.x_start = my_union->half_win_x - (my_union->half_win_y >> 1);
-	my_union->weapon_plce.x_end = my_union->half_win_x + (my_union->half_win_y >> 1);
-	my_union->weapon_plce.width = my_union->weapon_plce.x_end - my_union->weapon_plce.x_start;
+	my_union->weapon_plce.y_start = my_union->half_win_y - 100;
+	my_union->weapon_plce.y_end = my_union->hud_start;
+	my_union->weapon_plce.width = my_union->weapon_plce.y_end - my_union->weapon_plce.y_start;
+	my_union->weapon_plce.x_start = my_union->half_win_x - (my_union->weapon_plce.width >> 1)
+			;//(my_union->half_win_y >> 1);
+	my_union->weapon_plce.x_end = my_union->half_win_x + (my_union->weapon_plce.width >> 1);//(my_union->half_win_y >> 1);
 	my_union->weapon_plce.scale = (float)BLOCK_SIZE / my_union->weapon_plce.width;
+	my_union->weapon_plce.cur_x = 0;
+	my_union->weapon_plce.changing_flag = 0;
 }
 
+//ГОТОВИТ ОКНО ДЛЯ ХУДА
 void	init_HUD(t_union *my_union)
 {
 	my_union->hud_rect.w = my_union->win_x;
@@ -165,16 +175,16 @@ void	init_HUD(t_union *my_union)
 void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
 	init_union(my_union);
-	init_weapon(my_union);
 	init_player(my_union, player);
-    my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
-    initialize_SDL(my_union);
-    load_menu(my_union);
+	my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
+	initialize_SDL(my_union);
+	load_menu(my_union);
 	load_wall_textures(my_union);
 	load_weapons(my_union);
 	load_HUD(my_union);
 	load_weapons_minimize(my_union);
 	init_HUD(my_union);
+	init_weapon(my_union);
 	initialize_TTF(my_union);
 }
 

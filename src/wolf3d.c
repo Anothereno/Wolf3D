@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/08 16:33:33 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 15:24:52 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	usage(void)
     ft_putstr("usage: ./wolf3d <argument>\n");
 }
 
+//СБРАСЫВВАЕТ ЗАДЕРЖКИ
 void    changing_key_states(t_union *my_union)
 {
     if (my_union->start_tick - my_union->door_timer_end > 350)
@@ -30,6 +31,7 @@ void    changing_key_states(t_union *my_union)
 		my_union->escape_timer = 0;
 }
 
+//РАСЧИТВАЕТ ФПС
 void	calc_time_FPS(t_union *my_union)
 {
 	my_union->end_tick = my_union->start_tick;
@@ -38,6 +40,7 @@ void	calc_time_FPS(t_union *my_union)
 	my_union->FPS = 1.0 / my_union->time;
 }
 
+//ЗАПУСКАЕТ ГЕЙМ ЛУП
 void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 	t_ray		ray;
 	my_union.go_to_menu = 0;
@@ -50,7 +53,6 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 			break;
 		player.move_indicate = 0;
 		check_event_game(&my_union, &map, &player, &objects, my_union.key_game);
-//			clear_window(my_union);
 		if (my_union.go_to_menu)
 			break;
 		take_vector_of_view(&player);
@@ -60,7 +62,6 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 		change_speed(&my_union, &player);
 		SDL_RenderPresent(my_union.renderer);
 		changing_key_states(&my_union);
-//		printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 	}
 
 }
@@ -94,15 +95,12 @@ int		main(int argc, char **argv)
 				my_union.go_to_menu = 1;
 				continue;
 			}
-			draw_weapon(&my_union, &player, &map);
-			print_FPS(&my_union);
 			calc_time_FPS(&my_union);
+			print_FPS(&my_union);
 //			printf("FPS: %d, Current PosX: %d, PosY: %d\n", my_union.FPS, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 			SDL_RenderPresent(my_union.renderer);
 			changing_key_states(&my_union);
 		}
-
-//		start_game(my_union, map, player, objects);
 	}
 	else
 		usage();

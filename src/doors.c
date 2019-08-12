@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-//ЧЕКАЕТ ДВЕРЬ
+
 //void    check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union) {
 //    double angle_rad;
 //    double angle;
@@ -35,6 +35,7 @@
 //    }
 //}
 
+//ОТКРЫВАЕТ/ЗАКРЫВАЕТ ДВЕРЬ
 void    open_close_door(t_map *objects, t_map *map, int j, int i)
 {
     if (objects->map[j][i] == 'D')
@@ -46,6 +47,7 @@ void    open_close_door(t_map *objects, t_map *map, int j, int i)
     }
 }
 
+//ЧЕКАЕТ ДВЕРЬ
 void    check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union)
 {
     int pos_x;

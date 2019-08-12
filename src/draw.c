@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/08 18:54:04 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/12 20:00:01 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 	one_angle = player.fov / my_union.win_x;
 	begin_angle = (player.view_direction - player.half_fov);
 	angle = begin_angle;
+	my_union.weapon_plce.cur_x = 0;
 	while (++x < my_union.win_x) {
 		my_union.flag = 0;
         angle = take_range_angle(angle);
@@ -159,26 +160,6 @@ int 	get_start_draw(t_union my_union)
 	return 0;
 }
 
-//ОТРИСОВЫВАЕТ ВЕРТИКАЛЬНУЮ СТОЛБЕЦ СПРАЙТА
-//void	draw_line(t_union *my_union, t_ray ray, int x, t_map map)
-//{
-//	int			start;
-//	int			y;
-//	double		wall_scale;
-//	SDL_Color	color;
-//
-//	start = my_union->start - 1;
-//	y = get_start_draw(*my_union);
-//	wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
-//	while (++start < my_union->end)
-//	{
-//		get_surface_pixel(my_union, ray.offset, y * wall_scale, &color, ray);
-//		if (check_bound(x, start, map))
-//			put_pixel(my_union, x, start, &color);
-//		y++;
-//	}
-//}
-
 //ПРОВЕРЯЕТ, ЧТО ПЕРЕДАННЫЕ Х И У НАХОДЯТСЯ В ПРЕДЕЛАХ КАРТЫ
 int 	check_window(double	x, double y, t_union my_union)
 {
@@ -187,14 +168,16 @@ int 	check_window(double	x, double y, t_union my_union)
     return (1);
 }
 
+//ПРОВЕРЯЕТ КООРДИНАТЫ НА РАСПОДЛОЖЕНИЯ В ПОЛЕ ОРУЖИЯ
 int 	check_weapon_place(t_union *my_union, int x, int y)
 {
 	if (x >= my_union->weapon_plce.x_start && x <= my_union->weapon_plce.x_end &&
-			y >= my_union->weapon_plce.x_start && y <= my_union->weapon_plce.y_end)
+			y >= my_union->weapon_plce.y_start && y <= my_union->weapon_plce.y_end)
 		return (1);
 	return (0);
 }
 
+//ОТРИСОВЫВАЕТ ОКНО
 void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
 {
     int			start;
@@ -213,16 +196,16 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     it = 0;
     cos_angle = cos(angle);
     sin_angle = sin(angle);
-    start = my_union->start - 1;
+    start = 0;
     y = get_start_draw(*my_union);
     wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
     hud_scale_width = (float)my_union->hud_surface->w / my_union->win_x;
     dist = my_union->dist / cos(angle - player.view_direction * RAD);
-    choose_surface_wall(my_union, ray, map);
     while (++start < my_union->win_y)
     {
         if (start >= my_union->start && start < my_union->end)
         {
+			choose_surface_wall(my_union, ray, map);
             if (start > my_union->hud_start)
                 continue;
             get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
@@ -230,7 +213,7 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             if (check_window(x, start, *my_union))
                 put_pixel(my_union, x, start, &color);
         }
-        else
+        else if (start > my_union->start)
         {
             cur_dist = dist / (start - my_union->half_win_y);
             cur_x = (cur_dist * cos_angle + player.player_pos_x);
@@ -246,27 +229,27 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
             if (check_window(x, my_union->win_y - start, *my_union))
                 put_pixel(my_union, x, my_union->win_y - start, &color);
         }
-    }
+		if (check_weapon_place(my_union, x, start))
+		{
+			if (start > my_union->hud_start)
+				continue;
+			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
+			get_surface_pixel(my_union, my_union->weapon_plce.cur_x * my_union->weapon_plce.scale,
+							  it * my_union->weapon_plce.scale, &color);
+			it++;
+//				printf("r = %d, g = %d, b = %d\n", color.r, color.g, color.b);
+			if (!check_invisible_pixels(&color) && check_window(x, start, *my_union))
+				put_pixel(my_union, x, start, &color);
+			my_union->weapon_plce.changing_flag = 1;
+		}
+
+	}
+    if (my_union->weapon_plce.changing_flag)
+	{
+    	my_union->weapon_plce.changing_flag = 0;
+    	my_union->weapon_plce.cur_x++;
+	}
 }
-
-
-
-//if (check_weapon_place(my_union, x, start))
-//{
-//my_union->surface = my_union->weapons_surfaces[player.weapon][0];
-//get_surface_pixel(my_union, x * my_union->weapon_plce.scale,
-//y * my_union->weapon_plce.scale, &color);
-//put_pixel(my_union, x, start, &color);
-//}
-
-//			if (start > my_union->hud_start)
-//				continue;
-//			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
-//			get_surface_pixel(my_union, (x - my_union->half_win_y / 2) * my_union->weapon_plce.scale,
-//					it * my_union->weapon_plce.scale, &color);
-//			it++;
-//			if (check_window(x, start, *my_union))
-//				put_pixel(my_union, x, start, &color);
 
 //ОТРИСОВЫВАЕТ МИНИКАРТУ
 void	draw_scene(t_union my_union, t_map map)

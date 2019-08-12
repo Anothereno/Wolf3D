@@ -12,6 +12,7 @@
 
 #include "wolf3d.h"
 
+//ОТРИСОВЫВАЕТ МЕНЮ В ОКНО
 void show_menu(t_union my_union, t_map map, t_player player, t_map objects)
 {
 	my_union.main_window_texture = SDL_CreateTextureFromSurface(my_union.renderer,
