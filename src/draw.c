@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 20:00:01 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 15:18:46 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,34 +109,29 @@ void    draw_hud(t_union *my_union, t_player *player, t_map *map)
 }
 
 //ПРОВОДИТ РЭЙКАСТ
-void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
+void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
 {
 	int		x;
 	double	angle_rad;
 	double	angle;
 	double 	one_angle;
 	double 	begin_angle;
-	double	center_y;
 
 	x = -1;
-//	clear_texture(&my_union);
-//	player.move_indicate = 0;
-//	center_x = player.player_pos_x + (player.player_width >> 1);
-//	center_y = player.player_pos_y + (player.player_heigth >> 1);
-	one_angle = player.fov / my_union.win_x;
-	begin_angle = (player.view_direction - player.half_fov);
+	one_angle = player->fov / my_union->win_x;
+	begin_angle = (player->view_direction - player->half_fov);
 	angle = begin_angle;
-	my_union.weapon_plce.cur_x = 0;
-	while (++x < my_union.win_x) {
-		my_union.flag = 0;
+	my_union->weapon_plce.cur_x = 0;
+	while (++x < my_union->win_x) {
+		my_union->flag = 0;
         angle = take_range_angle(angle);
         angle_rad = angle * RAD;
-        hor_distance(&my_union, player, map, &ray, angle_rad);
-        vert_distance(&my_union, player, map, &ray, angle_rad);
-        choose_distance(&ray);
-        calc_line(&my_union, ray, angle_rad - player.view_direction * RAD);
-        ray.offset = take_textures_offset(ray);
-        draw_line(&my_union, ray, x, map, player, angle_rad);
+        hor_distance(my_union, *player, *map, ray, angle_rad);
+        vert_distance(my_union, *player, *map, ray, angle_rad);
+        choose_distance(ray);
+        calc_line(my_union, *ray, angle_rad - player->view_direction * RAD);
+        ray->offset = take_textures_offset(*ray);
+		draw_line_in_window(my_union, *ray, x, *map, *player, angle_rad);
 
 //		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
 //		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
@@ -145,11 +140,11 @@ void	raycast(t_union my_union, t_map map, t_player player, t_ray ray)
 //		SDL_RenderDrawLine(my_union.renderer, (int)player.player_pos_x, player.player_pos_y, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
-	put_cross(&my_union, &player);
-    SDL_UpdateTexture(my_union.main_window_texture, NULL, my_union.pixel_array, my_union.win_x * sizeof(Uint32));
-    SDL_RenderCopy(my_union.renderer, my_union.main_window_texture, NULL, NULL);
-//	draw_weapon(&my_union, &player, &map);
-	draw_hud(&my_union, &player, &map);
+	put_cross(my_union, player);
+    SDL_UpdateTexture(my_union->main_window_texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
+    SDL_RenderCopy(my_union->renderer, my_union->main_window_texture, NULL, NULL);
+	draw_weapon(my_union, player, map);
+	draw_hud(my_union, player, map);
 }
 
 //ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
@@ -178,16 +173,17 @@ int 	check_weapon_place(t_union *my_union, int x, int y)
 }
 
 //ОТРИСОВЫВАЕТ ОКНО
-void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
+void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
 {
     int			start;
     int			y;
     int         it;
+    int 		diff;
     double		wall_scale;
     double      hud_scale_width;
     double      cur_dist;
-    double      cur_x;
-    double      cur_y;
+    int			cur_x;
+	int			cur_y;
     double      dist;
     double      cos_angle;
     double      sin_angle;
@@ -199,56 +195,58 @@ void	draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, 
     start = 0;
     y = get_start_draw(*my_union);
     wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
-    hud_scale_width = (float)my_union->hud_surface->w / my_union->win_x;
+//    hud_scale_width = (float)my_union->hud_surface->w / my_union->win_x;
     dist = my_union->dist / cos(angle - player.view_direction * RAD);
     while (++start < my_union->win_y)
     {
         if (start >= my_union->start && start < my_union->end)
         {
+            if (start > my_union->hud_start) {
+				continue;
+			}
 			choose_surface_wall(my_union, ray, map);
-            if (start > my_union->hud_start)
-                continue;
-            get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
+			get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
             y++;
-            if (check_window(x, start, *my_union))
+//            if (check_window(x, start, *my_union))
                 put_pixel(my_union, x, start, &color);
         }
         else if (start > my_union->start)
         {
             cur_dist = dist / (start - my_union->half_win_y);
-            cur_x = (cur_dist * cos_angle + player.player_pos_x);
-            cur_y = (cur_dist * sin_angle + player.player_pos_y);
+            cur_x = (int)(cur_dist * cos_angle + player.player_pos_x) % 64;
+            cur_y = (int)(cur_dist * sin_angle + player.player_pos_y) % 64;
             if (start < my_union->hud_start) {
                 choose_surface_floor_ceiling_hud(my_union, 'f');
-                get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
+                get_surface_pixel(my_union, cur_x, cur_y, &color);
                 if (check_window(x, start, *my_union))
                     put_pixel(my_union, x, start, &color);
             }
+            diff = my_union->win_y - start;
             choose_surface_floor_ceiling_hud(my_union, 'c');
-            get_surface_pixel(my_union, (int) cur_x % 64, (int) cur_y % 64, &color);
-            if (check_window(x, my_union->win_y - start, *my_union))
-                put_pixel(my_union, x, my_union->win_y - start, &color);
+            get_surface_pixel(my_union, cur_x, cur_y, &color);
+            if (check_window(x, diff, *my_union))
+                put_pixel(my_union, x, diff, &color);
         }
-		if (check_weapon_place(my_union, x, start))
-		{
-			if (start > my_union->hud_start)
-				continue;
-			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
-			get_surface_pixel(my_union, my_union->weapon_plce.cur_x * my_union->weapon_plce.scale,
-							  it * my_union->weapon_plce.scale, &color);
-			it++;
-//				printf("r = %d, g = %d, b = %d\n", color.r, color.g, color.b);
-			if (!check_invisible_pixels(&color) && check_window(x, start, *my_union))
-				put_pixel(my_union, x, start, &color);
-			my_union->weapon_plce.changing_flag = 1;
-		}
+//		if (check_weapon_place(my_union, x, start))
+//		{
+//			if (start > my_union->hud_start)
+//				continue;
+//			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
+//			get_surface_pixel(my_union, my_union->weapon_plce.cur_x * my_union->weapon_plce.scale,
+//							  it * my_union->weapon_plce.scale, &color);
+//			it++;
+////				printf("r = %d, g = %d, b = %d\n", color.r, color.g, color.b);
+//			if (!check_invisible_pixels(&color) && check_window(x, start, *my_union))
+//				put_pixel(my_union, x, start, &color);
+//			my_union->weapon_plce.changing_flag = 1;
+//		}
 
 	}
-    if (my_union->weapon_plce.changing_flag)
-	{
-    	my_union->weapon_plce.changing_flag = 0;
-    	my_union->weapon_plce.cur_x++;
-	}
+//    if (my_union->weapon_plce.changing_flag)
+//	{
+//    	my_union->weapon_plce.changing_flag = 0;
+//    	my_union->weapon_plce.cur_x++;
+//	}
 }
 
 //ОТРИСОВЫВАЕТ МИНИКАРТУ

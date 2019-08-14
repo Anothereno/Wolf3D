@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 15:55:20 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:09:08 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ typedef struct	s_union
 	Uint64          rel_mouse_mode_timer;
 	Uint64          door_timer_end;
 	Uint64 			escape_timer;
+	Uint64 			shoot_timer;
+	Uint64 			reload_timer;
+	Uint64			weapon_down_timer;
 	int 			wall_heigth;
 	double          dist;
 	int 			start;
@@ -146,9 +149,12 @@ typedef struct	s_player
 	int     level;
 	int		lives;
 	int 	health;
-	int 	ammo;
+	int 	*ammo;
+	int 	*clip_volume;
+	int		*clip;
 	int 	weapon;
 	int 	weapon_frame;
+	int 	shoot_mode;
 
 	double 	distanse;
 	double	fov;
@@ -169,6 +175,7 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			reload(t_union *my_union, t_player *player);
 int 			check_invisible_pixels(SDL_Color *color);
 void			draw_weapon(t_union *my_union, t_player *player, t_map *map);
 void			print_FPS(t_union *my_union);
@@ -188,22 +195,22 @@ void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void            get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color);
-void			draw_line(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
-//void			draw_line(t_union *my_union, t_ray ray, int x, t_map map);
+void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
+//void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
 void			load_wall_textures(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
 void			vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
-void			raycast(t_union my_union, t_map map, t_player player, t_ray ray);
+void			raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray);
 void			hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
 int				draw_vert_line(t_union my_union, int x, int y1, int y2);
-//int				draw_line(t_union my_union, double x1, double y1, double y2);
+//int				draw_line_in_window(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
-void			view_follow(t_player *player, t_map *map, int mode);
+void			view_follow(t_player *player, t_map *map, int mode, t_union *my_union);
 void			check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);

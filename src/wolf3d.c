@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 15:24:52 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:58:15 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	usage(void)
 }
 
 //СБРАСЫВВАЕТ ЗАДЕРЖКИ
-void    changing_key_states(t_union *my_union)
+void    changing_key_states(t_union *my_union, t_player *player)
 {
     if (my_union->start_tick - my_union->door_timer_end > 350)
         my_union->door_timer_end = 0;
@@ -29,6 +29,10 @@ void    changing_key_states(t_union *my_union)
         my_union->menu_tick = 0;
 	if (my_union->start_tick - my_union->escape_timer > 350)
 		my_union->escape_timer = 0;
+	if (my_union->start_tick - my_union->shoot_timer > 500)
+		my_union->shoot_timer = 0;
+	if (my_union->start_tick - my_union->reload_timer > 600)
+		my_union->reload_timer = 0;
 }
 
 //РАСЧИТВАЕТ ФПС
@@ -56,12 +60,12 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 		if (my_union.go_to_menu)
 			break;
 		take_vector_of_view(&player);
-		raycast(my_union, map, player, ray);
+		raycast(&my_union, &map, &player, &ray);
 //			draw_scene(my_union, map);
 		calc_time_FPS(&my_union);
 		change_speed(&my_union, &player);
 		SDL_RenderPresent(my_union.renderer);
-		changing_key_states(&my_union);
+		changing_key_states(&my_union, &player);
 	}
 
 }
@@ -99,7 +103,7 @@ int		main(int argc, char **argv)
 			print_FPS(&my_union);
 //			printf("FPS: %d, Current PosX: %d, PosY: %d\n", my_union.FPS, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 			SDL_RenderPresent(my_union.renderer);
-			changing_key_states(&my_union);
+			changing_key_states(&my_union, &player);
 		}
 	}
 	else

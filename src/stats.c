@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 18:07:46 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 15:31:21 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 15:48:59 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,14 @@ void    print_health(t_union *my_union, t_player *player)
 	put_surface_to_render(my_union, ft_strcat(ft_itoa(player->health), "%"), 3);
 }
 
-void    print_ammo(t_union *my_union, t_player *player)
+void    print_ammo_in_clip(t_union *my_union, t_player *player)
 {
-	put_surface_to_render(my_union, ft_itoa(player->ammo), 4);
+	put_surface_to_render(my_union, ft_strcat(ft_itoa(player->clip[player->weapon]), "/"), 4);
+}
+
+void	print_ammo_in_stock(t_union *my_union, t_player *player)
+{
+	put_surface_to_render(my_union, ft_itoa(player->ammo[player->weapon]), 6);
 }
 
 //ОРТИСОВЫВАЕТ МИНИМАЙЗ КАРТИНКИ
@@ -61,7 +66,7 @@ void	show_weapon_image(t_union *my_union, t_player *player)
 
 void	print_FPS(t_union *my_union)
 {
-	put_surface_to_render(my_union, ft_itoa(my_union->FPS), 6);
+	put_surface_to_render(my_union, ft_itoa(my_union->FPS), 7);
 }
 
 //ОТРИСОВАЕТ СТАТЫ
@@ -71,7 +76,8 @@ void    show_stats(t_union *my_union, t_map *map, t_player *player)
     print_score(my_union, player);
     print_lives(my_union, player);
     print_health(my_union, player);
-    print_ammo(my_union, player);
+	print_ammo_in_clip(my_union, player);
+	print_ammo_in_stock(my_union, player);
 	print_FPS(my_union);
 	show_weapon_image(my_union, player);
 }

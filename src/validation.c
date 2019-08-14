@@ -6,35 +6,61 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 19:53:57 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 18:11:19 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
+
+
 // Получаю размер поля
 void	take_size(t_map *map, char *map_coordinates)
 {
 	char	*str;
+	int		size_x;
 
+	size_x = 0;
 	map->size_x = 0;
 	map->size_y = 0;
 	str = map_coordinates;
 	while (*str)
 	{
-		if (!ft_isdigit(*str) && *str != '.' && *str != ' ' && *str != '\n' && !ft_is_uppercase(*str))
+		if (!ft_isdigit(*str) && *str != '.' && *str != ' ' &&
+				*str != '\n' && !ft_is_uppercase(*str))
 		{
 			ft_putstr("Not a valid file\n");
 			exit(0);
 		}
 		if (*str == '\n')
+		{
 			map->size_y++;
-		if (!map->size_y && *str != ' ' && *str != '\n')
-			map->size_x++;
+			if (size_x > map->size_x)
+				map->size_x = size_x;
+			size_x = 0;
+		}
+		if (*str != ' ' && *str != '\n')
+			size_x++;
 		str++;
 	}
 	if (*str == '\0')
 		map->size_y++;
+}
+
+int 	get_size(char *string)
+{
+	char	*str;
+	int		size_x;
+
+	size_x = 0;
+	str = string;
+	while (*str)
+	{
+		if (*str != ' ' && *str != '\n')
+			size_x++;
+		str++;
+	}
+	return (size_x);
 }
 
 //УСТАНАВЛИВАЕТ ДВЕРИ
@@ -63,11 +89,18 @@ int    set_player(t_map *map, t_map *objects, char ch, int x, int y, t_player *p
     return (0);
 }
 
+void	set_map_and_objects(int map_num, int objects_num, int *map, int *objects)
+{
+	*map = map_num;
+	*objects = objects_num;
+}
+
 // Инициализирую массив с координатами карты
 void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *player)
 {
 	int		y;
 	int		x;
+	int 	size_string;
 	char	**res;
 	char 	**tmp;
 
@@ -85,19 +118,22 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
 	while (++y < map->size_y)
 	{
 		x = -1;
+		size_string = get_size(res[y]);
         tmp = ft_strsplit(res[y], ' ');
         while (++x < map->size_x)
 		{
+//        	if (x + 1 < map->size_x)
+			if (x >= size_string) {
+				set_map_and_objects(2, 3,
+									&map->map[y][x], &objects->map[y][x]);
+				continue;
+			}
             if (tmp[x][0] == '.')
-            {
-                map->map[y][x] = 0;
-                objects->map[y][x] = 0;
-            }
+            	set_map_and_objects(0, 0,
+            			&map->map[y][x], &objects->map[y][x]);
             else if (ft_isdigit(tmp[x][0]))
-            {
-                map->map[y][x] = ft_atoi(tmp[x]);
-                objects->map[y][x] = 0;
-            }
+				set_map_and_objects(ft_atoi(tmp[x]), 0,
+						&map->map[y][x], &objects->map[y][x]);
             else
             {
                 if (set_doors(map, objects, tmp[x][0], x, y))
@@ -105,10 +141,8 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
                 else if (set_player(map, objects, tmp[x][0], x, y, player))
                     continue;
                 else
-                {
-                    map->map[y][x] = 0;
-                    objects->map[y][x] = tmp[x][0];
-                }
+                	set_map_and_objects(0, tmp[x][0],
+							&map->map[y][x], &objects->map[y][x]);
             }
 		}
 	}

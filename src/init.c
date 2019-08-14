@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 19:37:56 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:15:45 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	initialize_SDL(t_union *my_union)
 	my_union->main_window_texture = SDL_CreateTexture(my_union->renderer,
 													  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
 													  my_union->win_x, my_union->win_y);
-//	my_union->font_color = (SDL_Color*)malloc(sizeof(SDL_Color));
 	my_union->surface_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 10);
 	my_union->weapons_mini_array = (SDL_Surface**)malloc(sizeof(SDL_Surface*) * 3);
 	my_union->weapons_surfaces = (SDL_Surface***)malloc(sizeof(SDL_Surface**) * 3);
@@ -48,9 +47,9 @@ void	initialize_SDL(t_union *my_union)
 void    init_stats_rects(t_union *my_union) {
     int i;
 
-	my_union->stat_rects = (SDL_Rect*)malloc(sizeof(SDL_Rect) * 7);
+	my_union->stat_rects = (SDL_Rect*)malloc(sizeof(SDL_Rect) * 8);
 	i = -1;
-	while (++i < 6)
+	while (++i < 7)
 	{
 		my_union->stat_rects[i].h = my_union->hud_rect.h - 20;
 		my_union->stat_rects[i].y = my_union->hud_rect.y + 20;
@@ -63,15 +62,19 @@ void    init_stats_rects(t_union *my_union) {
 	my_union->stat_rects[2].w = my_union->stat_rects[2].h >> 1;
 	my_union->stat_rects[3].x = my_union->hud_rect.x + 670;
 	my_union->stat_rects[3].w = (my_union->stat_rects[3].h << 1) - 50;
-	my_union->stat_rects[4].x = my_union->hud_rect.x + 850;
-	my_union->stat_rects[4].w = my_union->stat_rects[4].h;
-	my_union->stat_rects[5].x = my_union->hud_rect.x + 1040;
+	my_union->stat_rects[4].x = my_union->hud_rect.x + 840;
+	my_union->stat_rects[4].w = (my_union->stat_rects[4].h >> 1);
+	my_union->stat_rects[5].x = my_union->hud_rect.x + 1050;
 	my_union->stat_rects[5].w = my_union->stat_rects[4].h << 1;
 	my_union->stat_rects[5].y -= 5;
-	my_union->stat_rects[6].h = 40;
-	my_union->stat_rects[6].w = 40;
-	my_union->stat_rects[6].x = 0;
-	my_union->stat_rects[6].y = -10;
+	my_union->stat_rects[6].x = my_union->stat_rects[4].x + my_union->stat_rects[4].w;
+	my_union->stat_rects[6].w = my_union->stat_rects[6].h - 20;
+
+
+	my_union->stat_rects[7].h = 40;
+	my_union->stat_rects[7].w = 40;
+	my_union->stat_rects[7].x = 0;
+	my_union->stat_rects[7].y = -10;
 }
 
 // ИНИЦИАЛИЗИРУЕТ ТТФ
@@ -81,7 +84,7 @@ void    initialize_TTF(t_union *my_union)
     {
         printf("Unable to init SDL_TTF: %s", TTF_GetError());
     }
-    my_union->font = TTF_OpenFont("resources/fonts/ui_font.ttf", 25);
+    my_union->font = TTF_OpenFont("resources/fonts/ui_font.ttf", 16);
     if (my_union->font == NULL)
         printf("Unable to load font: %s", TTF_GetError());
     init_stats_rects(my_union);
@@ -107,6 +110,9 @@ void	init_union(t_union *my_union)
 	my_union->font = NULL;
 	my_union->menu_mode = 1;
 	my_union->menu_tick = 0;
+	my_union->shoot_timer = 0;
+	my_union->reload_timer = 0;
+	my_union->weapon_down_timer = 0;
 	my_union->go_to_menu = 0;
 	my_union->menu_frame = 0;
 }
@@ -137,18 +143,32 @@ void	init_player(t_union *my_union, t_player *player)
 	player->level = 2;
 	player->lives = 3;
 	player->health = 100;
-	player->ammo = 40;
+	player->ammo = (int*)malloc(sizeof(int) * 3);
+	player->clip_volume = (int*)malloc(sizeof(int) * 3);
+	player->clip = (int*)malloc(sizeof(int) * 3);
+	player->ammo[0] = 1;
+	player->ammo[1] = 40;
+	player->ammo[2] = 80;
+	player->clip_volume[0] = 1;
+	player->clip_volume[1] = 7;
+	player->clip_volume[2] = 20;
+	player->clip[0] = player->clip_volume[0];
+	player->clip[1] = player->clip_volume[1];
+	player->clip[2] = player->clip_volume[2];
 	player->weapon = 1;
-	player->weapon_frame = 0;
+	player->weapon_frame = 1;
+
+	player->shoot_mode = 0;
 }
 
 //ГОТОВИТ СТРУКТУРУ ДЛЯ ОРУЖИЯ
 void	init_weapon(t_union *my_union)
 {
-//	my_union->weapon_place.w = my_union->win_x * 0.66;
-//	my_union->weapon_place.h = my_union->weapon_place.w;
-//	my_union->weapon_place.x = my_union->win_x * 0.25;
-//	my_union->weapon_place.y = my_union->half_win_y;
+	my_union->weapon_place.w = my_union->win_x * 0.4;
+	my_union->weapon_place.h = my_union->weapon_place.w;
+	my_union->weapon_place.x = my_union->half_win_x - (my_union->weapon_place.w >> 1);//my_union->win_x * 0.25;
+	my_union->weapon_place.y = (my_union->half_win_y >> 1) - 50;//
+	// my_union->half_win_y;
 	my_union->weapon_plce.y_start = my_union->half_win_y - 100;
 	my_union->weapon_plce.y_end = my_union->hud_start;
 	my_union->weapon_plce.width = my_union->weapon_plce.y_end - my_union->weapon_plce.y_start;

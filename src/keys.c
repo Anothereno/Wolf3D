@@ -6,14 +6,14 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/12 19:42:04 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/14 16:54:19 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
 //ПЕРЕДВИЖЕНИЕ В СТОРОНУ ВЗГЛЯДА
-void	view_follow(t_player *player, t_map *map, int mode)
+void	view_follow(t_player *player, t_map *map, int mode, t_union *my_union)
 {
 	double center_x;
 	double center_y;
@@ -103,8 +103,6 @@ void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player,
     if (x)
     {
         player->view_direction += (x * my_union->sens * my_union->time);
-//        printf("%d, %f\n", x, player->view_direction);
-
         my_union->mouse_x = x;
     }
 }
@@ -136,7 +134,6 @@ void	change_menu_choise(t_union *my_union, char mode)
 void	choise_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 {
 	if (my_union->menu_frame == 0)
-//		start_game(*my_union, *map, *player, *objects);
 		my_union->menu_mode = 0;
 	else if (my_union->menu_frame == 3)
 		exit(0);
@@ -185,6 +182,14 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
         my_union->mouse_state = (my_union->mouse_state == 0) ? 1 : 0;
         SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
     }
+    if (!my_union->shoot_timer && key[SDL_SCANCODE_KP_ENTER]
+    		&& !player->shoot_mode && player->clip[player->weapon])
+	{
+    	if (player->weapon)
+			player->clip[player->weapon]--;
+    	my_union->shoot_timer = SDL_GetTicks();
+    	player->shoot_mode = 1;
+	}
 	if (key[SDL_SCANCODE_Q])
 	{
 		if (player->view_direction - player->rotate_angle >= 0)
@@ -206,9 +211,9 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 		}
 	}
 	if (key[SDL_SCANCODE_W])
-		view_follow(player, map, 1);
+		view_follow(player, map, 1, my_union);
 	if (key[SDL_SCANCODE_S])
-		view_follow(player, map, -1);
+		view_follow(player, map, -1,my_union);
 	if (key[SDL_SCANCODE_A])
         strafe(player, map, -1);
 	if (key[SDL_SCANCODE_D])
@@ -217,23 +222,27 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 	    check_door(map, objects, player, my_union);
 	if (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] || key[SDL_SCANCODE_3])
 		change_weapon(player, key);
-
-
+	if (!my_union->reload_timer && key[SDL_SCANCODE_R])
+	{
+		my_union->reload_timer = SDL_GetTicks();
+		weapon_down(my_union, player);
+		reload(my_union, player);
+	}
 	//FOR DEBUG
-	if (key[SDL_SCANCODE_KP_PLUS])
-	{
-		player->score += 100;
-		player->health += 10;
-		player->ammo += 10;
-		player->lives++;
-		player->level++;
-	}
-	if (key[SDL_SCANCODE_KP_MINUS])
-	{
-		player->score -= 100;
-		player->health -= 10;
-		player->ammo -= 10;
-		player->lives--;
-		player->level--;
-	}
+//	if (key[SDL_SCANCODE_KP_PLUS])
+//	{
+//		player->score += 100;
+//		player->health += 10;
+//		player->ammo += 10;
+//		player->lives++;
+//		player->level++;
+//	}
+//	if (key[SDL_SCANCODE_KP_MINUS])
+//	{
+//		player->score -= 100;
+//		player->health -= 10;
+//		player->ammo -= 10;
+//		player->lives--;
+//		player->level--;
+//	}
 }
