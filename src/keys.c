@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 16:54:19 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 18:55:03 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,26 @@ void    mouse_handling(t_union *my_union, t_map *map, t_player *player, t_map *o
 }
 
 // МЕНЯЕТ ОРУЖИЕ
-void	change_weapon(t_player *player, const Uint8	*key)
+void change_weapon(t_player *player, const Uint8 *key, t_union *my_union)
 {
 	if (key[SDL_SCANCODE_1] && player->weapon != 0)
-		player->weapon = 0;
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 0;
+	}
 	else if (key[SDL_SCANCODE_2] && player->weapon != 1)
-		player->weapon = 1;
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 1;
+	}
 	else if (key[SDL_SCANCODE_3] && player->weapon != 2)
-		player->weapon = 2;
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 2;
+	}
 }
 
 //ОБРАБАТЫВАЕТ ПОВЕДЕНИЕ МЫШИ, ЕСЛИ КУРСОР ВЫКЛЮЧЕН
@@ -160,52 +172,44 @@ void	check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *ob
 }
 
 //ОТЛАВЛИВАЕТ ИВЕНТЫ В ИГРЕ
-void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key)
-{
-	int		temp;
+void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key) {
+	int temp;
 
-    if (my_union->event.type == SDL_MOUSEMOTION)
-    {
+	if (my_union->event.type == SDL_MOUSEMOTION) {
 //        if (my_union->mouse_state)
 //            mouse_handling(my_union, map, player, objects);
 //        else
-            mouse_relative_handling(my_union, map, player, objects);
-    }
-    if (!my_union->escape_timer && key[SDL_SCANCODE_ESCAPE])
-	{
-    	my_union->escape_timer = SDL_GetTicks();
+		mouse_relative_handling(my_union, map, player, objects);
+	}
+	if (!my_union->escape_timer && key[SDL_SCANCODE_ESCAPE]) {
+		my_union->escape_timer = SDL_GetTicks();
 		my_union->go_to_menu = 1;
 	}
-    if (!my_union->rel_mouse_mode_timer && key[SDL_SCANCODE_BACKSPACE])
-    {
-        my_union->rel_mouse_mode_timer = SDL_GetTicks();
-        my_union->mouse_state = (my_union->mouse_state == 0) ? 1 : 0;
-        SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
-    }
-    if (!my_union->shoot_timer && key[SDL_SCANCODE_KP_ENTER]
-    		&& !player->shoot_mode && player->clip[player->weapon])
-	{
-    	if (player->weapon)
-			player->clip[player->weapon]--;
-    	my_union->shoot_timer = SDL_GetTicks();
-    	player->shoot_mode = 1;
+	if (!my_union->rel_mouse_mode_timer && key[SDL_SCANCODE_BACKSPACE]) {
+		my_union->rel_mouse_mode_timer = SDL_GetTicks();
+		my_union->mouse_state = (my_union->mouse_state == 0) ? 1 : 0;
+		SDL_SetRelativeMouseMode(!SDL_GetRelativeMouseMode());
 	}
-	if (key[SDL_SCANCODE_Q])
-	{
+	if (!my_union->weapon_down_mode && !my_union->shoot_timer &&
+		key[SDL_SCANCODE_KP_ENTER]
+		&& !player->shoot_mode && player->clip[player->weapon]) {
+		if (player->weapon)
+			player->clip[player->weapon]--;
+		my_union->shoot_timer = SDL_GetTicks();
+		player->shoot_mode = 1;
+	}
+	if (key[SDL_SCANCODE_Q]) {
 		if (player->view_direction - player->rotate_angle >= 0)
 			player->view_direction -= player->rotate_angle;
-		else
-		{
+		else {
 			temp = 360 + player->view_direction - player->rotate_angle;
 			player->view_direction = temp;
 		}
 	}
-	if (key[SDL_SCANCODE_E])
-	{
+	if (key[SDL_SCANCODE_E]) {
 		if (player->view_direction + player->rotate_angle < 360)
 			player->view_direction += player->rotate_angle;
-		else
-		{
+		else {
 			temp = 360 - player->view_direction - player->rotate_angle;
 			player->view_direction = -temp;
 		}
@@ -213,19 +217,22 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 	if (key[SDL_SCANCODE_W])
 		view_follow(player, map, 1, my_union);
 	if (key[SDL_SCANCODE_S])
-		view_follow(player, map, -1,my_union);
+		view_follow(player, map, -1, my_union);
 	if (key[SDL_SCANCODE_A])
-        strafe(player, map, -1);
+		strafe(player, map, -1);
 	if (key[SDL_SCANCODE_D])
-	    strafe(player, map, 1);
+		strafe(player, map, 1);
 	if (key[SDL_SCANCODE_SPACE])
-	    check_door(map, objects, player, my_union);
-	if (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] || key[SDL_SCANCODE_3])
-		change_weapon(player, key);
+		check_door(map, objects, player, my_union);
+	if (!player->shoot_mode && (key[SDL_SCANCODE_1] || key[SDL_SCANCODE_2] ||
+	key[SDL_SCANCODE_3]))
+	{
+		my_union->change_weapon_mode = 1;
+		change_weapon(player, key, my_union);
+	}
 	if (!my_union->reload_timer && key[SDL_SCANCODE_R])
 	{
 		my_union->reload_timer = SDL_GetTicks();
-		weapon_down(my_union, player);
 		reload(my_union, player);
 	}
 	//FOR DEBUG

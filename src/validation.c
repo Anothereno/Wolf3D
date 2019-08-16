@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 18:11:19 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 18:41:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	take_size(t_map *map, char *map_coordinates)
 	int		size_x;
 
 	size_x = 0;
-	map->size_x = 0;
-	map->size_y = 0;
+	map->size_x = 2;
+	map->size_y = 2;
 	str = map_coordinates;
 	while (*str)
 	{
@@ -36,7 +36,7 @@ void	take_size(t_map *map, char *map_coordinates)
 		{
 			map->size_y++;
 			if (size_x > map->size_x)
-				map->size_x = size_x;
+				map->size_x = size_x + 2;
 			size_x = 0;
 		}
 		if (*str != ' ' && *str != '\n')
@@ -63,14 +63,21 @@ int 	get_size(char *string)
 	return (size_x);
 }
 
+int		check_on_edge(t_map *map, int x, int y)
+{
+	if (x == 0 || x == map->size_x - 1 || y == 0 || y == map->size_y - 1)
+		return (1);
+	return (0);
+}
+
 //УСТАНАВЛИВАЕТ ДВЕРИ
 int    set_doors(t_map *map, t_map *objects, char ch, int x, int y)
 {
     if (ch == 'D')
     {
-        map->map[y][x] = 9;
-        objects->map[y][x] = ch;
-        return (1);
+		map->map[y][x] = 9;
+		objects->map[y][x] = ch;
+    	return (1);
     }
     return (0);
 }
@@ -95,6 +102,22 @@ void	set_map_and_objects(int map_num, int objects_num, int *map, int *objects)
 	*objects = objects_num;
 }
 
+void	set_edges(t_map *map, t_map *objects)
+{
+	int x;
+	int y;
+
+	y = -1;
+	while (++y < map->size_y)
+	{
+		x = -1;
+		while (++x < map->size_x)
+			if (check_on_edge(map, x, y))
+				set_map_and_objects(1 + rand() % 6, 0,
+									&map->map[y][x], &objects->map[y][x]);
+	}
+}
+
 // Инициализирую массив с координатами карты
 void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *player)
 {
@@ -113,35 +136,35 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
         map->map[y] = (int*)malloc(sizeof(int) * map->size_x);
         objects->map[y] = (int*)malloc(sizeof(int) * map->size_x);
     }
-	y = -1;
+	y = 0;
+	set_edges(map,objects);
 	res = ft_strsplit(map_coordinates, '\n');
-	while (++y < map->size_y)
+	while (++y < map->size_y - 1)
 	{
-		x = -1;
-		size_string = get_size(res[y]);
-        tmp = ft_strsplit(res[y], ' ');
-        while (++x < map->size_x)
+		x = 0;
+		size_string = get_size(res[y - 1]);
+        tmp = ft_strsplit(res[y - 1], ' ');
+        while (++x < map->size_x - 1)
 		{
-//        	if (x + 1 < map->size_x)
-			if (x >= size_string) {
-				set_map_and_objects(2, 3,
+        	if (x >= size_string)
+        	{
+				set_map_and_objects(1 + rand() % 6, 0,
 									&map->map[y][x], &objects->map[y][x]);
 				continue;
 			}
-            if (tmp[x][0] == '.')
+            else if (tmp[x - 1][0] == '.')
             	set_map_and_objects(0, 0,
             			&map->map[y][x], &objects->map[y][x]);
-            else if (ft_isdigit(tmp[x][0]))
-				set_map_and_objects(ft_atoi(tmp[x]), 0,
+            else if (ft_isdigit(tmp[x - 1][0]))
+				set_map_and_objects(ft_atoi(tmp[x - 1]), 0,
 						&map->map[y][x], &objects->map[y][x]);
             else
             {
-                if (set_doors(map, objects, tmp[x][0], x, y))
-                    continue;
-                else if (set_player(map, objects, tmp[x][0], x, y, player))
+                if (set_doors(map, objects, tmp[x - 1][0], x, y) ||
+                		set_player(map, objects, tmp[x - 1][0], x, y, player))
                     continue;
                 else
-                	set_map_and_objects(0, tmp[x][0],
+                	set_map_and_objects(0, tmp[x - 1][0],
 							&map->map[y][x], &objects->map[y][x]);
             }
 		}

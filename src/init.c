@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 16:15:45 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 18:41:28 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	initialize_SDL(t_union *my_union)
 		exit(0);
 	}
 	my_union->win = SDL_CreateWindow("Wolf3D",/*SDL_WINDOWPOS_CENTERED*/ 200, /*SDL_WINDOWPOS_CENTERED*/200, my_union->win_x, my_union->win_y, 0);
-	my_union->renderer = SDL_CreateRenderer(my_union->win, -1,
-			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	my_union->renderer = SDL_CreateRenderer(my_union->win, 0,
+			SDL_RENDERER_SOFTWARE);
 	my_union->pixel_array = (Uint32*)malloc(sizeof(Uint32) * my_union->win_x * my_union->win_y);
 	my_union->main_window_texture = SDL_CreateTexture(my_union->renderer,
 													  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
@@ -108,6 +108,7 @@ void	init_union(t_union *my_union)
 	my_union->mouse_y = my_union->half_win_y;
 	my_union->rel_mouse_mode_timer = 0;
 	my_union->font = NULL;
+	my_union->weapon_down_mode = 0;
 	my_union->menu_mode = 1;
 	my_union->menu_tick = 0;
 	my_union->shoot_timer = 0;
@@ -115,6 +116,8 @@ void	init_union(t_union *my_union)
 	my_union->weapon_down_timer = 0;
 	my_union->go_to_menu = 0;
 	my_union->menu_frame = 0;
+	my_union->change_weapon_mode = 0;
+	srand(time(NULL));
 }
 
 //ГОТОВИТ СТРУКТУРУ ДЛЯ ИГРОКА
@@ -139,7 +142,7 @@ void	init_player(t_union *my_union, t_player *player)
 	player->fov = 60;
 	player->half_fov = player->fov * 0.5;
 
-	player->score = 19999;
+	player->score = 7200;
 	player->level = 2;
 	player->lives = 3;
 	player->health = 100;

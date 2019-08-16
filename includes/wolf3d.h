@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 16:09:08 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 16:40:33 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct	s_union
 	Uint32 			*pixel_array;
 	double 			time;
 	int				menu_mode;
+	int				change_weapon_mode;
 	int 			menu_frame;
 	int				win_y;
 	int             hud_start;
@@ -97,6 +98,7 @@ typedef struct	s_union
 	double          dist;
 	int 			start;
 	int 			end;
+	int 			weapon_down_mode;
 	SDL_Rect        hud_rect;
 	SDL_Rect        *stat_rects;
 	SDL_Rect		weapon_place;
@@ -152,6 +154,7 @@ typedef struct	s_player
 	int 	*ammo;
 	int 	*clip_volume;
 	int		*clip;
+	int 	new_weapon;
 	int 	weapon;
 	int 	weapon_frame;
 	int 	shoot_mode;
@@ -175,6 +178,7 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			weapon_down(t_union *my_union, t_player *player);
 void			reload(t_union *my_union, t_player *player);
 int 			check_invisible_pixels(SDL_Color *color);
 void			draw_weapon(t_union *my_union, t_player *player, t_map *map);

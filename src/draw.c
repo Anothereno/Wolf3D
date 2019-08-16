@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 15:18:46 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 14:31:24 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,6 @@ void	calc_line(t_union *my_union, t_ray ray, double betta)
 	if (my_union->end >= my_union->win_y)
 		my_union->end = my_union->win_y - 1;
 }
-
-//void	calc_line(t_union *my_union, double betta)
-//{
-//	my_union->distance = my_union->distance * cos(betta);
-//	my_union->line_length = (BLOCK_SIZE << (int)(my_union->win_x / 640)) / my_union->distance * 277;
-//	my_union->start = -my_union->line_length / 2 + my_union->win_y / 2;
-//	if (my_union->start < 0)
-//		my_union->start = 0;
-//	my_union->end = my_union->line_length / 2 + my_union->win_y / 2;
-//	if (my_union->end >= my_union->win_y)
-//		my_union->end = my_union->win_y - 1;
-//}
 
 //ВЫБИРАЕТ ПРАИВЛЬНЫЙ ЛУЧ ПО КРАТЧАЙШЕЙ ДИСТАНЦИИ
 void	choose_distance(t_ray *ray) {
@@ -143,6 +131,7 @@ void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
 	put_cross(my_union, player);
     SDL_UpdateTexture(my_union->main_window_texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
     SDL_RenderCopy(my_union->renderer, my_union->main_window_texture, NULL, NULL);
+//    weapon_down(my_union, player);
 	draw_weapon(my_union, player, map);
 	draw_hud(my_union, player, map);
 }
@@ -189,7 +178,6 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
     double      sin_angle;
     SDL_Color	color;
 
-    it = 0;
     cos_angle = cos(angle);
     sin_angle = sin(angle);
     start = 0;
@@ -207,8 +195,7 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
 			choose_surface_wall(my_union, ray, map);
 			get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
             y++;
-//            if (check_window(x, start, *my_union))
-                put_pixel(my_union, x, start, &color);
+			put_pixel(my_union, x, start, &color);
         }
         else if (start > my_union->start)
         {
@@ -227,26 +214,7 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
             if (check_window(x, diff, *my_union))
                 put_pixel(my_union, x, diff, &color);
         }
-//		if (check_weapon_place(my_union, x, start))
-//		{
-//			if (start > my_union->hud_start)
-//				continue;
-//			my_union->surface = my_union->weapons_surfaces[player.weapon][0];
-//			get_surface_pixel(my_union, my_union->weapon_plce.cur_x * my_union->weapon_plce.scale,
-//							  it * my_union->weapon_plce.scale, &color);
-//			it++;
-////				printf("r = %d, g = %d, b = %d\n", color.r, color.g, color.b);
-//			if (!check_invisible_pixels(&color) && check_window(x, start, *my_union))
-//				put_pixel(my_union, x, start, &color);
-//			my_union->weapon_plce.changing_flag = 1;
-//		}
-
 	}
-//    if (my_union->weapon_plce.changing_flag)
-//	{
-//    	my_union->weapon_plce.changing_flag = 0;
-//    	my_union->weapon_plce.cur_x++;
-//	}
 }
 
 //ОТРИСОВЫВАЕТ МИНИКАРТУ

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 16:58:15 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/16 14:44:53 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	usage(void)
 }
 
 //СБРАСЫВВАЕТ ЗАДЕРЖКИ
-void    changing_key_states(t_union *my_union, t_player *player)
+void    zeroing_timers(t_union *my_union, t_player *player)
 {
     if (my_union->start_tick - my_union->door_timer_end > 350)
         my_union->door_timer_end = 0;
@@ -33,6 +33,8 @@ void    changing_key_states(t_union *my_union, t_player *player)
 		my_union->shoot_timer = 0;
 	if (my_union->start_tick - my_union->reload_timer > 600)
 		my_union->reload_timer = 0;
+	if (my_union->start_tick - my_union->weapon_down_timer > 600)
+		my_union->weapon_down_timer = 0;
 }
 
 //РАСЧИТВАЕТ ФПС
@@ -65,7 +67,7 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 		calc_time_FPS(&my_union);
 		change_speed(&my_union, &player);
 		SDL_RenderPresent(my_union.renderer);
-		changing_key_states(&my_union, &player);
+		zeroing_timers(&my_union, &player);
 	}
 
 }
@@ -103,7 +105,7 @@ int		main(int argc, char **argv)
 			print_FPS(&my_union);
 //			printf("FPS: %d, Current PosX: %d, PosY: %d\n", my_union.FPS, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 			SDL_RenderPresent(my_union.renderer);
-			changing_key_states(&my_union, &player);
+			zeroing_timers(&my_union, &player);
 		}
 	}
 	else
@@ -145,7 +147,7 @@ int		main(int argc, char **argv)
 //            my_union.time = (my_union.start_tick - my_union.end_tick) * 0.001;
 //            change_speed(&my_union, &player);
 //            SDL_RenderPresent(my_union.renderer);
-//            changing_key_states(&my_union);
+//            zeroing_timers(&my_union);
 //			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 //        }
 //    }
