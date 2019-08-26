@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 18:41:28 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 16:33:57 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,10 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
 							&map->map[y][x], &objects->map[y][x]);
             }
 		}
+        ft_clear_string_array(tmp, size_string);
 	}
+	ft_clear_string_array(res, map->size_y);
+	ft_strdel(&map_coordinates);
 }
 
 // Читаю карту из файла
@@ -192,9 +195,11 @@ char	*reading(int fd)
 		close(fd);
 		return (res);
 	}
-	ft_putstr("Wrong file\n");
+	error_quit("Wrong file", 0, NULL, NULL);
 	return (NULL);
 }
+
+
 
 // Открываю карту на чтение
 int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
@@ -210,10 +215,12 @@ int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
     player->player_pos_y = -1;
     player->player_pos_x = -1;
     map_coordinates = reading(fd);
+    if (ft_strequ(map_coordinates, ""))
+    	error_quit("Empty map", 0, NULL, NULL);
 	set_array(map, map_coordinates, objects, player);
 	if (player->player_pos_x == -1 || player->player_pos_y == -1)
 	{
-        ft_putstr("Not set player position");
+        error_quit("Not set player position", 1, NULL, NULL);
         return (0);
     }
 	return (1);

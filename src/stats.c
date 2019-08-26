@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 18:07:46 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 15:48:59 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 15:15:12 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ void	put_surface_to_render(t_union *my_union, char *info, int i)
 			info, my_union->font_color);
 	my_union->stats_texture = SDL_CreateTextureFromSurface(
 			my_union->renderer, my_union->stats_surface);
-	free(my_union->stats_surface);
+	SDL_FreeSurface(my_union->stats_surface);
 	SDL_RenderCopy(my_union->renderer, my_union->stats_texture,
 				   NULL, &my_union->stat_rects[i]);
 	SDL_DestroyTexture(my_union->stats_texture);
+	free(info);
 }
 
 void    print_level(t_union *my_union, t_player *player)
@@ -62,6 +63,7 @@ void	show_weapon_image(t_union *my_union, t_player *player)
 			my_union->renderer, my_union->weapons_mini_array[player->weapon]);
 	SDL_RenderCopy(my_union->renderer, my_union->stats_texture,
 			NULL, &my_union->stat_rects[5]);
+	SDL_DestroyTexture(my_union->stats_texture);
 }
 
 void	print_FPS(t_union *my_union)

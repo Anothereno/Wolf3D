@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/14 13:24:49 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 15:41:43 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ SDL_Surface		*get_color_key(t_union *my_union, char *path)
 }
 
 //ЗАГРУЖАЕТ САРФЭЙСЫ ПИСТОЛЕТА
-void	load_pistol(t_union *my_union)
+char	*load_pistol(t_union *my_union)
 {
 	int i;
 
@@ -37,14 +37,13 @@ void	load_pistol(t_union *my_union)
 	my_union->weapons_surfaces[1][8] = get_color_key(my_union,"resources/pictures/weapons/pistol/pistol9.bmp");
 	my_union->weapons_surfaces[1][9] = get_color_key(my_union,"resources/pictures/weapons/pistol/pistol10.bmp");
 	while (++i < 10)
-	{
 		if (!my_union->weapons_surfaces[1][i])
-			ft_putstr("Pistol surface not loaded\n");
-	}
+			return ("Pistol surface not loaded\n");
+	return (NULL);
 }
 
 //ЗАГРУЖАЕТ САРФЭЙСЫ НОЖА
-void	load_knife(t_union *my_union)
+char	*load_knife(t_union *my_union)
 {
 	int i;
 
@@ -55,14 +54,14 @@ void	load_knife(t_union *my_union)
 	my_union->weapons_surfaces[0][3] = SDL_LoadBMP("resources/pictures/weapons/knife/old knife4.bmp");
 	my_union->weapons_surfaces[0][4] = SDL_LoadBMP("resources/pictures/weapons/knife/old knife5.bmp");
 	while (++i < 5)
-	{
 		if (!my_union->weapons_surfaces[0][i])
-			ft_putstr("Knife surface not loaded\n");
-	}
+//			ft_putstr("Knife surface not loaded\n");
+			return ("Knife surface not loaded\n");
+	return (NULL);
 }
 
 //ЗАГРУЖАЕТ САРФЭЙСЫ АВТОМАТА
-void	load_auto(t_union *my_union)
+char	*load_auto(t_union *my_union)
 {
 	int i;
 
@@ -78,22 +77,27 @@ void	load_auto(t_union *my_union)
 	my_union->weapons_surfaces[2][8] = get_color_key(my_union,"resources/pictures/weapons/auto/auto9.bmp");
 	my_union->weapons_surfaces[2][9] = get_color_key(my_union,"resources/pictures/weapons/auto/auto10.bmp");
 	while (++i < 10)
-	{
 		if (!my_union->weapons_surfaces[2][i])
-			ft_putstr("Auto surface not loaded\n");
-	}
+//			ft_putstr("Auto surface not loaded\n");
+			return ("Auto surface not loaded\n");
+	return (NULL);
+
 }
 
 //ЗАГРУЖАЕТ ОРУЖИЕ
-void	load_weapons(t_union *my_union)
+char	*load_weapons(t_union *my_union)
 {
-	load_pistol(my_union);
-	load_auto(my_union);
-	load_knife(my_union);
+	char *message;
+
+	if ((message = load_pistol(my_union)) ||
+			(message = load_auto(my_union)) ||
+			(message = load_knife(my_union)))
+		return (message);
+	return (NULL);
 }
 
 //ЗАГРУЖАЕТ ИКОНКИ ОРУЖИЯ ДЛЯ ХУДА
-void	load_weapons_minimize(t_union *my_union)
+char	*load_weapons_minimize(t_union *my_union)
 {
 	int i;
 
@@ -103,43 +107,48 @@ void	load_weapons_minimize(t_union *my_union)
 	my_union->weapons_mini_array[0] = SDL_LoadBMP("resources/pictures/weapon_img/knife.bmp");
 	while (++i < 3)
 		if (!my_union->weapons_mini_array[i])
-			ft_putstr("Weapon minimize surface not loaded\n");
+//			ft_putstr("Weapon minimize surface not loaded\n");
+			return ("Weapon minimize surface not loaded\n");
+	return (NULL);
+
 }
 
 //ЗАГРУЖАЕТ САРФЭЙС ХУДА
-void	load_HUD(t_union *my_union)
+char	*load_HUD(t_union *my_union)
 {
 	my_union->hud_surface = SDL_LoadBMP("resources/pictures/HUD/HUD.bmp");
 	if (!my_union->surface)
-		ft_putstr("HUD surface not loaded\n");
+//		ft_putstr("HUD surface not loaded\n");
+		return ("HUD surface not loaded\n");
+	return (NULL);
 }
 
 //ЗАГРУЖАЕТ ТЕКСТУРЫ В МАССИВ
-void	load_wall_textures(t_union *my_union)
+char	*load_wall_textures(t_union *my_union)
 {
 	int	i;
 
 	i = -1;
-	my_union->surface = SDL_LoadBMP("resources/pictures/WALLS/WALL14.bmp");
-	if (!my_union->surface)
-		ft_putstr("Surface not loaded\n");
-	my_union->surface_array[0] = SDL_LoadBMP("resources/pictures/WALLS/WALL56.bmp");
-	my_union->surface_array[1] = SDL_LoadBMP("resources/pictures/WALLS/WALL57.bmp");
-	my_union->surface_array[2] = SDL_LoadBMP("resources/pictures/WALLS/WALL56.bmp");
-	my_union->surface_array[3] = SDL_LoadBMP("resources/pictures/WALLS/WALL57.bmp");
-	my_union->surface_array[4] = SDL_LoadBMP("resources/pictures/WALLS/WALL90.bmp");
-	my_union->surface_array[5] = SDL_LoadBMP("resources/pictures/WALLS/WALL91.bmp");
-	my_union->surface_array[6] = SDL_LoadBMP("resources/pictures/WALLS/WALL90.bmp");
-	my_union->surface_array[7] = SDL_LoadBMP("resources/pictures/WALLS/WALL91.bmp");
-	my_union->surface_array[8] = SDL_LoadBMP("resources/pictures/WALLS/WALL98.bmp");
-	my_union->surface_array[9] = SDL_LoadBMP("resources/pictures/WALLS/WALL98.bmp");
+	my_union->wall_surfaces_array[0] = SDL_LoadBMP("resources/pictures/WALLS/WALL56.bmp");
+	my_union->wall_surfaces_array[1] = SDL_LoadBMP("resources/pictures/WALLS/WALL57.bmp");
+	my_union->wall_surfaces_array[2] = SDL_LoadBMP("resources/pictures/WALLS/WALL56.bmp");
+	my_union->wall_surfaces_array[3] = SDL_LoadBMP("resources/pictures/WALLS/WALL57.bmp");
+	my_union->wall_surfaces_array[4] = SDL_LoadBMP("resources/pictures/WALLS/WALL90.bmp");
+	my_union->wall_surfaces_array[5] = SDL_LoadBMP("resources/pictures/WALLS/WALL91.bmp");
+	my_union->wall_surfaces_array[6] = SDL_LoadBMP("resources/pictures/WALLS/WALL90.bmp");
+	my_union->wall_surfaces_array[7] = SDL_LoadBMP("resources/pictures/WALLS/WALL91.bmp");
+	my_union->wall_surfaces_array[8] = SDL_LoadBMP("resources/pictures/WALLS/WALL98.bmp");
+	my_union->wall_surfaces_array[9] = SDL_LoadBMP("resources/pictures/WALLS/WALL98.bmp");
 	while (++i < 10)
-		if (!my_union->surface_array[i])
-			ft_putstr("Walls surface not loaded\n");
+		if (!my_union->wall_surfaces_array[i])
+//			ft_putstr("Walls surface not loaded\n");
+			return ("Walls surface not loaded\n");
+
+	return (NULL);
 }
 
 //ЗАГРУЖАЕТ САРФЭЙС МЕНЮ
-void	load_menu(t_union *my_union)
+char	*load_menu(t_union *my_union)
 {
 	int i;
 
@@ -150,6 +159,9 @@ void	load_menu(t_union *my_union)
 	my_union->menu_array[2] = SDL_LoadBMP("resources/pictures/menu/menu_control.bmp");
 	my_union->menu_array[3] = SDL_LoadBMP("resources/pictures/menu/menu_quit.bmp");
 	while (++i < 4)
-		if (!my_union->menu_array[i])
-			ft_putstr("Menu surface not loaded\n");
+		if (!my_union->menu_array[i]) {
+//			ft_putstr("Menu surface not loaded\n");
+			return ("Menu surface not loaded\n");
+		}
+	return (NULL);
 }

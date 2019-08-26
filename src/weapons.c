@@ -6,11 +6,25 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 15:26:12 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 18:55:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/20 12:27:36 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void	change_weapon_frame(t_union *my_union, t_player *player)
+{
+	if ((player->weapon == 1 &&
+			my_union->start_tick - my_union->shoot_timer >= 15) ||
+			(player->weapon == 2 &&
+			my_union->start_tick- my_union->shoot_timer >= 7) ||
+			(player->weapon == 0 &&
+			my_union->start_tick - my_union->shoot_timer >= 4))
+	{
+		my_union->shoot_timer = SDL_GetTicks();
+		player->weapon_frame++;
+	}
+}
 
 void	draw_weapon(t_union *my_union, t_player *player, t_map *map)
 {
@@ -20,10 +34,8 @@ void	draw_weapon(t_union *my_union, t_player *player, t_map *map)
 			my_union->weapons_surfaces[player->weapon][player->weapon_frame]);
 	SDL_RenderCopy(my_union->renderer, my_union->weapon_texture, NULL, &my_union->weapon_place);
 	SDL_DestroyTexture(my_union->weapon_texture);
-	if (player->shoot_mode && my_union->start_tick - my_union->shoot_timer >= 35)
-	{
-		player->weapon_frame++;
-	}
+	if (player->shoot_mode)
+		change_weapon_frame(my_union, player);
 	if ((!player->weapon && player->weapon_frame == 4) ||
 			(player->weapon && player->weapon_frame == 9))
 	{

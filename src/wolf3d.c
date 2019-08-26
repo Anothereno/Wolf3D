@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 14:44:53 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 16:21:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 void	usage(void)
 {
     ft_putstr("usage: ./wolf3d <argument>\n");
+}
+
+void	zeroing_weapon_timer(t_union *my_union, t_player *player)
+{
+	if (player->weapon == 1 && my_union->start_tick -
+			my_union->shoot_timer > 150)
+		my_union->shoot_timer = 0;
+	else if (player->weapon == 2 && my_union->start_tick -
+			my_union->shoot_timer > 70)
+		my_union->shoot_timer = 0;
+	else if (player->weapon == 0 && my_union->start_tick -
+			my_union->shoot_timer > 200)
+		my_union->shoot_timer = 0;
 }
 
 //СБРАСЫВВАЕТ ЗАДЕРЖКИ
@@ -29,8 +42,8 @@ void    zeroing_timers(t_union *my_union, t_player *player)
         my_union->menu_tick = 0;
 	if (my_union->start_tick - my_union->escape_timer > 350)
 		my_union->escape_timer = 0;
-	if (my_union->start_tick - my_union->shoot_timer > 500)
-		my_union->shoot_timer = 0;
+	if (my_union->shoot_timer)
+		zeroing_weapon_timer(my_union,player);
 	if (my_union->start_tick - my_union->reload_timer > 600)
 		my_union->reload_timer = 0;
 	if (my_union->start_tick - my_union->weapon_down_timer > 600)
@@ -78,7 +91,7 @@ int		main(int argc, char **argv)
 	t_map		map;
 	t_map       objects;
 	t_player	player;
-
+//	getchar(); ДЛЯ ДЕБАГА
 	my_union.start_tick = 0;
 	if (argc == 2)
 	{
@@ -86,14 +99,13 @@ int		main(int argc, char **argv)
 			exit(0);
 		init(&my_union, &map, &player, &objects);
 		my_union.key_menu = SDL_GetKeyboardState(NULL);
-
 		while (1) {
 			SDL_PollEvent(&my_union.event);
 			if (my_union.event.type == SDL_QUIT)
 				break;
 			check_event_menu(&my_union, &map, &player, &objects, my_union.key_menu);
 			if (my_union.menu_mode)
-				show_menu(my_union, map, player, objects);
+				show_menu(my_union);
 			else
 			{
 				start_game(my_union, map, player, objects);
@@ -103,7 +115,6 @@ int		main(int argc, char **argv)
 			}
 			calc_time_FPS(&my_union);
 			print_FPS(&my_union);
-//			printf("FPS: %d, Current PosX: %d, PosY: %d\n", my_union.FPS, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
 			SDL_RenderPresent(my_union.renderer);
 			zeroing_timers(&my_union, &player);
 		}
@@ -113,45 +124,3 @@ int		main(int argc, char **argv)
 	return (0);
 }
 
-
-//ОСУЩЕСТВЛЯЕТ МЭЙН ЛУП
-//int		main(int argc, char **argv)
-//{
-//    t_union		my_union;
-//    t_map		map;
-//    t_map       objects;
-//    t_player	player;
-//    t_ray		ray;
-//
-//    my_union.start_tick = 0;
-//    if (argc == 2)
-//    {
-//        if (!val_set(argv[1], &map, &objects, &player))
-//            exit(0);
-//        init(&my_union, &map, &player, &objects);
-//        my_union.key_menu = SDL_GetKeyboardState(NULL);
-//        SDL_SetRelativeMouseMode(SDL_TRUE);
-//        while (1) {
-//
-//            SDL_PollEvent(&my_union.event);
-//            if (my_union.event.type == SDL_QUIT)
-//                break;
-//            player.move_indicate = 0;
-//            check_event_game(&my_union, &map, &player, &objects, my_union.key_menu);
-////			clear_window(my_union);
-//            take_vector_of_view(&player);
-//            raycast(my_union, map, player, ray);
-////			draw_scene(my_union, map);
-//            my_union.end_tick = my_union.start_tick;
-//            my_union.start_tick = SDL_GetTicks();
-//            my_union.time = (my_union.start_tick - my_union.end_tick) * 0.001;
-//            change_speed(&my_union, &player);
-//            SDL_RenderPresent(my_union.renderer);
-//            zeroing_timers(&my_union);
-//			printf("FPS: %f, Current PosX: %d, PosY: %d\n", 1.0 / my_union.time, (int)player.player_pos_x, (int)player.player_pos_y/*"%f - FLOOR, %f ELAPSE\n", floor(16.666f - elapsedMS), elapsedMS*/);
-//        }
-//    }
-//    else
-//        usage();
-//    return (0);
-//}

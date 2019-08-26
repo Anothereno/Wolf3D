@@ -81,7 +81,7 @@ add_executable(wolf3d
         src/wolf3d.c
         src/init.c
         author
-        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c src/doors.c src/stats.c src/menu.c src/weapons.c libft/ft_is_uppercase.c)
+        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c src/doors.c src/stats.c src/menu.c src/weapons.c libft/ft_is_uppercase.c src/exit.c libft/ft_clear_string_array.c)
 
 target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")

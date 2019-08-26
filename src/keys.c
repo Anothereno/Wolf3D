@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/06 16:27:07 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 18:55:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 12:38:45 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@ void	view_follow(t_player *player, t_map *map, int mode, t_union *my_union)
 	double center_y;
 	double pos_x;
 	double pos_y;
-	double angle;
 
-	angle = player->view_direction * RAD;
     player->move_indicate = 5;
 	center_x = player->player_pos_x + (player->player_width >> 1);
 	center_y = player->player_pos_y + (player->player_heigth >> 1);
 	pos_x = (center_x + (player->speed * mode *
-			cos(angle))) - (player->player_width >> 1);
+			cos(player->view_direction_rad))) - (player->player_width >> 1);
 	pos_y = (center_y + (player->speed * mode *
-			sin(angle))) - (player->player_width >> 1);
+			sin(player->view_direction_rad))) - (player->player_width >> 1);
 	if (!check_wall(pos_x, pos_y, *map))
 	{
 		player->player_pos_x = pos_x;
@@ -115,6 +113,7 @@ void    mouse_relative_handling(t_union *my_union, t_map *map, t_player *player,
     if (x)
     {
         player->view_direction += (x * my_union->sens * my_union->time);
+        player->view_direction_rad = player->view_direction * RAD;
         my_union->mouse_x = x;
     }
 }
@@ -165,7 +164,7 @@ void	check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *ob
 		if (!my_union->escape_timer) {
 			my_union->escape_timer = SDL_GetTicks();
 			if (!my_union->go_to_menu && my_union->menu_mode)
-				exit(0);
+				complete_work(my_union,map, objects, player);
 			my_union->go_to_menu = 0;
 		}
 	}
@@ -205,6 +204,7 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 			temp = 360 + player->view_direction - player->rotate_angle;
 			player->view_direction = temp;
 		}
+		player->view_direction_rad = player->view_direction * RAD;
 	}
 	if (key[SDL_SCANCODE_E]) {
 		if (player->view_direction + player->rotate_angle < 360)
@@ -213,6 +213,7 @@ void	check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *ob
 			temp = 360 - player->view_direction - player->rotate_angle;
 			player->view_direction = -temp;
 		}
+		player->view_direction_rad = player->view_direction * RAD;
 	}
 	if (key[SDL_SCANCODE_W])
 		view_follow(player, map, 1, my_union);

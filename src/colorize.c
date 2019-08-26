@@ -60,16 +60,16 @@ void		choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
 	int wall;
 
 	wall = map.map[(int)ray.y >> 6][(int)ray.x >> 6];
-	my_union->surface = my_union->surface_array[wall - ray.mode];
+	my_union->surface = my_union->wall_surfaces_array[wall - ray.mode];
 }
 
 //ВЫБИРАЕТ САРФЭЙС ИЗ МАССИВА СПРАЙТОВ
 void		choose_surface_floor_ceiling_hud(t_union *my_union, char mode)
 {
 	if (mode =='c')
-		my_union->surface = my_union->surface_array[7];
+		my_union->surface = my_union->wall_surfaces_array[7];
 	else if (mode == 'h')
 	    my_union->surface = my_union->hud_surface;
 	else
-		my_union->surface = my_union->surface_array[6];
+		my_union->surface = my_union->wall_surfaces_array[6];
 }

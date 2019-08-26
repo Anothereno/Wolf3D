@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   menu.c                                             :+:      :+:    :+:   */
+/*   ft_clear_string_array.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/07 10:56:51 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/07 16:36:38 by hdwarven         ###   ########.fr       */
+/*   Created: 2019/08/26 14:32:38 by hdwarven          #+#    #+#             */
+/*   Updated: 2019/08/26 14:32:38 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "libft.h"
 
-//ОТРИСОВЫВАЕТ МЕНЮ В ОКНО
-void show_menu(t_union my_union)
+void ft_clear_string_array(char **array, int size)
 {
-	my_union.main_window_texture = SDL_CreateTextureFromSurface(my_union.renderer,
-																my_union.menu_array[my_union.menu_frame]);
-	SDL_RenderCopy(my_union.renderer, my_union.main_window_texture, NULL, NULL);
-	SDL_DestroyTexture(my_union.main_window_texture);
+	while (--size > -1)
+		ft_strdel(&array[size]);
+	free(array);
 }

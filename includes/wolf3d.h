@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 16:40:33 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 16:33:57 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct	s_union
 	SDL_Surface     *stats_surface;
 	SDL_Texture     *stats_texture;
 	SDL_Surface     *hud_surface;
-	SDL_Surface		**surface_array;
+	SDL_Surface		**wall_surfaces_array;
 	SDL_Surface		**weapons_mini_array;
 	SDL_Surface		*pistol;
 	SDL_Surface		**menu_array;
@@ -166,6 +166,7 @@ typedef struct	s_player
 	int     strafe_speed;
 	int		radius;
     double	view_direction;
+    double 	view_direction_rad;
 	double 	speed_move;
 	double 	speed_rotate;
 
@@ -178,6 +179,8 @@ typedef struct	s_player
 	double	oldTime;
 }				t_player;
 
+void			free_map_and_objects(t_map *map, t_map *objects);
+void			error_quit(char *msg, int i, t_map *map, t_map *objects);
 void			weapon_down(t_union *my_union, t_player *player);
 void			reload(t_union *my_union, t_player *player);
 int 			check_invisible_pixels(SDL_Color *color);
@@ -185,11 +188,11 @@ void			draw_weapon(t_union *my_union, t_player *player, t_map *map);
 void			print_FPS(t_union *my_union);
 void			check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
 void 			start_game(t_union my_union, t_map map, t_player player, t_map objects);
-void 			show_menu(t_union my_union, t_map map, t_player player, t_map objects);
-void			load_menu(t_union *my_union);
-void			load_HUD(t_union *my_union);
-void			load_weapons(t_union *my_union);
-void			load_weapons_minimize(t_union *my_union);
+void 			show_menu(t_union my_union);
+char			*load_menu(t_union *my_union);
+char			*load_HUD(t_union *my_union);
+char			*load_weapons(t_union *my_union);
+char			*load_weapons_minimize(t_union *my_union);
 void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
 //void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle);
 void			draw_floor(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
@@ -202,7 +205,7 @@ void            get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *co
 void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
 //void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
-void			load_wall_textures(t_union *my_union);
+char			*load_wall_textures(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
@@ -230,5 +233,7 @@ int 	        check_wall(double cur_x, double cur_y, t_map map);
 double          take_range_angle(double angle);
 void	        choose_distance(t_ray *ray);
 void            show_stats(t_union *my_union, t_map *map, t_player *player);
+void			complete_work(t_union *my_union, t_map *map, t_map *objects,
+		t_player *player);
 
 #endif

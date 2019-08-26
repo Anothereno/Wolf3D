@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/16 14:31:24 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/20 11:58:21 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	take_vector_of_view(t_player *player)
 	double last_x;
 
 	last_x = player->direct_x;
-	player->direct_x = player->direct_x * cos(player->view_direction * RAD) - player->direct_y * sin(player->view_direction * RAD);
-	player->direct_y = last_x * sin(player->view_direction * RAD) + player->direct_y * sin(player->view_direction * RAD);
+	player->direct_x = player->direct_x * cos(player->view_direction_rad) - player->direct_y *
+			sin(player->view_direction_rad);
+	player->direct_y = last_x * sin(player->view_direction_rad) +
+			player->direct_y * sin(player->view_direction_rad);
 }
 
 //РАССЧИТЫВАЕТ ВЫСОТУ СТЕНЫ И КОРРЕКТИРУЕТ РЫБИЙ ГЛАЗ
@@ -62,23 +64,6 @@ double take_range_angle(double angle)
 		angle = (angle - 360);
 	return angle;
 
-}
-
-//ОЧИЩАЕТ ТЕКСТУРУ
-void	clear_texture(t_union *my_union)
-{
-	int i;
-	int j;
-
-	i = -1;
-	while (++i < my_union->win_y)
-	{
-		j = -1;
-		while (++j < my_union->win_x)
-			put_black_pixel(my_union, j, i);
-	}
-	SDL_UpdateTexture(my_union->main_window_texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
-	SDL_RenderCopy(my_union->renderer, my_union->main_window_texture, NULL, NULL);
 }
 
 //ВОЗВРАЩАЕТ ВЕРТИКАЛЬНУЮ ЛИНИЮ ДЛЯ ОТРИСОВКИ СПРАЙТА В ЗАВИСИМОСТИ ОТ ГОР/ВЕРТ СТОЛКНОВЕНИЯ
@@ -189,9 +174,8 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
     {
         if (start >= my_union->start && start < my_union->end)
         {
-            if (start > my_union->hud_start) {
+            if (start > my_union->hud_start)
 				continue;
-			}
 			choose_surface_wall(my_union, ray, map);
 			get_surface_pixel(my_union, ray.offset, y * wall_scale, &color);
             y++;
@@ -205,13 +189,13 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
             if (start < my_union->hud_start) {
                 choose_surface_floor_ceiling_hud(my_union, 'f');
                 get_surface_pixel(my_union, cur_x, cur_y, &color);
-                if (check_window(x, start, *my_union))
+//                if (check_window(x, start, *my_union))
                     put_pixel(my_union, x, start, &color);
             }
             diff = my_union->win_y - start;
             choose_surface_floor_ceiling_hud(my_union, 'c');
             get_surface_pixel(my_union, cur_x, cur_y, &color);
-            if (check_window(x, diff, *my_union))
+//            if (check_window(x, diff, *my_union))
                 put_pixel(my_union, x, diff, &color);
         }
 	}
@@ -343,8 +327,8 @@ void	vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, do
 		ray->vert_distance = 99999;
 		return;
 	}
-	first_intersect_y = player.player_pos_y + (first_intersect_x - player.player_pos_x) *
-											  tan(alpha);
+	first_intersect_y = player.player_pos_y + (first_intersect_x
+			- player.player_pos_x) * tan(alpha);
 	step_y = -step_x * tan(-alpha);
 	cur_point_x = first_intersect_x;
 	cur_point_y = first_intersect_y;
