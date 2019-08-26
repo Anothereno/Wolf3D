@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 15:20:31 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 17:46:22 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void    initialize_TTF(t_union *my_union)
 //ГОТОВИТ ГЛАВНУЮ СТРУКТУРУ
 void	init_union(t_union *my_union)
 {
+	my_union->load_mark = 0;
 	my_union->win_x = 1280;
 	my_union->win_y = 720;
 	my_union->half_win_y = my_union->win_y >> 1;
@@ -217,7 +218,7 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects) {
 	my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
 	initialize_SDL(my_union);
 	if ((message = load_menu(my_union)) ||
-		(message = load_wall_textures(my_union)) ||
+		(message = load_wall_surfaces(my_union)) ||
 		(message = load_weapons(my_union)) ||
 		(message = load_HUD(my_union)) ||
 		(message = load_weapons_minimize(my_union)))
@@ -225,11 +226,6 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects) {
 		ft_putstr(message);
 		complete_work(my_union, map, objects, player);
 	}
-//	load_menu(my_union);
-//	load_wall_textures(my_union);
-//	load_weapons(my_union);
-//	load_HUD(my_union);
-//	load_weapons_minimize(my_union);
 	init_HUD(my_union);
 	init_weapon(my_union);
 	initialize_TTF(my_union);

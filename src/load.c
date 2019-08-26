@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 15:41:43 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 17:19:25 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char	*load_weapons(t_union *my_union)
 			(message = load_auto(my_union)) ||
 			(message = load_knife(my_union)))
 		return (message);
+	my_union->load_mark++;
 	return (NULL);
 }
 
@@ -109,6 +110,7 @@ char	*load_weapons_minimize(t_union *my_union)
 		if (!my_union->weapons_mini_array[i])
 //			ft_putstr("Weapon minimize surface not loaded\n");
 			return ("Weapon minimize surface not loaded\n");
+	my_union->load_mark++;
 	return (NULL);
 
 }
@@ -120,11 +122,12 @@ char	*load_HUD(t_union *my_union)
 	if (!my_union->surface)
 //		ft_putstr("HUD surface not loaded\n");
 		return ("HUD surface not loaded\n");
+	my_union->load_mark++;
 	return (NULL);
 }
 
 //ЗАГРУЖАЕТ ТЕКСТУРЫ В МАССИВ
-char	*load_wall_textures(t_union *my_union)
+char	*load_wall_surfaces(t_union *my_union)
 {
 	int	i;
 
@@ -143,7 +146,7 @@ char	*load_wall_textures(t_union *my_union)
 		if (!my_union->wall_surfaces_array[i])
 //			ft_putstr("Walls surface not loaded\n");
 			return ("Walls surface not loaded\n");
-
+	my_union->load_mark++;
 	return (NULL);
 }
 
@@ -163,5 +166,6 @@ char	*load_menu(t_union *my_union)
 //			ft_putstr("Menu surface not loaded\n");
 			return ("Menu surface not loaded\n");
 		}
+	my_union->load_mark++;
 	return (NULL);
 }

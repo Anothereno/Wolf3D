@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 13:05:13 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 17:33:33 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 17:47:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	error_quit(char *msg, int i, t_map *map, t_map *objects)
 {
+	ft_putstr(msg);
 	if (!i) {
-		ft_putstr(msg);
 		exit(0);
 	}
 	else if (i == 1)
@@ -33,19 +33,19 @@ void	free_SDL(t_union *my_union)
 	SDL_DestroyTexture(my_union->main_window_texture);
 	i = 10;
 	while (--i > -1)
-		if (my_union->wall_surfaces_array[i])
+		if (my_union->load_mark > 1 && my_union->wall_surfaces_array[i])
 			SDL_FreeSurface(my_union->wall_surfaces_array[i]);
 	free(my_union->wall_surfaces_array);
 	i = 3;
 	while (--i > -1)
 	{
-		if (my_union->weapons_mini_array[i])
+		if (my_union->load_mark > 4 && my_union->weapons_mini_array[i])
 			SDL_FreeSurface(my_union->weapons_mini_array[i]);
 		j = 10;
 		while (--j > -1) {
 			if (i == 0 && j > 4)
 				continue;
-			if (my_union->weapons_surfaces[i][j])
+			if (my_union->load_mark > 2 && my_union->weapons_surfaces[i][j])
 				SDL_FreeSurface(my_union->weapons_surfaces[i][j]);
 		}
 		free(my_union->weapons_surfaces[i]);
@@ -84,7 +84,8 @@ void	complete_work(t_union *my_union, t_map *map, t_map *objects, t_player
 *player)
 {
 	free_SDL(my_union);
-	free_stat_HUD_rects(my_union);
+	if (my_union->load_mark > 3)
+		free_stat_HUD_rects(my_union);
 	free_player(player);
 	free_map_and_objects(map, objects);
 

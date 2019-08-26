@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 16:33:57 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/26 19:39:50 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,46 @@ void	take_size(t_map *map, char *map_coordinates)
 	{
 		if (!ft_isdigit(*str) && *str != '.' && *str != ' ' &&
 				*str != '\n' && !ft_is_uppercase(*str))
-		{
-			ft_putstr("Not a valid file\n");
-			exit(0);
-		}
+			error_quit("Not a valid file", 0, NULL, NULL);
 		if (*str == '\n')
 		{
 			map->size_y++;
-			if (size_x > map->size_x)
+			if (size_x + 2 > map->size_x)
 				map->size_x = size_x + 2;
 			size_x = 0;
 		}
 		if (*str != ' ' && *str != '\n')
 			size_x++;
+		if (*str == '\n' && *(str + 1) == '\0')
+			map->size_y--;
 		str++;
 	}
 	if (*str == '\0')
+	{
+		if (size_x + 2 > map->size_x)
+			map->size_x = size_x + 2;
 		map->size_y++;
+	}
 }
 
 int 	get_size(char *string)
 {
 	char	*str;
 	int		size_x;
+	int		flag;
 
+	flag = 1;
 	size_x = 0;
 	str = string;
-	while (*str)
+	while (str && *str)
 	{
-		if (*str != ' ' && *str != '\n')
+		if (*str == ' ')
+			flag++;
+		if (flag && *str != ' ' && *str != '\n')
+		{
 			size_x++;
+			flag = 0;
+		}
 		str++;
 	}
 	return (size_x);
@@ -146,7 +156,7 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
         tmp = ft_strsplit(res[y - 1], ' ');
         while (++x < map->size_x - 1)
 		{
-        	if (x >= size_string)
+        	if (x > size_string)
         	{
 				set_map_and_objects(1 + rand() % 6, 0,
 									&map->map[y][x], &objects->map[y][x]);
@@ -170,7 +180,7 @@ void	set_array(t_map *map, char *map_coordinates, t_map *objects, t_player *play
 		}
         ft_clear_string_array(tmp, size_string);
 	}
-	ft_clear_string_array(res, map->size_y);
+	ft_clear_string_array(res, map->size_y - 2);
 	ft_strdel(&map_coordinates);
 }
 
@@ -199,7 +209,26 @@ char	*reading(int fd)
 	return (NULL);
 }
 
+int 	find_place_for_player(t_player *player, t_map *map, t_map *objects)
+{
+	int i;
+	int j;
 
+	i = 0;
+	while (++i < map->size_y - 1)
+	{
+		j = 0;
+		while (++j < map->size_x - 1) {
+			if (map->map[i][j] == 0 && objects->map[i][j] == 0)
+			{
+				player->player_pos_x = (j << 6) + 32;
+				player->player_pos_y = (i << 6) + 32;
+				return (1);
+			}
+		}
+	}
+	return (0);
+}
 
 // Открываю карту на чтение
 int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
@@ -220,8 +249,11 @@ int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
 	set_array(map, map_coordinates, objects, player);
 	if (player->player_pos_x == -1 || player->player_pos_y == -1)
 	{
-        error_quit("Not set player position", 1, NULL, NULL);
-        return (0);
+		if (!find_place_for_player(player, map, objects))
+		{
+			error_quit("Not set player position", 1, map, objects);
+			return (0);
+		}
     }
 	return (1);
 }
