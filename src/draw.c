@@ -12,7 +12,6 @@
 
 #include "wolf3d.h"
 
-//ПОЛУЧАЕТ НАПРАВЛЕНИЕ ВЗГЛЯДА
 void	take_vector_of_view(t_player *player)
 {
 	double last_x;
@@ -24,7 +23,6 @@ void	take_vector_of_view(t_player *player)
 			player->direct_y * sin(player->view_direction_rad);
 }
 
-//РАССЧИТЫВАЕТ ВЫСОТУ СТЕНЫ И КОРРЕКТИРУЕТ РЫБИЙ ГЛАЗ
 void	calc_line(t_union *my_union, t_ray ray, double betta)
 {
 	ray.res_distance = ray.res_distance * cos(betta);
@@ -37,7 +35,6 @@ void	calc_line(t_union *my_union, t_ray ray, double betta)
 		my_union->end = my_union->win_y - 1;
 }
 
-//ВЫБИРАЕТ ПРАИВЛЬНЫЙ ЛУЧ ПО КРАТЧАЙШЕЙ ДИСТАНЦИИ
 void	choose_distance(t_ray *ray) {
 	if (ray->hor_distance < ray->vert_distance)
 	{
@@ -55,7 +52,6 @@ void	choose_distance(t_ray *ray) {
 	}
 }
 
-//ЗАКОЛЬЦОВЫВАЕТ УГОЛ В РЭНДЖЕ [0 : 360] ГРАДУСОВ
 double take_range_angle(double angle)
 {
 	if (angle < 0)
@@ -66,7 +62,6 @@ double take_range_angle(double angle)
 
 }
 
-//ВОЗВРАЩАЕТ ВЕРТИКАЛЬНУЮ ЛИНИЮ ДЛЯ ОТРИСОВКИ СПРАЙТА В ЗАВИСИМОСТИ ОТ ГОР/ВЕРТ СТОЛКНОВЕНИЯ
 int	take_textures_offset(t_ray ray)
 {
 	if (!ray.mode)
@@ -81,7 +76,6 @@ void    draw_hud(t_union *my_union, t_player *player, t_map *map)
     show_stats(my_union, map, player);
 }
 
-//ПРОВОДИТ РЭЙКАСТ
 void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
 {
 	int		x;
@@ -105,23 +99,15 @@ void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
         calc_line(my_union, *ray, angle_rad - player->view_direction * RAD);
         ray->offset = take_textures_offset(*ray);
 		draw_line_in_window(my_union, *ray, x, *map, *player, angle_rad);
-
-//		SDL_SetRenderDrawColor(my_union.renderer, 155, 155, 155, 255);
-//		draw_vert_line(my_union, (int)i, (int)my_union.start, (int)my_union.end); //Отрисовка вертикальных линий ДДА
-//		SDL_RenderDrawLine(my_union.renderer, x, my_union.start, x, my_union.end); // Отрисовка линий СДЛ
-//		SDL_SetRenderDrawColor(my_union.renderer, 244, 244, 66, 255);
-//		SDL_RenderDrawLine(my_union.renderer, (int)player.player_pos_x, player.player_pos_y, (int)ray.x >> 2, (int)ray.y >> 2);
 		angle += one_angle;
 	}
 	put_cross(my_union, player);
     SDL_UpdateTexture(my_union->main_window_texture, NULL, my_union->pixel_array, my_union->win_x * sizeof(Uint32));
     SDL_RenderCopy(my_union->renderer, my_union->main_window_texture, NULL, NULL);
-//    weapon_down(my_union, player);
 	draw_weapon(my_union, player, map);
 	draw_hud(my_union, player, map);
 }
 
-//ВОЗВРАЩАЕТ РАЗНИЦУ МЕЖДУ РЕАЛЬНОЙ СТЕНОЙ И ОТРИСОВАННОЙ (ЕСЛИ СТЕНА БОЛЬШЕ, ЧЕМ win_y)
 int 	get_start_draw(t_union my_union)
 {
 	if (my_union.wall_heigth >= my_union.win_y)
@@ -129,24 +115,6 @@ int 	get_start_draw(t_union my_union)
 	return 0;
 }
 
-//ПРОВЕРЯЕТ, ЧТО ПЕРЕДАННЫЕ Х И У НАХОДЯТСЯ В ПРЕДЕЛАХ КАРТЫ
-int 	check_window(double	x, double y, t_union my_union)
-{
-    if (x < 0 || x > my_union.win_x || y < 0 || y > my_union.win_y)
-        return (0);
-    return (1);
-}
-
-//ПРОВЕРЯЕТ КООРДИНАТЫ НА РАСПОДЛОЖЕНИЯ В ПОЛЕ ОРУЖИЯ
-int 	check_weapon_place(t_union *my_union, int x, int y)
-{
-	if (x >= my_union->weapon_plce.x_start && x <= my_union->weapon_plce.x_end &&
-			y >= my_union->weapon_plce.y_start && y <= my_union->weapon_plce.y_end)
-		return (1);
-	return (0);
-}
-
-//ОТРИСОВЫВАЕТ ОКНО
 void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle)
 {
     int			start;
@@ -168,7 +136,6 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
     start = 0;
     y = get_start_draw(*my_union);
     wall_scale = (float)BLOCK_SIZE / my_union->wall_heigth;
-//    hud_scale_width = (float)my_union->hud_surface->w / my_union->win_x;
     dist = my_union->dist / cos(angle - player.view_direction * RAD);
     while (++start < my_union->win_y)
     {
@@ -189,43 +156,16 @@ void	draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_playe
             if (start < my_union->hud_start) {
                 choose_surface_floor_ceiling_hud(my_union, 'f');
                 get_surface_pixel(my_union, cur_x, cur_y, &color);
-//                if (check_window(x, start, *my_union))
                     put_pixel(my_union, x, start, &color);
             }
             diff = my_union->win_y - start;
             choose_surface_floor_ceiling_hud(my_union, 'c');
             get_surface_pixel(my_union, cur_x, cur_y, &color);
-//            if (check_window(x, diff, *my_union))
-                put_pixel(my_union, x, diff, &color);
+            put_pixel(my_union, x, diff, &color);
         }
 	}
 }
 
-//ОТРИСОВЫВАЕТ МИНИКАРТУ
-void	draw_scene(t_union my_union, t_map map)
-{
-	int			x;
-	int			y;
-	SDL_Rect	wall;
-
-	SDL_SetRenderDrawColor(my_union.renderer, 255, 50, 255, 255);
-	y = -1;
-	while (++y < map.size_y)
-	{
-		x = -1;
-		while (++x < map.size_x)
-		{
-			wall.x = x * (BLOCK_SIZE >> 2);
-			wall.y = y * (BLOCK_SIZE >> 2);
-			wall.h = (BLOCK_SIZE >> 2);
-			wall.w = (BLOCK_SIZE >> 2);
-			if (map.map[y][x] != 0)
-				SDL_RenderFillRect(my_union.renderer, &wall);
-		}
-	}
-}
-
-//ПРОВЕРЯЕТ СТОЛКНОВЕНИЕ ПО КООРДИНАТАМ
 int 	check_wall(double cur_x, double cur_y, t_map map)
 {
 	if (cur_x >= map.size_x << 6 || cur_x < 0 ||
@@ -235,7 +175,6 @@ int 	check_wall(double cur_x, double cur_y, t_map map)
 	return (0);
 }
 
-//ПРОВЕРЯЕТ, ЧТО ПЕРЕДАННЫЕ Х И У НАХОДЯТСЯ В ПРЕДЕЛАХ КАРТЫ
 int 	check_bound(double	x, double y, t_map map)
 {
 	if (x < 0 || x > map.size_x << 6 || y < 0 || y > map.size_y << 6)
@@ -243,21 +182,6 @@ int 	check_bound(double	x, double y, t_map map)
 	return (1);
 }
 
-//ДДА ДЛЯ ВЕРТИКАЛЬНОЙ ЧЕРТЫ
-int		draw_vert_line(t_union my_union, int x, int y1, int y2)
-{
-	int	sign_y;
-
-	sign_y = y1 < y2 ? 1 : -1;
-	SDL_RenderDrawPoint(my_union.renderer, x, y2);
-	while (y1 != y2)
-	{
-		SDL_RenderDrawPoint(my_union.renderer, x, y1);
-		y1 += sign_y;
-	}
-}
-
-//РАССЧИТЫВАЕТ ГОРИЗОНТАЛЬНОЕ ПЕРЕСЕЧЕНИЕ СО СТЕНОЙ
 void	hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha)
 {
 	double	first_intersect_y;
@@ -343,7 +267,6 @@ void	vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, do
 	ray->vert_distance = fabs((player.player_pos_x - cur_point_x) / cos_alpha);
 }
 
-//ВЫВОДИТ ПЕРЕКРЕСТЬЕ ПРИЦЕЛА))
 void	put_cross(t_union *my_union, t_player *player)
 {
 	int         i;

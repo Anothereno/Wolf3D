@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 16:21:30 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/28 18:51:32 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,12 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 		if (my_union.event.type == SDL_QUIT)
 			break;
 		player.move_indicate = 0;
-		check_event_game(&my_union, &map, &player, &objects, my_union.key_game);
+		check_event_game(&my_union, &map, &player, &objects);
 		if (my_union.go_to_menu)
 			break;
 		take_vector_of_view(&player);
 		raycast(&my_union, &map, &player, &ray);
-//			draw_scene(my_union, map);
 		calc_time_FPS(&my_union);
-		change_speed(&my_union, &player);
 		SDL_RenderPresent(my_union.renderer);
 		zeroing_timers(&my_union, &player);
 	}
@@ -103,7 +101,7 @@ int		main(int argc, char **argv)
 			SDL_PollEvent(&my_union.event);
 			if (my_union.event.type == SDL_QUIT)
 				break;
-			check_event_menu(&my_union, &map, &player, &objects, my_union.key_menu);
+			check_event_menu(&my_union, &map, &player, &objects);
 			if (my_union.menu_mode)
 				show_menu(my_union);
 			else
@@ -114,7 +112,7 @@ int		main(int argc, char **argv)
 				continue;
 			}
 			calc_time_FPS(&my_union);
-			print_FPS(&my_union);
+			print_fps(&my_union);
 			SDL_RenderPresent(my_union.renderer);
 			zeroing_timers(&my_union, &player);
 		}

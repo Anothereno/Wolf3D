@@ -64,6 +64,28 @@ void	reload(t_union *my_union, t_player *player)
 		player->ammo[player->weapon] = 0;
 }
 
+void change_weapon(t_player *player, const Uint8 *key, t_union *my_union)
+{
+	if (key[SDL_SCANCODE_1] && player->weapon != 0)
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 0;
+	}
+	else if (key[SDL_SCANCODE_2] && player->weapon != 1)
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 1;
+	}
+	else if (key[SDL_SCANCODE_3] && player->weapon != 2)
+	{
+		weapon_down(my_union, player);
+		my_union->change_weapon_mode = 1;
+		player->new_weapon = 2;
+	}
+}
+
 void	weapon_down(t_union *my_union, t_player *player)
 {
 	if (!my_union->weapon_down_mode)

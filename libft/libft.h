@@ -24,7 +24,7 @@ typedef struct	s_list
 }				t_list;
 
 void			ft_clear_string_array(char **array, int size);
-int     		ft_is_uppercase(char c);
+int				ft_is_uppercase(char c);
 double			ft_powd(double x, int y);
 int				ft_isdigit(int c);
 int				ft_strcmp(const char *s1, const char *s2);

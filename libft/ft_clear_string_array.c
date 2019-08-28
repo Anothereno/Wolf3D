@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void ft_clear_string_array(char **array, int size)
+void	ft_clear_string_array(char **array, int size)
 {
 	while (--size > -1)
 		ft_strdel(&array[size]);

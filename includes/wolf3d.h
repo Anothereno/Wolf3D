@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 17:19:25 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:32:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct	s_union
 	int             half_win_x;
 	int             mouse_state;
 	int 			go_to_menu;
+	int 			temp_int;
     double          sens;
     int				FPS;
     int				load_mark;
@@ -147,7 +148,6 @@ typedef struct	s_player
 	int 	rotate_angle;
 	int     move_indicate;
 
-	//STATS
 	int     score;
 	int     level;
 	int		lives;
@@ -160,38 +160,55 @@ typedef struct	s_player
 	int 	weapon_frame;
 	int 	shoot_mode;
 
-	double 	distanse;
 	double	fov;
 	double  half_fov;
 	int		speed;
 	int     strafe_speed;
-	int		radius;
     double	view_direction;
     double 	view_direction_rad;
-	double 	speed_move;
-	double 	speed_rotate;
-
-
-	double	dirX;
-	double	dirY;
-	double	planeX;
-	double	planeY;
-	double	time;
-	double	oldTime;
 }				t_player;
 
+void			show_weapon_image(t_union *my_union, t_player *player);
+void			print_ammo_in_stock(t_union *my_union, t_player *player);
+void    		print_ammo_in_clip(t_union *my_union, t_player *player);
+void			put_surface_to_render(t_union *my_union, char *info, int i);
+int				check_loaded(t_union *my_union, int index, int size,
+			int dimension);
+void			check_weapons_and_quit(t_union *my_union, t_map *map, t_player *player,
+			t_map *objects);
+void			mouse_relative_handling(t_union *my_union, t_player *player);
+void			check_rotates_keys(t_union *my_union, t_player *player);
+void			check_movement_shooting_keys(t_union *my_union,
+			t_map *map, t_player *player);
+void			strafe(t_player *player, t_map *map, int mode);
+void 			change_weapon(t_player *player, const Uint8 *key, t_union *my_union);
+void			choise_menu(t_union *my_union);
+void			change_menu_choise(t_union *my_union, char mode);
+void			init_weapon_arrays(t_union *my_union);
+void			init_weapon(t_union *my_union);
+void			init_stats_rects(t_union *my_union);
+void			init_union(t_union *my_union);
+void			init_hud(t_union *my_union);
+void			init_player(t_player *player);
+void			msg(char *message);
+void			free_font(t_union *my_union);
+void			free_player(t_player *player);
+void			free_stat_hud_rects(t_union *my_union);
+void			free_map_and_objects(t_map *map, t_map *objects);
+void			free_sdl(t_union *my_union);
 void			free_map_and_objects(t_map *map, t_map *objects);
 void			error_quit(char *msg, int i, t_map *map, t_map *objects);
 void			weapon_down(t_union *my_union, t_player *player);
 void			reload(t_union *my_union, t_player *player);
 int 			check_invisible_pixels(SDL_Color *color);
 void			draw_weapon(t_union *my_union, t_player *player, t_map *map);
-void			print_FPS(t_union *my_union);
-void			check_event_menu(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
+void			print_fps(t_union *my_union);
+void check_event_menu(t_union *my_union, t_map *map, t_player *player,
+					  t_map *objects);
 void 			start_game(t_union my_union, t_map map, t_player player, t_map objects);
 void 			show_menu(t_union my_union);
 char			*load_menu(t_union *my_union);
-char			*load_HUD(t_union *my_union);
+char			*load_hud(t_union *my_union);
 char			*load_weapons(t_union *my_union);
 char			*load_weapons_minimize(t_union *my_union);
 void			draw_ceiling(t_union my_union, t_ray ray, int x, t_map map, double angle, t_player player);
@@ -218,13 +235,13 @@ int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 //int				draw_line_in_window(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
-void			view_follow(t_player *player, t_map *map, int mode, t_union *my_union);
-void			check_event_game(t_union *my_union, t_map *map, t_player *player, t_map *objects, const Uint8	*key);
+void			move_forvard(t_player *player, t_map *map, int mode, t_union *my_union);
+void check_event_game(t_union *my_union, t_map *map, t_player *player,
+					  t_map *objects);
 void			draw_player(t_union my_union, t_player player, t_map map);
 void			draw_scene(t_union my_union, t_map map);
 void			clear_window(t_union my_union);
-void			initialize_SDL(t_union *my_union);
-void			msg(char *message, t_map *my_union);
+void			initialize_sdl(t_union *my_union);
 int				val_set(char *argv, t_map *my_union, t_map *objects, t_player *player);
 void			usage(void);
 void			init(t_union *my_union, t_map *map, t_player *player, t_map *objects);

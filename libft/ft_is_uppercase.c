@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-int     ft_is_uppercase(char c)
+int		ft_is_uppercase(char c)
 {
-	if (ft_isalpha(c) && c >= 'A' && c <='Z')
+	if (ft_isalpha(c) && c >= 'A' && c <= 'Z')
 		return (1);
 	return (0);
 }

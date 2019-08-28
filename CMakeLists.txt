@@ -10,7 +10,6 @@ include_directories(resources)
 
 add_executable(wolf3d
         includes/wolf3d.h
-        includes/mlx.h
         libft/author
         libft/ft_atoi.c
         libft/ft_bzero.c
@@ -79,9 +78,9 @@ add_executable(wolf3d
         libft/powd.c
         src/colorize.c
         src/wolf3d.c
-        src/init.c
+        src/init_sdl_ttf.c
         author
-        src/validation.c src/errors.c src/draw.c src/keys.c src/load.c src/doors.c src/stats.c src/menu.c src/weapons.c libft/ft_is_uppercase.c src/exit.c libft/ft_clear_string_array.c)
+        src/validation.c src/errors.c src/draw.c src/keys.c src/load_weapon.c src/doors.c src/stats_showing.c src/menu.c src/weapons.c libft/ft_is_uppercase.c src/exit.c libft/ft_clear_string_array.c src/free.c src/init_hud_and_player.c src/init_weapons.c src/move.c src/check_events.c src/load_hud_menu_walls.c src/stats_weapon.c)
 
 target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")
