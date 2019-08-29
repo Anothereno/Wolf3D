@@ -21,7 +21,7 @@ void	show_menu(t_union my_union)
 	SDL_DestroyTexture(my_union.main_window_texture);
 }
 
-void	change_menu_choise(t_union *my_union, char mode)
+void	change_menu_choice(t_union *my_union, char mode)
 {
 	if (my_union->menu_mode && !my_union->menu_tick)
 	{
@@ -43,7 +43,7 @@ void	change_menu_choise(t_union *my_union, char mode)
 	}
 }
 
-void	choise_menu(t_union *my_union)
+void	choice_menu(t_union *my_union)
 {
 	if (my_union->menu_frame == 0)
 		my_union->menu_mode = 0;

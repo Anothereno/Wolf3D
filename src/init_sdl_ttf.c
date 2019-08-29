@@ -17,14 +17,14 @@ void	initialize_sdl(t_union *my_union)
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		msg("Erron in SDL_Init!\n");
 	my_union->win = SDL_CreateWindow("Wolf3D", 200, 200,
-			my_union->win_x, my_union->win_y, 0);
+									 my_union->cur_win_x, my_union->cur_win_y, 0);
 	my_union->renderer = SDL_CreateRenderer(my_union->win, 0,
 			SDL_RENDERER_SOFTWARE);
 	my_union->pixel_array = (Uint32 *)malloc(
-			sizeof(Uint32) * my_union->win_x * my_union->win_y);
+			sizeof(Uint32) * my_union->cur_win_x * my_union->cur_win_y);
 	my_union->main_window_texture = SDL_CreateTexture(my_union->renderer,
-			SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
-			my_union->win_x, my_union->win_y);
+													  SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC,
+													  my_union->cur_win_x, my_union->cur_win_y);
 	my_union->wall_surfaces_array = (SDL_Surface **)malloc(
 			sizeof(SDL_Surface *) * 10);
 	init_weapon_arrays(my_union);
@@ -56,7 +56,7 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 
 	init_union(my_union);
 	init_player(player);
-	my_union->dist = my_union->win_x / (tan(player->half_fov) * 2) * -360;
+	my_union->dist = my_union->cur_win_x / (tan(player->half_fov) * 2) * -360;
 	initialize_sdl(my_union);
 	if ((message = load_menu(my_union)) ||
 		(message = load_wall_surfaces(my_union)) ||

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 17:41:01 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 17:41:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 18:21:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,29 @@ void	init_player(t_player *player)
 	init_player_ammunition(player);
 }
 
+void	change_hud_rect(t_union *my_union)
+{
+	if (!my_union->fullscreen_mode)
+	{
+		my_union->hud_rect.w = my_union->cur_win_x;
+		my_union->hud_rect.h = my_union->cur_win_y / 6;
+		my_union->hud_rect.x = 0;
+		my_union->hud_rect.y = my_union->cur_win_y - my_union->hud_rect.h;
+		my_union->hud_start = my_union->hud_rect.y;
+	}
+	else
+	{
+		my_union->hud_rect.w = 2560;
+		my_union->hud_rect.h = 1440 / 6;
+		my_union->hud_rect.x = 0;
+		my_union->hud_rect.y = 1440 - my_union->hud_rect.h;
+		my_union->hud_start = my_union->hud_rect.y;
+	}
+}
+
 void	init_hud(t_union *my_union)
 {
-	my_union->hud_rect.w = my_union->win_x;
-	my_union->hud_rect.h = my_union->win_y / 6;
-	my_union->hud_rect.x = 0;
-	my_union->hud_rect.y = my_union->win_y - my_union->hud_rect.h;
-	my_union->hud_start = my_union->hud_rect.y;
+	change_hud_rect(my_union);
 	my_union->hud_texture = SDL_CreateTextureFromSurface(my_union->renderer,
 			my_union->hud_surface);
 }

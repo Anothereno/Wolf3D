@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 18:51:32 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 17:18:36 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	calc_time_FPS(t_union *my_union)
 	my_union->end_tick = my_union->start_tick;
 	my_union->start_tick = SDL_GetTicks();
 	my_union->time = (my_union->start_tick - my_union->end_tick) * 0.001;
-	my_union->FPS = 1.0 / my_union->time;
+	my_union->FPS = 1.0f / my_union->time;
 }
 
 //ЗАПУСКАЕТ ГЕЙМ ЛУП
@@ -71,14 +71,15 @@ void 	start_game(t_union my_union, t_map map, t_player player, t_map objects) {
 		if (my_union.event.type == SDL_QUIT)
 			break;
 		player.move_indicate = 0;
-		check_event_game(&my_union, &map, &player, &objects);
-		if (my_union.go_to_menu)
+		if (my_union.go_to_menu) {
 			break;
-		take_vector_of_view(&player);
+		}
+//		take_vector_of_view(&player);
 		raycast(&my_union, &map, &player, &ray);
 		calc_time_FPS(&my_union);
 		SDL_RenderPresent(my_union.renderer);
 		zeroing_timers(&my_union, &player);
+		check_event_game(&my_union, &map, &player, &objects);
 	}
 
 }
@@ -89,7 +90,7 @@ int		main(int argc, char **argv)
 	t_map		map;
 	t_map       objects;
 	t_player	player;
-//	getchar(); ДЛЯ ДЕБАГА
+//	getchar(); //ДЛЯ ДЕБАГА
 	my_union.start_tick = 0;
 	if (argc == 2)
 	{
@@ -97,6 +98,7 @@ int		main(int argc, char **argv)
 			exit(0);
 		init(&my_union, &map, &player, &objects);
 		my_union.key_menu = SDL_GetKeyboardState(NULL);
+		SDL_SetWindowFullscreen(my_union.win, -1);
 		while (1) {
 			SDL_PollEvent(&my_union.event);
 			if (my_union.event.type == SDL_QUIT)

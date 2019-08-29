@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 18:27:50 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 18:54:59 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 17:12:21 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	check_weapons_and_quit(t_union *my_union, t_map *map, t_player *player,
 
 void	check_rotates_keys(t_union *my_union, t_player *player)
 {
-	int temp;
+	float temp;
 
 	if (my_union->key_game[SDL_SCANCODE_Q])
 	{
@@ -66,16 +66,21 @@ void	check_rotates_keys(t_union *my_union, t_player *player)
 void	check_movement_shooting_keys(t_union *my_union, t_map *map,
 		t_player *player)
 {
+	if (my_union->mouse_handling)
+		mouse_relative_handling(my_union, player);
 	if (my_union->key_game[SDL_SCANCODE_W])
-		move_forvard(player, map, 1, my_union);
+		move_forward(player, map, 1, my_union);
 	if (my_union->key_game[SDL_SCANCODE_S])
-		move_forvard(player, map, -1, my_union);
+		move_forward(player, map, -1, my_union);
 	if (my_union->key_game[SDL_SCANCODE_A])
 		strafe(player, map, -1);
 	if (my_union->key_game[SDL_SCANCODE_D])
 		strafe(player, map, 1);
 	if (!my_union->weapon_down_mode && !my_union->shoot_timer &&
-			my_union->key_game[SDL_SCANCODE_KP_ENTER]
+			(my_union->key_game[SDL_SCANCODE_KP_ENTER] ||
+			 (my_union->mouse_handling &&
+					 (SDL_GetMouseState(NULL, NULL) &
+			 			SDL_BUTTON(SDL_BUTTON_LEFT))))
 		&& !player->shoot_mode && player->clip[player->weapon])
 	{
 		if (player->weapon)
@@ -83,6 +88,4 @@ void	check_movement_shooting_keys(t_union *my_union, t_map *map,
 		my_union->shoot_timer = SDL_GetTicks();
 		player->shoot_mode = 1;
 	}
-	if (my_union->event.type == SDL_MOUSEMOTION)
-		mouse_relative_handling(my_union, player);
 }

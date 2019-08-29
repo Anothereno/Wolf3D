@@ -6,15 +6,12 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/26 19:39:50 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 14:59:09 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-
-
-// Получаю размер поля
 void	take_size(t_map *map, char *map_coordinates)
 {
 	char	*str;

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 17:43:43 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 17:46:15 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 18:15:34 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_weapon_arrays(t_union *my_union)
 
 void	init_weapon(t_union *my_union)
 {
-	my_union->weapon_place.w = my_union->win_x * 0.4;
+	my_union->weapon_place.w = my_union->cur_win_x * 0.4;
 	my_union->weapon_place.h = my_union->weapon_place.w;
 	my_union->weapon_place.x = my_union->half_win_x -
 			(my_union->weapon_place.w >> 1);
@@ -93,11 +93,15 @@ void	init_stats_rects(t_union *my_union)
 
 void	init_union(t_union *my_union)
 {
+	ft_bzero(my_union, sizeof(my_union));
+	my_union->mouse_handling = 1;
 	my_union->load_mark = 0;
-	my_union->win_x = 1280;
-	my_union->win_y = 720;
-	my_union->half_win_y = my_union->win_y >> 1;
-	my_union->half_win_x = my_union->win_x >> 1;
+	my_union->fullscreen_mode = 1;
+	my_union->cur_win_x = 1280;
+	my_union->cur_win_y = 720;
+	my_union->wall_height_cof = BLOCK_SIZE << (int)(my_union->cur_win_x / 640);
+	my_union->half_win_y = my_union->cur_win_y >> 1;
+	my_union->half_win_x = my_union->cur_win_x >> 1;
 	my_union->door_timer_end = 0;
 	my_union->escape_timer = 0;
 	my_union->sens = 2.4;

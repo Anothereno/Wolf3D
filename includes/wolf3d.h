@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 19:32:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/29 18:11:04 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct	s_weapon
 typedef struct	s_union
 {
 	char			*image_data;
-	int				win_x;
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_Texture		*main_window_texture;
@@ -67,19 +66,26 @@ typedef struct	s_union
 	SDL_Surface		**menu_array;
 	SDL_Surface		***weapons_surfaces;
 	Uint32 			*pixel_array;
-	double 			time;
+	float 			time;
 	int				menu_mode;
 	int				change_weapon_mode;
 	int 			menu_frame;
-	int				win_y;
+	int				cur_win_x;
+	int				cur_win_y;
+	int				full_win_x;
+	int				full_win_y;
+	int				window_win_x;
+	int				window_win_y;
+	int 			mouse_handling;
+	int 			fullscreen_mode;
 	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
 	int             mouse_state;
 	int 			go_to_menu;
 	int 			temp_int;
-    double          sens;
-    int				FPS;
+	float          	sens;
+    float			FPS;
     int				load_mark;
     int             mouse_x;
     int             mouse_y;
@@ -97,6 +103,7 @@ typedef struct	s_union
 	Uint64 			reload_timer;
 	Uint64			weapon_down_timer;
 	int 			wall_heigth;
+	int				wall_height_cof;
 	double          dist;
 	int 			start;
 	int 			end;
@@ -139,13 +146,13 @@ typedef struct	s_ray
 
 typedef struct	s_player
 {
-	double	player_pos_x;
-	double	player_pos_y;
+	float	player_pos_x;
+	float	player_pos_y;
 	int		player_heigth;
 	int		player_width;
-	double	direct_x;
-	double	direct_y;
-	int 	rotate_angle;
+	float	direct_x;
+	float	direct_y;
+	float 	rotate_angle;
 	int     move_indicate;
 
 	int     score;
@@ -160,14 +167,15 @@ typedef struct	s_player
 	int 	weapon_frame;
 	int 	shoot_mode;
 
-	double	fov;
-	double  half_fov;
+	float	fov;
+	float  half_fov;
 	int		speed;
 	int     strafe_speed;
-    double	view_direction;
-    double 	view_direction_rad;
+    float	view_direction;
+    float 	view_direction_rad;
 }				t_player;
 
+void			change_hud_rect(t_union *my_union);
 void			show_weapon_image(t_union *my_union, t_player *player);
 void			print_ammo_in_stock(t_union *my_union, t_player *player);
 void    		print_ammo_in_clip(t_union *my_union, t_player *player);
@@ -182,8 +190,8 @@ void			check_movement_shooting_keys(t_union *my_union,
 			t_map *map, t_player *player);
 void			strafe(t_player *player, t_map *map, int mode);
 void 			change_weapon(t_player *player, const Uint8 *key, t_union *my_union);
-void			choise_menu(t_union *my_union);
-void			change_menu_choise(t_union *my_union, char mode);
+void			choice_menu(t_union *my_union);
+void			change_menu_choice(t_union *my_union, char mode);
 void			init_weapon_arrays(t_union *my_union);
 void			init_weapon(t_union *my_union);
 void			init_stats_rects(t_union *my_union);
@@ -220,22 +228,22 @@ void			put_black_pixel(t_union *my_union, int x, int y);
 void			init_texture(t_union *my_union);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void            get_surface_pixel(t_union *my_union, int x, int y, SDL_Color *color);
-void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, double angle);
+void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map, t_player player, float angle);
 //void			draw_line_in_window(t_union *my_union, t_ray ray, int x, t_map map);
 void			draw_ceiling_and_floor(t_union my_union);
 char			*load_wall_surfaces(t_union *my_union);
 void			change_walls_color(t_union my_union, t_ray ray, t_player player);
 int 			check_bound(double	x, double y, t_map map);
 void			take_vector_of_view(t_player *player);
-void			vert_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
+void vert_distance(t_player player, t_map map, t_ray *ray, float alpha);
 void			raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray);
-void			hor_distance(t_union *my_union, t_player player, t_map map, t_ray *ray, double alpha);
+void hor_distance(t_player player, t_map map, t_ray *ray, float alpha);
 void			trace_ray(t_union *my_union, t_map map, double x1, double y1, double x2, double y2, double alpha);
 int				draw_vert_line(t_union my_union, int x, int y1, int y2);
 //int				draw_line_in_window(t_union my_union, double x1, double y1, double y2);
 void			draw_rays(t_union my_union, t_player player, t_map map);
 void			change_speed(t_union *my_union, t_player *player);
-void			move_forvard(t_player *player, t_map *map, int mode, t_union *my_union);
+void			move_forward(t_player *player, t_map *map, int mode, t_union *my_union);
 void check_event_game(t_union *my_union, t_map *map, t_player *player,
 					  t_map *objects);
 void			draw_player(t_union my_union, t_player player, t_map map);
@@ -248,7 +256,7 @@ void			init(t_union *my_union, t_map *map, t_player *player, t_map *objects);
 void	        put_cross(t_union *my_union, t_player *player);
 void            check_door(t_map *map, t_map *objects, t_player *player, t_union *my_union);
 int 	        check_wall(double cur_x, double cur_y, t_map map);
-double          take_range_angle(double angle);
+float take_range_angle(float angle);
 void	        choose_distance(t_ray *ray);
 void            show_stats(t_union *my_union, t_map *map, t_player *player);
 void			complete_work(t_union *my_union, t_map *map, t_map *objects,

@@ -26,7 +26,7 @@ void	put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 {
 	int shift;
 
-	shift = y * my_union->win_x + x;
+	shift = y * my_union->cur_win_x + x;
 	my_union->pixel_array[shift] = (Uint32)((color->r << 16) +
 		(color->g << 8) + color->b);
 }
