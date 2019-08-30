@@ -25,7 +25,7 @@ void	free_menu(t_union *my_union)
 {
 	int i;
 
-	i = 4;
+	i = 8;
 	while (--i > -1)
 		SDL_FreeSurface(my_union->menu_array[i]);
 	free(my_union->menu_array);

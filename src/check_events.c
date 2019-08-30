@@ -6,11 +6,25 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 18:27:50 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/29 17:12:21 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/30 15:49:27 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void	mouse_relative_handling(t_union *my_union, t_player *player)
+{
+	int x;
+	int y;
+
+	SDL_GetRelativeMouseState(&x, &y);
+	if (x)
+	{
+		player->view_direction += (x * my_union->sens * my_union->time);
+		player->view_direction_rad = player->view_direction * RAD;
+		my_union->mouse_x = x;
+	}
+}
 
 void	check_weapons_and_quit(t_union *my_union, t_map *map, t_player *player,
 							t_map *objects)
@@ -39,7 +53,7 @@ void	check_rotates_keys(t_union *my_union, t_player *player)
 {
 	float temp;
 
-	if (my_union->key_game[SDL_SCANCODE_Q])
+	if (!my_union->mouse_handling && my_union->key_game[SDL_SCANCODE_Q])
 	{
 		if (player->view_direction - player->rotate_angle >= 0)
 			player->view_direction -= player->rotate_angle;
@@ -50,7 +64,7 @@ void	check_rotates_keys(t_union *my_union, t_player *player)
 		}
 		player->view_direction_rad = player->view_direction * RAD;
 	}
-	if (my_union->key_game[SDL_SCANCODE_E])
+	if (!my_union->mouse_handling && my_union->key_game[SDL_SCANCODE_E])
 	{
 		if (player->view_direction + player->rotate_angle < 360)
 			player->view_direction += player->rotate_angle;
@@ -68,20 +82,23 @@ void	check_movement_shooting_keys(t_union *my_union, t_map *map,
 {
 	if (my_union->mouse_handling)
 		mouse_relative_handling(my_union, player);
-	if (my_union->key_game[SDL_SCANCODE_W])
+	if (my_union->key_game[SDL_SCANCODE_UP] ||
+	my_union->key_game[SDL_SCANCODE_W])
 		move_forward(player, map, 1, my_union);
-	if (my_union->key_game[SDL_SCANCODE_S])
+	if (my_union->key_game[SDL_SCANCODE_DOWN] ||
+		my_union->key_game[SDL_SCANCODE_S])
 		move_forward(player, map, -1, my_union);
-	if (my_union->key_game[SDL_SCANCODE_A])
+	if (my_union->key_game[SDL_SCANCODE_LEFT] ||
+		my_union->key_game[SDL_SCANCODE_A])
 		strafe(player, map, -1);
-	if (my_union->key_game[SDL_SCANCODE_D])
+	if (my_union->key_game[SDL_SCANCODE_RIGHT] ||
+		my_union->key_game[SDL_SCANCODE_D])
 		strafe(player, map, 1);
 	if (!my_union->weapon_down_mode && !my_union->shoot_timer &&
 			(my_union->key_game[SDL_SCANCODE_KP_ENTER] ||
-			 (my_union->mouse_handling &&
-					 (SDL_GetMouseState(NULL, NULL) &
-			 			SDL_BUTTON(SDL_BUTTON_LEFT))))
-		&& !player->shoot_mode && player->clip[player->weapon])
+			(my_union->mouse_handling && (SDL_GetMouseState(NULL, NULL) &
+			SDL_BUTTON(SDL_BUTTON_LEFT))))
+			&& !player->shoot_mode && player->clip[player->weapon])
 	{
 		if (player->weapon)
 			player->clip[player->weapon]--;

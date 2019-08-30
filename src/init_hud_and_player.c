@@ -77,4 +77,5 @@ void	init_hud(t_union *my_union)
 	change_hud_rect(my_union);
 	my_union->hud_texture = SDL_CreateTextureFromSurface(my_union->renderer,
 			my_union->hud_surface);
+	init_stats_rects(my_union);
 }

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 19:19:00 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 19:21:11 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/30 13:40:29 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,35 @@ char			*load_hud(t_union *my_union)
 	return (NULL);
 }
 
+char			*load_submenu(t_union *my_union)
+{
+	my_union->menu_array[6] = SDL_LoadBMP(
+			"resources/pictures/menu/menu_fullscreen_on.bmp");
+	my_union->menu_array[7] = SDL_LoadBMP(
+			"resources/pictures/menu/menu_fullscreen_off.bmp");
+	my_union->menu_array[4] = SDL_LoadBMP(
+			"resources/pictures/menu/menu_mouse_on.bmp");
+	my_union->menu_array[5] = SDL_LoadBMP(
+			"resources/pictures/menu/menu_mouse_off.bmp");
+}
+
 char			*load_menu(t_union *my_union)
 {
 	int i;
 
 	i = -1;
 	my_union->menu_array =
-			(SDL_Surface**)malloc(sizeof(SDL_Surface*) * 4);
+			(SDL_Surface**)malloc(sizeof(SDL_Surface*) * 8);
 	my_union->menu_array[0] = SDL_LoadBMP(
 			"resources/pictures/menu/menu_new_game.bmp");
 	my_union->menu_array[1] = SDL_LoadBMP(
-			"resources/pictures/menu/menu_sound.bmp");
-	my_union->menu_array[2] = SDL_LoadBMP(
 			"resources/pictures/menu/menu_control.bmp");
+	my_union->menu_array[2] = SDL_LoadBMP(
+			"resources/pictures/menu/menu_graphics.bmp");
 	my_union->menu_array[3] = SDL_LoadBMP(
 			"resources/pictures/menu/menu_quit.bmp");
-	while (++i < 4)
+	load_submenu(my_union);
+	while (++i < 8)
 		if (!my_union->menu_array[i])
 			return ("Menu surface not loaded\n");
 	my_union->load_mark++;

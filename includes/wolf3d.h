@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/29 18:11:04 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/30 15:07:29 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct	s_union
 	int				window_win_y;
 	int 			mouse_handling;
 	int 			fullscreen_mode;
+	int 			submenu_mode;
 	int             hud_start;
 	int             half_win_y;
 	int             half_win_x;
@@ -102,6 +103,7 @@ typedef struct	s_union
 	Uint64 			shoot_timer;
 	Uint64 			reload_timer;
 	Uint64			weapon_down_timer;
+	Uint64 			return_timer;
 	int 			wall_heigth;
 	int				wall_height_cof;
 	double          dist;
@@ -175,6 +177,9 @@ typedef struct	s_player
     float 	view_direction_rad;
 }				t_player;
 
+void			change_resolution(t_union *my_union);
+void			change_weapon_rect(t_union *my_union);
+void			change_stat_rects(t_union *my_union);
 void			change_hud_rect(t_union *my_union);
 void			show_weapon_image(t_union *my_union, t_player *player);
 void			print_ammo_in_stock(t_union *my_union, t_player *player);
@@ -193,7 +198,7 @@ void 			change_weapon(t_player *player, const Uint8 *key, t_union *my_union);
 void			choice_menu(t_union *my_union);
 void			change_menu_choice(t_union *my_union, char mode);
 void			init_weapon_arrays(t_union *my_union);
-void			init_weapon(t_union *my_union);
+void			weapon_to_windowed(t_union *my_union);
 void			init_stats_rects(t_union *my_union);
 void			init_union(t_union *my_union);
 void			init_hud(t_union *my_union);

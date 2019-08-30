@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:22:21 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/29 17:18:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/08/30 13:06:52 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void    zeroing_timers(t_union *my_union, t_player *player)
 		my_union->reload_timer = 0;
 	if (my_union->start_tick - my_union->weapon_down_timer > 600)
 		my_union->weapon_down_timer = 0;
+	if (my_union->start_tick - my_union->return_timer > 300)
+		my_union->return_timer = 0;
 }
 
 //РАСЧИТВАЕТ ФПС
@@ -98,7 +100,8 @@ int		main(int argc, char **argv)
 			exit(0);
 		init(&my_union, &map, &player, &objects);
 		my_union.key_menu = SDL_GetKeyboardState(NULL);
-		SDL_SetWindowFullscreen(my_union.win, -1);
+		if (my_union.fullscreen_mode)
+			SDL_SetWindowFullscreen(my_union.win, -1);
 		while (1) {
 			SDL_PollEvent(&my_union.event);
 			if (my_union.event.type == SDL_QUIT)
