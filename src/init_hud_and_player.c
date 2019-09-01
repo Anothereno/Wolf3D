@@ -6,11 +6,24 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 17:41:01 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/29 18:21:13 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/01 18:36:45 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+int		check_loaded(t_union *my_union, int index,
+								int size, int dimension)
+{
+	int i;
+
+	i = -1;
+	while (++i < size)
+		if ((dimension == 1 && !my_union->wall_surfaces_array[i]) ||
+			(dimension == 2 && !my_union->weapons_surfaces[index][i]))
+			return (0);
+	return (1);
+}
 
 void	init_player_ammunition(t_player *player)
 {
@@ -30,10 +43,6 @@ void	init_player_ammunition(t_player *player)
 
 void	init_player(t_player *player)
 {
-	player->player_heigth = 1;
-	player->direct_x = 1;
-	player->direct_y = 0;
-	player->player_width = 1;
 	player->view_direction = 0;
 	player->view_direction_rad = player->view_direction * RAD;
 	player->speed = BLOCK_SIZE >> 3;

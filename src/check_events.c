@@ -84,10 +84,10 @@ void	check_movement_shooting_keys(t_union *my_union, t_map *map,
 		mouse_relative_handling(my_union, player);
 	if (my_union->key_game[SDL_SCANCODE_UP] ||
 	my_union->key_game[SDL_SCANCODE_W])
-		move_forward(player, map, 1, my_union);
+		move_forward(player, map, 1);
 	if (my_union->key_game[SDL_SCANCODE_DOWN] ||
 		my_union->key_game[SDL_SCANCODE_S])
-		move_forward(player, map, -1, my_union);
+		move_forward(player, map, -1);
 	if (my_union->key_game[SDL_SCANCODE_LEFT] ||
 		my_union->key_game[SDL_SCANCODE_A])
 		strafe(player, map, -1);

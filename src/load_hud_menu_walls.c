@@ -6,13 +6,13 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/28 19:19:00 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/30 13:40:29 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/01 18:37:53 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-char			*load_hud(t_union *my_union)
+char	*load_hud(t_union *my_union)
 {
 	my_union->hud_surface = SDL_LoadBMP(
 			"resources/pictures/HUD/HUD.bmp");
@@ -22,7 +22,7 @@ char			*load_hud(t_union *my_union)
 	return (NULL);
 }
 
-char			*load_submenu(t_union *my_union)
+char	*load_submenu(t_union *my_union)
 {
 	my_union->menu_array[6] = SDL_LoadBMP(
 			"resources/pictures/menu/menu_fullscreen_on.bmp");
@@ -34,7 +34,7 @@ char			*load_submenu(t_union *my_union)
 			"resources/pictures/menu/menu_mouse_off.bmp");
 }
 
-char			*load_menu(t_union *my_union)
+char	*load_menu(t_union *my_union)
 {
 	int i;
 
@@ -57,7 +57,7 @@ char			*load_menu(t_union *my_union)
 	return (NULL);
 }
 
-char			*load_weapons_minimize(t_union *my_union)
+char	*load_weapons_minimize(t_union *my_union)
 {
 	int i;
 
@@ -75,7 +75,7 @@ char			*load_weapons_minimize(t_union *my_union)
 	return (NULL);
 }
 
-char			*load_wall_surfaces(t_union *my_union)
+char	*load_wall_surfaces(t_union *my_union)
 {
 	my_union->wall_surfaces_array[0] = SDL_LoadBMP(
 			"resources/pictures/WALLS/WALL56.bmp");
@@ -101,17 +101,4 @@ char			*load_wall_surfaces(t_union *my_union)
 		return ("Walls surface not loaded\n");
 	my_union->load_mark++;
 	return (NULL);
-}
-
-int				check_loaded(t_union *my_union, int index,
-								int size, int dimension)
-{
-	int i;
-
-	i = -1;
-	while (++i < size)
-		if ((dimension == 1 && !my_union->wall_surfaces_array[i]) ||
-			(dimension == 2 && !my_union->weapons_surfaces[index][i]))
-			return (0);
-	return (1);
 }

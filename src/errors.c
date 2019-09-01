@@ -17,3 +17,8 @@ void	msg(char *message)
 	ft_putendl(message);
 	exit(0);
 }
+
+void	usage(void)
+{
+	ft_putstr("usage: ./wolf3d <argument>\n");
+}

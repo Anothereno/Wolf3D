@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 15:26:12 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/20 12:27:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/01 16:44:47 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	change_weapon_frame(t_union *my_union, t_player *player)
 	if ((player->weapon == 1 &&
 			my_union->start_tick - my_union->shoot_timer >= 15) ||
 			(player->weapon == 2 &&
-			my_union->start_tick- my_union->shoot_timer >= 7) ||
+			my_union->start_tick - my_union->shoot_timer >= 7) ||
 			(player->weapon == 0 &&
 			my_union->start_tick - my_union->shoot_timer >= 4))
 	{
@@ -32,7 +32,8 @@ void	draw_weapon(t_union *my_union, t_player *player, t_map *map)
 		weapon_down(my_union, player);
 	my_union->weapon_texture = SDL_CreateTextureFromSurface(my_union->renderer,
 			my_union->weapons_surfaces[player->weapon][player->weapon_frame]);
-	SDL_RenderCopy(my_union->renderer, my_union->weapon_texture, NULL, &my_union->weapon_place);
+	SDL_RenderCopy(my_union->renderer, my_union->weapon_texture,
+			NULL, &my_union->weapon_place);
 	SDL_DestroyTexture(my_union->weapon_texture);
 	if (player->shoot_mode)
 		change_weapon_frame(my_union, player);
@@ -50,11 +51,14 @@ void	reload(t_union *my_union, t_player *player)
 			player->clip[player->weapon] < player->clip_volume[player->weapon])
 	{
 		weapon_down(my_union, player);
-		player->clip[player->weapon] = player->clip_volume[player->weapon];
-		player->ammo[player->weapon] -= player->clip_volume[player->weapon];
+		player->clip[player->weapon] =
+				player->clip_volume[player->weapon];
+		player->ammo[player->weapon] -=
+				player->clip_volume[player->weapon];
 	}
-	else if (player->ammo[player->weapon] < player->clip_volume[player->weapon] &&
-				player->clip[player->weapon] < player->ammo[player->weapon])
+	else if (player->ammo[player->weapon] <
+			player->clip_volume[player->weapon] &&
+			player->clip[player->weapon] < player->ammo[player->weapon])
 	{
 		weapon_down(my_union, player);
 		player->clip[player->weapon] = player->ammo[player->weapon];
@@ -64,7 +68,7 @@ void	reload(t_union *my_union, t_player *player)
 		player->ammo[player->weapon] = 0;
 }
 
-void change_weapon(t_player *player, const Uint8 *key, t_union *my_union)
+void	change_weapon(t_player *player, const Uint8 *key, t_union *my_union)
 {
 	if (key[SDL_SCANCODE_1] && player->weapon != 0)
 	{
@@ -88,11 +92,9 @@ void change_weapon(t_player *player, const Uint8 *key, t_union *my_union)
 
 void	weapon_down(t_union *my_union, t_player *player)
 {
-	if (!my_union->weapon_down_mode)
-	{
-		my_union->weapon_down_timer = SDL_GetTicks();
+	if (!my_union->weapon_down_mode &&
+			(my_union->weapon_down_timer = SDL_GetTicks()))
 		my_union->weapon_down_mode = 1;
-	}
 	else
 	{
 		if (my_union->weapon_down_mode == 21)
@@ -113,6 +115,5 @@ void	weapon_down(t_union *my_union, t_player *player)
 					player->weapon = player->new_weapon;
 			}
 		}
-
 	}
 }

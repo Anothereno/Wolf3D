@@ -56,7 +56,7 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 
 	init_union(my_union);
 	init_player(player);
-	my_union->dist = my_union->cur_win_x / (tan(player->half_fov) * 2) * -360;
+	my_union->dist = my_union->cur_win_x / (tanf(player->half_fov) * 2) * -360;
 	initialize_sdl(my_union);
 	if ((message = load_menu(my_union)) ||
 		(message = load_wall_surfaces(my_union)) ||
