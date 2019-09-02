@@ -80,7 +80,7 @@ add_executable(wolf3d
         src/wolf3d.c
         src/init_sdl_ttf.c
         author
-        src/validation.c src/errors.c src/raycasting.c src/keys.c src/load_weapon.c src/doors.c src/stats_showing.c src/menu.c src/weapons.c libft/ft_is_uppercase.c src/exit.c libft/ft_clear_string_array.c src/free.c src/init_hud_and_player.c src/init_weapons.c src/move.c src/check_events.c src/load_hud_menu_walls.c src/stats_weapon.c src/changing_fulscreen.c src/calculate_distance.c src/draw.c src/vert_hor_calc.c src/timers_game_loop.c)
+        src/validation.c src/errors.c src/raycasting.c src/keys.c src/load_weapon.c src/doors.c src/stats_showing.c src/menu.c src/weapons.c libft/ft_is_uppercase.c src/exit.c libft/ft_clear_string_array.c src/free.c src/init_hud_and_player.c src/init_weapons.c src/move.c src/check_events.c src/load_hud_menu_walls.c src/stats_weapon.c src/changing_fullscreen.c src/calculate_distance.c src/draw.c src/vert_hor_calc.c src/timers_game_loop.c src/map_processing.c src/parse_map.c)
 
 target_link_libraries(wolf3d "-lmlx")
 target_link_libraries(wolf3d "-framework OpenGl")

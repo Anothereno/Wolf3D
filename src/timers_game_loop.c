@@ -50,7 +50,7 @@ void	calc_time_fps(t_union *my_union)
 	my_union->end_tick = my_union->start_tick;
 	my_union->start_tick = SDL_GetTicks();
 	my_union->time = (my_union->start_tick - my_union->end_tick) * 0.001;
-	my_union->FPS = 1.0f / my_union->time;
+	my_union->fps = 1.0f / my_union->time;
 }
 
 void	start_game(t_union my_union, t_map map, t_player player,

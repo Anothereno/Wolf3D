@@ -50,7 +50,7 @@ void	init_player(t_player *player)
 	player->move_indicate = 0;
 	player->rotate_angle = 3;
 	player->fov = 60;
-	player->half_fov = player->fov * 0.5;
+	player->half_fov = player->fov * 0.5f;
 	player->score = 7200;
 	player->level = 2;
 	player->lives = 3;

@@ -47,5 +47,5 @@ void	show_weapon_image(t_union *my_union, t_player *player)
 
 void	print_fps(t_union *my_union)
 {
-	put_surface_to_render(my_union, ft_itoa(my_union->FPS), 7);
+	put_surface_to_render(my_union, ft_itoa(my_union->fps), 7);
 }

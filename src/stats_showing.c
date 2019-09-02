@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/18 18:07:46 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 19:32:47 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/02 14:47:05 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	print_health(t_union *my_union, t_player *player)
 	put_surface_to_render(my_union, ft_strcat(ft_itoa(player->health), "%"), 3);
 }
 
-void	show_stats(t_union *my_union, t_map *map, t_player *player)
+void	show_stats(t_union *my_union, t_player *player)
 {
 	print_level(my_union, player);
 	print_score(my_union, player);

@@ -6,17 +6,27 @@
 #    By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/09 17:56:15 by hdwarven          #+#    #+#              #
-#    Updated: 2019/08/06 17:55:47 by hdwarven         ###   ########.fr        #
+#    Updated: 2019/09/02 14:57:55 by hdwarven         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-NAME = fractol
-INCLUDES = -I ./libft/includes -I ./includes
+CFLAGS = -Wall -Wextra -Werror -O1
+NAME = wolf3d
+INCLUDES = -I ./libft \
+           -I ./includes \
+           -I ./SDL/SDL2.framework/Versions/A/Headers \
+           -I ./SDL/SDL2_ttf.framework/Versions/A/Headers
 
 SRC_PATH = src
-SRC_LIST = fractol.c calculate.c colorize.c input.c keys.c transform.c
+SRC_LIST = calculate_distance.c init_hud_and_player.c parse_map.c \
+           changing_fullscreen.c init_sdl_ttf.c raycasting.c \
+           check_events.c init_weapons.c stats_showing.c colorize.c \
+           keys.c stats_weapon.c doors.c load_hud_menu_walls.c \
+           timers_game_loop.c draw.c load_weapon.c validation.c \
+           errors.c  map_processing.c vert_hor_calc.c exit.c menu.c \
+           weapons.c free.c move.c wolf3d.c
+
 SRC = $(addprefix $(SRC_PATH)/, $(SRC_LIST))
 
 OBJ_LIST = $(SRC_LIST:.c=.o)
@@ -26,7 +36,10 @@ OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_LIST))
 LIBFT_PATH = libft
 LIBFT = -L $(LIBFT_PATH) -lft
 
-LIBS = -lm -lmlx -framework OpenGl -framework Appkit
+LIBS = -lm \
+       -F ./SDL -framework SDL2 \
+       -F ./SDL -framework SDL2_ttf
+
 
 YELLOW = \033[1;33m
 PURPLE = \033[0;35m
@@ -41,7 +54,7 @@ intro:
 	@echo "\n$(PURPLE)MAKE $(NAME) Start!$(NC)"
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) -o $(NAME) $(LIBS) -lpthread $(LIBFT)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) $(OBJ) -o $(NAME) $(LIBFT)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@echo "$(YELLOW)$(NAME): $(notdir $<)$(NC)"

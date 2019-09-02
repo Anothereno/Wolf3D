@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 15:26:12 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/01 16:44:47 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/02 14:50:55 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	change_weapon_frame(t_union *my_union, t_player *player)
 	}
 }
 
-void	draw_weapon(t_union *my_union, t_player *player, t_map *map)
+void	draw_weapon(t_union *my_union, t_player *player)
 {
 	if (my_union->weapon_down_mode)
 		weapon_down(my_union, player);

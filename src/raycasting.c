@@ -6,21 +6,21 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/05 18:50:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/01 18:21:44 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/02 14:51:15 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	update_renderer(t_union *my_union, t_player *player, t_map *map)
+void	update_renderer(t_union *my_union, t_player *player)
 {
 	put_cross(my_union, player);
 	SDL_UpdateTexture(my_union->main_window_texture, NULL,
 			my_union->pixel_array, my_union->cur_win_x * sizeof(Uint32));
 	SDL_RenderCopy(my_union->renderer, my_union->main_window_texture,
 			NULL, NULL);
-	draw_weapon(my_union, player, map);
-	draw_hud(my_union, player, map);
+	draw_weapon(my_union, player);
+	draw_hud(my_union, player);
 }
 
 void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
@@ -48,10 +48,10 @@ void	raycast(t_union *my_union, t_map *map, t_player *player, t_ray *ray)
 		draw_ceiling_floor(my_union, *player, angle_rad, x);
 		angle += one_angle;
 	}
-	update_renderer(my_union, player, map);
+	update_renderer(my_union, player);
 }
 
-int		check_bound(double x, double y, t_map map)
+int		check_bound(float x, float y, t_map map)
 {
 	if (x < 0 || x > (map.size_x << 6) || y < 0 || y > (map.size_y << 6))
 		return (0);

@@ -22,7 +22,7 @@ char	*load_hud(t_union *my_union)
 	return (NULL);
 }
 
-char	*load_submenu(t_union *my_union)
+void	load_submenu(t_union *my_union)
 {
 	my_union->menu_array[6] = SDL_LoadBMP(
 			"resources/pictures/menu/menu_fullscreen_on.bmp");

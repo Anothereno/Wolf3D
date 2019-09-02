@@ -85,7 +85,7 @@ void	init_union(t_union *my_union)
 	my_union->half_win_x = my_union->cur_win_x >> 1;
 	my_union->door_timer_end = 0;
 	my_union->escape_timer = 0;
-	my_union->sens = 2.4;
+	my_union->sens = 2.4f;
 	my_union->mouse_x = my_union->half_win_x;
 	my_union->mouse_y = my_union->half_win_y;
 	my_union->rel_mouse_mode_timer = 0;

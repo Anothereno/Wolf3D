@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:43:30 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/01 18:34:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/02 14:48:36 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	draw_walls(t_union *my_union, t_ray ray, int x, t_map map)
 {
 	int			y;
-	double		wall_scale;
+	float		wall_scale;
 
 	my_union->start_for_draw = 0;
 	y = get_start_draw(*my_union);
@@ -85,14 +85,14 @@ void	put_cross(t_union *my_union, t_player *player)
 	}
 }
 
-void	draw_hud(t_union *my_union, t_player *player, t_map *map)
+void	draw_hud(t_union *my_union, t_player *player)
 {
 	SDL_RenderCopy(my_union->renderer, my_union->hud_texture,
 			NULL, &my_union->hud_rect);
-	show_stats(my_union, map, player);
+	show_stats(my_union, player);
 }
 
-int		check_wall(double cur_x, double cur_y, t_map map)
+int		check_wall(float cur_x, float cur_y, t_map map)
 {
 	if (cur_x >= (map.size_x << 6) || cur_x < 0 ||
 		cur_y >= (map.size_y << 6) || cur_y < 0 ||
