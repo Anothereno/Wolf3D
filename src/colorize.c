@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/03 11:36:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 11:39:08 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 		(color->g << 8) + color->b);
 }
 
-void choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
+void	choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
 {
 	int wall;
 	int x;

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:51:30 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/03 11:57:38 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 12:49:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ void	map_processing(t_map *map, char **res, t_map *objects, t_player *player)
 	while (++map->obj_map.y < map->size_y - 1)
 	{
 		map->obj_map.x = 0;
-		if (!res[map->obj_map.y - 1])
-			msg("NOT A VALID MAP");
 		size_string = get_size(res[map->obj_map.y - 1]);
 		tmp = ft_strsplit(res[map->obj_map.y - 1], ' ');
 		while (++map->obj_map.x < map->size_x - 1)

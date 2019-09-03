@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:55:00 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/03 10:55:45 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 11:38:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int		get_size(char *string)
 	int		size_x;
 	int		flag;
 
+	if (!string)
+		msg("Not a valid map\n");
 	flag = 1;
 	size_x = 0;
 	str = string;

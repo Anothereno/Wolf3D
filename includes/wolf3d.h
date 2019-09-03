@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/03 11:36:42 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 12:52:21 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ void			main_loop(t_union my_union, t_map map, t_map objects,
 void			zeroing_timers(t_union *my_union, t_player *player);
 void			calc_time_fps(t_union *my_union);
 void			check_intersection(t_map map, t_point *points);
-void draw_hud(t_union *my_union, t_player *player);
+void			draw_hud(t_union *my_union, t_player *player);
 int				get_start_draw(t_union my_union);
 void			calc_line(t_union *my_union, t_ray ray, float betta);
 int				take_textures_offset(t_ray ray);
@@ -253,7 +253,7 @@ void			error_quit(char *msg, int i, t_map *map, t_map *objects);
 void			weapon_down(t_union *my_union, t_player *player);
 void			reload(t_union *my_union, t_player *player);
 int				check_invisible_pixels(SDL_Color *color);
-void draw_weapon(t_union *my_union, t_player *player);
+void			draw_weapon(t_union *my_union, t_player *player);
 void			print_fps(t_union *my_union);
 void			check_event_menu(t_union *my_union, t_map *map,
 		t_player *player, t_map *objects);
@@ -265,8 +265,7 @@ char			*load_hud(t_union *my_union);
 char			*load_weapons(t_union *my_union);
 char			*load_weapons_minimize(t_union *my_union);
 void			choose_surface_floor_ceiling_hud(t_union *my_union, char mode);
-void
-choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
+void			choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void			get_surface_pixel(t_union *my_union, int x, int y,
 		SDL_Color *color);
@@ -294,7 +293,7 @@ void			check_door(t_map *map, t_map *objects, t_player *player,
 int				check_wall(float cur_x, float cur_y, t_map map);
 float			take_range_angle(float angle);
 void			choose_distance(t_ray *ray);
-void show_stats(t_union *my_union, t_player *player);
+void			show_stats(t_union *my_union, t_player *player);
 void			complete_work(t_union *my_union, t_map *map, t_map *objects,
 		t_player *player);
 

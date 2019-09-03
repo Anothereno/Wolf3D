@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 17:27:15 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/03 10:52:03 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 12:49:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*reading(int fd)
 		close(fd);
 		return (res);
 	}
-	error_quit("Wrong file", 0, NULL, NULL);
+	error_quit("Wrong file\n", 0, NULL, NULL);
 	return (NULL);
 }
 
@@ -110,13 +110,13 @@ int		val_set(char *file, t_map *map, t_map *objects, t_player *player)
 	player->player_pos_x = -1;
 	map_coordinates = reading(fd);
 	if (ft_strequ(map_coordinates, ""))
-		error_quit("Empty map", 0, NULL, NULL);
+		error_quit("Empty map\n", 0, NULL, NULL);
 	set_array(map, map_coordinates, objects, player);
 	if (player->player_pos_x == -1 || player->player_pos_y == -1)
 	{
 		if (!find_place_for_player(player, map, objects))
 		{
-			error_quit("Not set player position", 1, map, objects);
+			error_quit("Not set player position\n", 1, map, objects);
 			return (0);
 		}
 	}
