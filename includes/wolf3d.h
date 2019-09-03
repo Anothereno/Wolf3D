@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 19:03:11 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/02 14:48:36 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 11:36:42 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ typedef struct	s_ray
 	float	x;
 	float	y;
 	float	res_distance;
+	float	sin_alpha;
+	float	cos_alpha;
 }				t_ray;
 
 typedef struct	s_player
@@ -263,7 +265,8 @@ char			*load_hud(t_union *my_union);
 char			*load_weapons(t_union *my_union);
 char			*load_weapons_minimize(t_union *my_union);
 void			choose_surface_floor_ceiling_hud(t_union *my_union, char mode);
-void			choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
+void
+choose_surface_wall(t_union *my_union, t_ray ray, t_map map);
 void			put_pixel(t_union *my_union, int x, int y, SDL_Color *color);
 void			get_surface_pixel(t_union *my_union, int x, int y,
 		SDL_Color *color);

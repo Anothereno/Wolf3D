@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/02 13:55:00 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/02 13:55:00 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 10:55:45 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		set_doors(t_map *map, t_map *objects, t_obj_on_map obj_on_map)
 {
 	if (obj_on_map.ch == 'D')
 	{
-		map->map[obj_on_map.y][obj_on_map.x] = 9;
+		map->map[obj_on_map.y][obj_on_map.x] = 2;
 		objects->map[obj_on_map.y][obj_on_map.x] = obj_on_map.ch;
 		return (1);
 	}

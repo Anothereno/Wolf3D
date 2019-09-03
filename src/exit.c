@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/26 13:05:13 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 16:56:58 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 10:27:10 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	complete_work(t_union *my_union, t_map *map, t_map *objects,
 		t_player *player)
 {
 	free_sdl(my_union);
-	if (my_union->load_mark > 3)
+	if (my_union->load_mark > 4)
 		free_stat_hud_rects(my_union);
 	free_player(player);
 	free_map_and_objects(map, objects);

@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/17 19:07:34 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/30 15:17:09 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 12:20:30 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,10 @@ void	initialize_sdl(t_union *my_union)
 void	initialize_ttf(t_union *my_union)
 {
 	if (TTF_Init() == -1)
-	{
-		ft_putstr("Unable to init SDL_TTF: %s");
-		ft_putstr(TTF_GetError());
-	}
+		msg("TTF didn't init\n");
 	my_union->font = TTF_OpenFont("resources/fonts/ui_font.ttf", 16);
 	if (my_union->font == NULL)
-	{
-		ft_putstr("Unable to load font: ");
-		ft_putstr(TTF_GetError());
-	}
+		msg("Font wasn't loaded\n");
 	my_union->font_color.r = 255;
 	my_union->font_color.g = 255;
 	my_union->font_color.b = 255;
@@ -58,6 +52,7 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 	init_player(player);
 	my_union->dist = my_union->cur_win_x / (tanf(player->half_fov) * 2) * -360;
 	initialize_sdl(my_union);
+	initialize_ttf(my_union);
 	if ((message = load_menu(my_union)) ||
 		(message = load_wall_surfaces(my_union)) ||
 		(message = load_weapons(my_union)) ||
@@ -69,5 +64,4 @@ void	init(t_union *my_union, t_map *map, t_player *player, t_map *objects)
 	}
 	init_hud(my_union);
 	change_weapon_rect(my_union);
-	initialize_ttf(my_union);
 }

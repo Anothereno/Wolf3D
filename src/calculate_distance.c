@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 17:26:44 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/01 18:24:11 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 11:00:13 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,20 @@ void	choose_distance(t_ray *ray)
 		ray->x = ray->end_hor_x;
 		ray->y = ray->end_hor_y;
 		ray->res_distance = ray->hor_distance;
-		ray->mode = 0;
+		if (ray->sin_alpha > 0)
+			ray->mode = 1;
+		else
+			ray->mode = 2;
 	}
 	else
 	{
 		ray->x = ray->end_vert_x;
 		ray->y = ray->end_vert_y;
 		ray->res_distance = ray->vert_distance;
-		ray->mode = 1;
+		if (ray->cos_alpha > 0)
+			ray->mode = 3;
+		else
+			ray->mode = 4;
 	}
 }
 
@@ -60,7 +66,7 @@ float	take_range_angle(float angle)
 
 int		take_textures_offset(t_ray ray)
 {
-	if (!ray.mode)
+	if (ray.mode == 1 || ray.mode == 2)
 		return ((int)ray.x % BLOCK_SIZE);
 	else
 		return ((int)ray.y % BLOCK_SIZE);

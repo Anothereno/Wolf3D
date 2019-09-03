@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 14:51:14 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 16:39:30 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 10:59:02 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	open_close_door(t_map *objects, t_map *map, int j, int i)
 		if (map->map[j][i] != 0)
 			map->map[j][i] = 0;
 		else
-			map->map[j][i] = 9;
+			map->map[j][i] = 2;
 	}
 }
 

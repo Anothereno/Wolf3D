@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 17:06:04 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 16:34:56 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 11:36:42 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,21 @@ void	put_pixel(t_union *my_union, int x, int y, SDL_Color *color)
 		(color->g << 8) + color->b);
 }
 
-void	choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
+void choose_surface_wall(t_union *my_union, t_ray ray, t_map map)
 {
 	int wall;
+	int x;
+	int y;
 
-	wall = map.map[(int)ray.y >> 6][(int)ray.x >> 6];
-	my_union->surface = my_union->wall_surfaces_array[wall - ray.mode];
+	y = (int)ray.y >> 6;
+	x = (int)ray.x >> 6;
+	if (map.map[y][x] == 2)
+		my_union->surface = my_union->wall_surfaces_array[9];
+	else
+	{
+		wall = map.map[y][x];
+		my_union->surface = my_union->wall_surfaces_array[wall + ray.mode];
+	}
 }
 
 void	choose_surface_floor_ceiling_hud(t_union *my_union, char mode)

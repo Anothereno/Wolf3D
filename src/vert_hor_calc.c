@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/01 18:15:05 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/09/01 18:42:57 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 10:27:11 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	hor_distance(t_player player, t_map map, t_ray *ray, float alpha)
 	ray->end_hor_y = points.cur_point_y;
 	ray->hor_distance = fabsf((player.player_pos_y - points.cur_point_y)
 			/ sin_alpha);
+	ray->sin_alpha = sin_alpha;
 }
 
 int		setup_vertical(float cos_alpha, t_point *points, t_player player,
@@ -103,4 +104,5 @@ void	vert_distance(t_player player, t_map map, t_ray *ray, float alpha)
 	ray->end_vert_y = points.cur_point_y;
 	ray->vert_distance = fabsf((player.player_pos_x - points.cur_point_x)
 			/ cos_alpha);
+	ray->cos_alpha = cos_alpha;
 }

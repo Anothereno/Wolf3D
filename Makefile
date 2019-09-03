@@ -6,12 +6,12 @@
 #    By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/09 17:56:15 by hdwarven          #+#    #+#              #
-#    Updated: 2019/09/02 14:57:55 by hdwarven         ###   ########.fr        #
+#    Updated: 2019/09/03 10:27:10 by hdwarven         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O1
+CFLAGS = -Wall -Wextra -Werror
 NAME = wolf3d
 INCLUDES = -I ./libft \
            -I ./includes \

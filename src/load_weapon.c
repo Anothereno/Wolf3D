@@ -6,7 +6,7 @@
 /*   By: hdwarven <hdwarven@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/30 12:21:09 by hdwarven          #+#    #+#             */
-/*   Updated: 2019/08/28 19:23:02 by hdwarven         ###   ########.fr       */
+/*   Updated: 2019/09/03 10:27:10 by hdwarven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 SDL_Surface		*get_color_key(t_union *my_union, char *path)
 {
 	my_union->surface = SDL_LoadBMP(path);
+	if (!my_union->surface)
+		return (NULL);
 	SDL_SetColorKey(my_union->surface, SDL_TRUE,
 			SDL_MapRGB(my_union->surface->format, 152, 0, 136));
 	return (my_union->surface);
